@@ -1,6 +1,7 @@
 {
-  "name": "bibliotecaic-web",
-  "version": "0.1.0",
+  "name": "front-end",
+  "version": "1.0.0",
+  "license": "MIT"
   "private": true,
   "dependencies": {
     "@chakra-ui/icons": "^1.1.1",
