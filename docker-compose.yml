@@ -1,0 +1,26 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: ./docker/back-end/Dockerfile
+      args:
+        WWWGROUP: '${WWWGROUP}'
+    command: npm start
+    volumes:
+      - ./back-end:/usr/app
+      - /usr/app/node_modules
+    networks:
+      - eco
+  postgres:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: '${POSTGRES_PASSWORD}'
+    networks:
+      - eco
+networks:
+  eco:
+    driver: bridge
+volumes:
+  ecopostgres:
+    driver: local
