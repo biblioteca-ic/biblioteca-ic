@@ -72,7 +72,7 @@ export const NavBarDesktop = () => {
                       <Link href="/perfil">Meu Perfil</Link>
                     </Box>
                     <Box fontSize="1.2rem" onClick={onToggle} mb={3}>
-                      <Link onClick={() => {}}>Sair</Link>
+                      <Link href="/login" onClick={() => { }}>Sair</Link>
                     </Box>
                   </Box>
                 ) : (
@@ -105,7 +105,11 @@ export const NavBarDesktop = () => {
                 </Link>
               </MenuItem>
               <MenuDivider />
-              <MenuItem onClick={() => {}}>Sair</MenuItem>
+              <MenuItem>
+                <Link href="/login">
+                  <span>Sair</span>
+                </Link>
+              </MenuItem>
             </MenuList>
           </Menu>
         </Box>
