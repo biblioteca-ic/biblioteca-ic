@@ -1,0 +1,149 @@
+#!/usr/bin/env bash
+# Based on Laravel Sail
+# @see https://github.com/laravel/sail/
+
+UNAMEOUT="$(uname -s)"
+
+WHITE='\033[1;37m'
+NC='\033[0m'
+
+# Verify operating system is supported...
+case "${UNAMEOUT}" in
+    Linux*)             MACHINE=linux;;
+    Darwin*)            MACHINE=mac;;
+    *)                  MACHINE="UNKNOWN"
+esac
+
+if [ "$MACHINE" == "UNKNOWN" ]; then
+    echo "Unsupported operating system [$(uname -s)]. Eco supports macOS, Linux, and Windows (WSL2)." >&2
+
+    exit 1
+fi
+
+# Source the ".env" file so environment variables are available...
+if [ -f ./.env ]; then
+    source ./.env
+fi
+
+# Define environment variables...
+export REPOSITORY=${REPOSITORY:-"biblioteca-ic"}
+export WWWUSER=${WWWUSER:-$UID}
+export WWWGROUP=${WWWGROUP:-$(id -g)}
+
+# Function that outputs Eco is not running...
+function eco_is_not_running {
+    echo -e "${WHITE}Eco is not running.${NC}" >&2
+    echo "" >&2
+    echo -e "${WHITE}You may Eco using the following commands:${NC} './eco up' or './eco up -d'" >&2
+
+    exit 1
+}
+
+# Function that outputs command not recognized...
+function command_not_found {
+    echo -e "${WHITE}Command $@ not recognized.${NC}" >&2
+    echo "" >&2
+
+    exit 1
+}
+
+if [ -z "$SAIL_SKIP_CHECKS" ]; then
+    # Ensure that Docker is running...
+    if ! docker info > /dev/null 2>&1; then
+        echo -e "${WHITE}Docker is not running.${NC}" >&2
+
+        exit 1
+    fi
+
+    # Determine if Eco is currently up...
+    PSRESULT="$(docker-compose ps -q)"
+    if docker-compose ps | grep "${REPOSITORY}" | grep 'Exit'; then
+        echo -e "${WHITE}Shutting down old Eco processes...${NC}" >&2
+
+        docker-compose down > /dev/null 2>&1
+
+        EXEC="no"
+    elif [ -n "$PSRESULT" ]; then
+        EXEC="yes"
+    else
+        EXEC="no"
+    fi
+else
+    EXEC="yes"
+fi
+
+if [ $# -gt 0 ]; then
+    if [ "$1" == 'backend' ]; then
+        # Proxy vendor binary commands on the application container...
+        if [ "$2" == "bin" ]; then
+            shift 2
+
+            if [ "$EXEC" == "yes" ]; then
+                docker-compose exec backend ./vendor/bin/"$@"
+            else
+                eco_is_not_running
+            fi
+
+        # Proxy the "test" command to the "php artisan test" Artisan command...
+        elif [ "$2" == "test" ]; then
+            shift 2
+
+            if [ "$EXEC" == "yes" ]; then
+                docker-compose exec backend npm run test
+            else
+                eco_is_not_running
+            fi
+
+        # Proxy NPM commands to the "npm" binary on the application container...
+        elif [ "$2" == "npm" ]; then
+            shift 2
+
+            if [ "$EXEC" == "yes" ]; then
+                docker-compose exec backend npm "$@"
+            else
+                eco_is_not_running
+            fi
+
+        # Proxy NPX commands to the "npx" binary on the application container...
+        elif [ "$2" == "npx" ]; then
+            shift 2
+
+            if [ "$EXEC" == "yes" ]; then
+                docker-compose exec backend npx "$@"
+            else
+                eco_is_not_running
+            fi
+
+        # Initiate a Bash shell within the application container...
+        elif [ "$2" == "shell" ] || [ "$2" == "bash" ]; then
+            INSTANCE=$1
+            shift 2
+
+            if [ "$EXEC" == "yes" ]; then
+                docker-compose exec "$INSTANCE" bash "$@"
+            else
+                eco_is_not_running
+            fi
+
+        else
+            command_not_found
+        fi
+
+    # Initiate a MySQL CLI terminal session within the "postgres" container...
+    elif [ "$1" == "postgres" ]; then
+        shift 1
+
+        if [ "$EXEC" == "yes" ]; then
+            docker-compose exec postgres bash -c 'psql -U postgres'
+        else
+            eco_is_not_running
+        fi
+
+    # Pass unknown commands to the "docker-compose" binary...
+    else
+        docker-compose "$@"
+    fi
+
+else
+    docker-compose ps
+fi
