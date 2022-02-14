@@ -1,6 +1,18 @@
 import * as React from 'react';
-import { Checkbox, Link, Box, Text, Input, InputGroup, InputRightElement, Button, Stack } from '@chakra-ui/react';
+import {
+  Checkbox,
+  Link,
+  Box,
+  Text,
+  Input,
+  InputGroup,
+  InputRightElement,
+  Button,
+  Stack,
+  IconButton,
+} from '@chakra-ui/react';
 import { useHistory } from 'react-router-dom';
+import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import { Page } from '../../components/Page';
 
 const Register = () => {
@@ -42,9 +54,17 @@ const Register = () => {
               placeholder="Senha"
             />
             <InputRightElement width="4.5rem">
-              <Button mr={2} h="1.75rem" size="sm" onClick={handleClick}>
-                {show ? 'Esconder' : 'Mostrar'}
-              </Button>
+              {show ? (
+                <IconButton
+                  aria-label="Esconder senha"
+                  icon={<AiOutlineEyeInvisible />}
+                  mr={2}
+                  size="sm"
+                  onClick={handleClick}
+                />
+              ) : (
+                <IconButton aria-label="Mostrar senha" icon={<AiOutlineEye />} mr={2} size="sm" onClick={handleClick} />
+              )}
             </InputRightElement>
           </InputGroup>
 
