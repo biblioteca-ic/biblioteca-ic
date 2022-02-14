@@ -3,7 +3,16 @@ export type UserModel = {
   name: string
   email: string
   cpf: string
-  registrationNumber: number
+  registrationNumber: string
   admin: boolean
   password: string
+}
+
+export type UserModelDto = {
+  id: string
+  name: string
+  email: string
+  cpf: string
+  registrationNumber: string
+  admin: boolean
 }

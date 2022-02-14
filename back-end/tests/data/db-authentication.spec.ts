@@ -3,6 +3,7 @@ import { UserModel } from '../domain/models/user'
 import { Authentication } from '../domain/usecases/authentication'
 import { Encrypter } from './protocols/encrypter'
 import { HashComparer } from './protocols/hash-comparer'
+import { Hasher } from './protocols/hasher'
 import { LoadUserByCpfRepository } from './protocols/load-user-by-cpf.repository'
 
 type SutTypes = {
@@ -17,7 +18,7 @@ const mockUser = (): UserModel => ({
   name: 'any_name',
   email: 'any_email@email.com',
   cpf: '11122233345',
-  registrationNumber: 123456,
+  registrationNumber: '123456',
   password: 'hashed_password',
   admin: false
 })
@@ -28,9 +29,13 @@ class LoadAccountByCpfRepositoryStub implements LoadUserByCpfRepository {
   }
 }
 
-class HashComparerStub implements HashComparer {
+class HashComparerStub implements HashComparer, Hasher {
   async compare (value: string, hash: string): Promise<boolean> {
     return Promise.resolve(true)
+  }
+
+  async hash (value: string): Promise<string> {
+    return Promise.resolve('any_hash')
   }
 }
 
