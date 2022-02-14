@@ -14,6 +14,24 @@ export const loginRequestSchema = {
 export const loginResponseSchema = {
   type: 'object',
   properties: {
+    id: {
+      type: 'string'
+    },
+    name: {
+      type: 'string'
+    },
+    email: {
+      type: 'string'
+    },
+    cpf: {
+      type: 'string'
+    },
+    registrationNumber: {
+      type: 'string'
+    },
+    admin: {
+      type: 'boolean'
+    },
     accessToken: {
       type: 'string'
     }

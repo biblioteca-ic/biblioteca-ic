@@ -8,7 +8,15 @@ type SutTypes = {
   authenticationStub: Authentication
 }
 
-const mockAuthenticationModel: AuthenticationModel = { accessToken: 'any_token' }
+const mockAuthenticationModel: AuthenticationModel = {
+  id: 'uuid',
+  name: 'any_name',
+  email: 'any_email@email.com',
+  cpf: '11122233345',
+  registrationNumber: '123456',
+  admin: false,
+  accessToken: 'any_token'
+}
 
 class AuthenticationStub implements Authentication {
   async auth (data: Authentication.Params): Promise<AuthenticationModel> {
