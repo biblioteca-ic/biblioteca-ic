@@ -11,12 +11,14 @@ import {
   IconButton,
   FormControl,
   FormErrorMessage,
+  useToast,
 } from '@chakra-ui/react';
 import { useHistory } from 'react-router-dom';
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import { useAuth } from '../../providers/AuthProvider';
 import { Page } from '../../components/Page';
 
 const schema = yup.object().shape({
@@ -27,6 +29,11 @@ const schema = yup.object().shape({
   password: yup.string().required('Senha é obrigatória'),
 });
 
+type LoginFormInputs = {
+  cpf: string;
+  password: string;
+};
+
 const Login = () => {
   const [show, setShow] = React.useState(false);
 
@@ -34,20 +41,45 @@ const Login = () => {
     register,
     handleSubmit,
     formState: { errors },
-    reset,
-  } = useForm({
+    // reset,
+  } = useForm<LoginFormInputs>({
     resolver: yupResolver(schema),
   });
 
   const history = useHistory();
   const handleClick = () => setShow(!show);
+  const toast = useToast();
+  const { signIn } = useAuth();
 
-  const onSubmitLogin = (data: any) => {
+  const onSubmitLogin = async (data: LoginFormInputs) => {
     // colocar type/interface
     // verificar credenciais e redirecionar para a dashboard
-    // history.push('/dashboard');
     console.log({ data });
-    reset();
+    try {
+      const { cpf, password } = data;
+
+      await signIn({
+        cpf,
+        password,
+      });
+
+      toast({
+        title: 'Login realizado com sucesso',
+        status: 'success',
+        position: 'top-right',
+        isClosable: true,
+      });
+
+      history.push('/dashboard');
+    } catch {
+      toast({
+        title: 'Ocorreu um erro ao fazer o login na plataforma',
+        description: 'Tente novamente mais tarde',
+        status: 'error',
+        position: 'top-right',
+        isClosable: true,
+      });
+    }
   };
 
   return (
@@ -56,12 +88,12 @@ const Login = () => {
         <Stack spacing={3} display="flex" alignItems="center" w="80%" maxW={380} minW={320}>
           <Text>Login</Text>
           <form style={{ width: '100%' }} onSubmit={handleSubmit(onSubmitLogin)}>
-            <FormControl my={2} isInvalid={errors.cpf?.message}>
+            <FormControl my={2} isInvalid={!!errors.cpf?.message}>
               <Input {...register('cpf')} placeholder="CPF" />
               {!!errors.cpf?.message && <FormErrorMessage>{errors.cpf.message}</FormErrorMessage>}
             </FormControl>
 
-            <FormControl my={2} isInvalid={errors.password?.message}>
+            <FormControl my={2} isInvalid={!!errors.password?.message}>
               <InputGroup size="md" maxW={380}>
                 <Input {...register('password')} type={show ? 'text' : 'password'} placeholder="Senha" />
                 <InputRightElement width="4.5rem">

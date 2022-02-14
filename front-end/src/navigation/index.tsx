@@ -1,5 +1,6 @@
 import React from 'react';
 import { Redirect, Route, Switch, RouteProps } from 'react-router-dom';
+import { isAuthenticated } from '../services/auth';
 import { routes } from './routes';
 
 interface CustomRouteProps {
@@ -10,11 +11,11 @@ interface CustomRouteProps {
 }
 
 const PrivateRoute: React.FC<CustomRouteProps & RouteProps> = ({ component: Component, ...rest }) => {
-  const user = {
-    profileTag: 'admin',
-  };
+  // const user = {
+  //   profileTag: 'admin',
+  // };
 
-  if (!user) {
+  if (!isAuthenticated()) {
     return <Redirect to="/login" />;
   }
 

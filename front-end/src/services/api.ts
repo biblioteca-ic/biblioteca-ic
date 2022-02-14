@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { getToken } from './auth';
 
 const api = axios.create({
   baseURL: process.env.REACT_APP_BASE_URL_API,
@@ -6,7 +7,7 @@ const api = axios.create({
 
 api.interceptors.request.use(
   config => {
-    const token = localStorage.getItem('@BibliotecaIC:token');
+    const token = getToken();
     if (token) {
       // eslint-disable-next-line no-param-reassign
       config.headers.Authorization = `Bearer ${JSON.parse(token)}`;
