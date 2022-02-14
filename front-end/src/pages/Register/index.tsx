@@ -37,12 +37,6 @@ const schema = yup.object().shape({
 });
 
 const Register = () => {
-  const [nome, setNome] = React.useState<string>('');
-  const [matricula, setMatricula] = React.useState<string>('');
-  const [cpf, setCpf] = React.useState<string>('');
-  const [email, setEmail] = React.useState<string>('');
-  const [password, setPassword] = React.useState<string>('');
-  const [admin, setAdmin] = React.useState<boolean>(false);
   const [show, setShow] = React.useState<boolean>(false);
 
   const {
