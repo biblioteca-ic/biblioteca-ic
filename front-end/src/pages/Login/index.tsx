@@ -117,9 +117,11 @@ const Login = () => {
             </Button>
           </form>
 
-          <Box width="100%" display="flex" justifyContent="space-between">
-            <Text fontSize="md">Ainda não tem conta?</Text>
-            <Link href="/register" color="#1A94DA">
+          <Box width="100%" display="flex">
+            <Text fontSize="md" mr={2}>
+              Ainda não tem conta?
+            </Text>
+            <Link href="/register" color="teal">
               <Text fontSize="md">Cadastre-se</Text>
             </Link>
           </Box>

@@ -197,7 +197,7 @@ const Register = () => {
             <Text fontSize="md" mr={2}>
               Já tem conta?
             </Text>
-            <Link href="/login" color="#1A94DA">
+            <Link href="/login" color="teal">
               <Text fontSize="md">Fazer login</Text>
             </Link>
           </Box>
