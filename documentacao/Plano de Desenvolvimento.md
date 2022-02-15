@@ -1,5 +1,6 @@
+# BIBLIOTECA IC - PLANO DE DESENVOLVIMENTO
+
 ## Sprint 1 (01/Fev - 14/Fev) - Início de Projeto
-### Objetivos:
 -  Confirmar os aplicativos, backend e frontend.
 -  Desenvolvedor módulo de usuários
 -  Desenvolver login, autenticação e autorização
