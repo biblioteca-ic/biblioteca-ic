@@ -1,5 +1,5 @@
 import React from 'react';
-import { Redirect, Route, Switch, RouteProps } from 'react-router-dom';
+import { Redirect, Route, Switch, RouteProps, useLocation } from 'react-router-dom';
 import { useAuth } from '../providers/AuthProvider';
 import { isAuthenticated } from '../services/auth';
 import { routes } from './routes';
@@ -26,6 +26,13 @@ const PrivateRoute: React.FC<CustomRouteProps & RouteProps> = ({ component: Comp
 };
 
 const PublicRoute: React.FC<CustomRouteProps & RouteProps> = ({ component: Component, ...rest }) => {
+  const { user } = useAuth();
+  const location = useLocation();
+
+  if (user && user.id && location.pathname === '/login') {
+    return <Redirect to="/" />;
+  }
+
   return <Route {...rest} render={props => <Component {...props} />} />;
 };
 
