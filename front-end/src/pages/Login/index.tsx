@@ -21,6 +21,7 @@ import * as yup from 'yup';
 import { useAuth } from '../../providers/AuthProvider';
 import { Page } from '../../components/Page';
 import InputWithMask from '../../components/InputWithMask';
+import { AxiosError } from 'axios';
 
 const schema = yup.object().shape({
   cpf: yup
@@ -41,8 +42,8 @@ const Login = () => {
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
-    // reset,
   } = useForm<LoginFormInputs>({
     resolver: yupResolver(schema),
   });
@@ -53,14 +54,10 @@ const Login = () => {
   const { signIn } = useAuth();
 
   const onSubmitLogin = async (data: LoginFormInputs) => {
-    // colocar type/interface
-    // verificar credenciais e redirecionar para a dashboard
-    console.log({ data });
+    const { cpf, password } = data;
     try {
-      const { cpf, password } = data;
-
       await signIn({
-        cpf,
+        cpf: cpf.replaceAll('.', '').replace('-', ''),
         password,
       });
 
@@ -72,10 +69,11 @@ const Login = () => {
       });
 
       history.push('/dashboard');
-    } catch {
+    } catch (error) {
+      const err = error as AxiosError;
       toast({
         title: 'Ocorreu um erro ao fazer o login na plataforma',
-        description: 'Tente novamente mais tarde',
+        description: err?.response?.status === 401 ? 'CPF e/ou senha incorreto(s).' : 'Tente novamente mais tarde',
         status: 'error',
         position: 'top-right',
         isClosable: true,
@@ -90,7 +88,7 @@ const Login = () => {
           <Text>Login</Text>
           <form style={{ width: '100%' }} onSubmit={handleSubmit(onSubmitLogin)}>
             <FormControl my={2} isInvalid={!!errors.cpf?.message}>
-              <InputWithMask {...register('cpf')} placeholder="CPF" mask='999.999.999-99' maskChar={null} />
+              <InputWithMask {...register('cpf')} control={control} placeholder="CPF" mask="999.999.999-99" />
               {!!errors.cpf?.message && <FormErrorMessage>{errors.cpf.message}</FormErrorMessage>}
             </FormControl>
 

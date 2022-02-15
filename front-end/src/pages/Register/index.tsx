@@ -28,20 +28,21 @@ const schema = yup.object().shape({
     .string()
     // .matches(/(^\d{3}\x2E\d{3}\x2E\d{3}\x2D\d{2}$)$/, 'Precisa estar no formato de CPF') // regex para cpf
     .required('CPF é obrigatório'),
-  email: yup.string().
-    required('E-mail é obrigatório')
-    .email('Precisa ser um e-mail válido.'),
+  email: yup.string().required('E-mail é obrigatório').email('Precisa ser um e-mail válido.'),
   registrationNumber: yup
     .string()
     .required('Matrícula é obrigatória')
-    .matches(/^[0-9]+$/, "Devem ser apenas dígitos")
+    .matches(/^[0-9]+$/, 'Devem ser apenas dígitos')
     .max(25, 'Não deve ultrapassar 25 dígitos'),
   name: yup.string().required('Nome é obrigatório'),
   admin: yup.boolean(),
   password: yup
     .string()
     .required('Senha é obrigatória')
-    .matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[$*.,&@#\W_-])[0-9a-zA-Z$*&@#.,-_]{6,}$/, 'A senha precisa ter no mínimo 6 caracteres, deve incluir letras maiúsculas e minúsculas e deve incluir pelo menos um caractere especial'),
+    .matches(
+      /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[$*.,&@#\W_-])[0-9a-zA-Z$*&@#.,-_]{6,}$/,
+      'A senha precisa ter no mínimo 6 caracteres, deve incluir letras maiúsculas e minúsculas e deve incluir pelo menos um caractere especial',
+    ),
   confirmPassword: yup
     .string()
     .required('Por favor, confirme sua senha')
@@ -66,6 +67,7 @@ const Register = () => {
     register,
     handleSubmit,
     formState: { errors },
+    control,
   } = useForm<RegisterFormInputs>({
     resolver: yupResolver(schema),
   });
@@ -73,7 +75,7 @@ const Register = () => {
   const toast = useToast();
   const history = useHistory();
   const togglePassword = () => setShowPassword(!showPassword);
-  const toggleConfirmPassword = () => setShowPassword(!showPassword);
+  const toggleConfirmPassword = () => setShowConfirmPassword(!showConfirmPassword);
 
   const onSubmitRegister = async (data: RegisterFormInputs) => {
     // colocar type/interface
@@ -84,7 +86,7 @@ const Register = () => {
       const { cpf, name, email, password, registrationNumber, admin } = data;
 
       await api.post('/signup', {
-        cpf,
+        cpf: cpf.replaceAll('.', '').replace('-', ''),
         name,
         email,
         password,
@@ -135,7 +137,7 @@ const Register = () => {
             </FormControl>
 
             <FormControl my={2} isInvalid={!!errors.cpf?.message}>
-              <InputWithMask {...register('cpf')} placeholder="CPF" mask='999.999.999-99' maskChar={null} />
+              <InputWithMask {...register('cpf')} placeholder="CPF" control={control} mask="999.999.999-99" />
               {!!errors.cpf?.message && <FormErrorMessage>{errors.cpf.message}</FormErrorMessage>}
             </FormControl>
 
@@ -193,7 +195,13 @@ const Register = () => {
               )}
             </FormControl>
 
-            <FormControl pb={2} isInvalid={!!errors.admin?.message} display="flex" justifyContent="start" alignItems="center" >
+            <FormControl
+              pb={2}
+              isInvalid={!!errors.admin?.message}
+              display="flex"
+              justifyContent="start"
+              alignItems="center"
+            >
               <Checkbox {...register('admin')}>Usuário administrador?</Checkbox>
               {!!errors.admin?.message && <FormErrorMessage>{errors.admin.message}</FormErrorMessage>}
             </FormControl>
