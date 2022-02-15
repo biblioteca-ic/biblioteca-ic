@@ -3,6 +3,7 @@ import Login from '../pages/Login';
 import Register from '../pages/Register';
 import EditProfile from '../pages/EditProfile';
 import Profile from '../pages/Profile';
+import ChangePassword from '../pages/ChangePassword';
 
 export const routes = [
   {
@@ -29,6 +30,11 @@ export const routes = [
   {
     path: '/profile/edit',
     component: EditProfile,
+    private: true,
+  },
+  {
+    path: '/profile/edit/password',
+    component: ChangePassword,
     private: true,
   },
 ];

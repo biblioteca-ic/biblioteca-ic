@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Box, Button, Container, Grid, GridItem, Heading, Link, Text } from '@chakra-ui/react';
-import { FaUserEdit, FaUserPlus } from 'react-icons/fa';
+import { FaUserEdit, FaUserPlus, FaLock } from 'react-icons/fa';
 import { Page } from '../../components/Page';
 import { useAuth } from '../../providers/AuthProvider';
 
@@ -36,13 +36,20 @@ const Profile = () => {
               <Text fontWeight="bold">É administrador?</Text>
               <Text>{user.admin ? 'Sim' : 'Não'}</Text>
             </GridItem>
+            
             <GridItem w="100%" alignSelf="center">
               <Link href="/profile/edit" textDecoration="none">
-                <Button colorScheme="teal" leftIcon={<FaUserEdit />}>
+                <Button variant="link" colorScheme="teal" leftIcon={<FaUserEdit />}>
                   Editar Perfil
                 </Button>
               </Link>
-            </GridItem>
+              
+              <Link href="/profile/edit/password" textDecoration="none">
+                <Button variant="link" colorScheme="teal" leftIcon={<FaLock />}>
+                  Alterar Senha
+                </Button>
+              </Link>
+            </GridItem>          
           </Grid>
           {user.admin && (
             <Box>

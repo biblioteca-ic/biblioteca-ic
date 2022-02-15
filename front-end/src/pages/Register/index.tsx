@@ -41,7 +41,7 @@ const schema = yup.object().shape({
     .string()
     .required('Senha é obrigatória')
     .matches(
-      /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[$*.,&@#\W_-])[0-9a-zA-Z$*&@#.,-_]{6,}$/,
+      /^(?=.*)(?=.*[a-z])(?=.*[A-Z])(?=.*[$*.,&@#\W_-])[a-zA-Z$*&@#.,-_]{6,}$/,
       'A senha precisa ter no mínimo 6 caracteres, deve incluir letras maiúsculas e minúsculas e deve incluir pelo menos um caractere especial',
     ),
   confirmPassword: yup
