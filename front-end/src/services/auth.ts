@@ -1,5 +1,5 @@
-export const TOKEN_KEY = "'@BibliotecaIC-Token";
-export const USER_KEY = "'@BibliotecaIC-User";
+export const TOKEN_KEY = '@BibliotecaIC-Token';
+export const USER_KEY = '@BibliotecaIC-User';
 
 export const isAuthenticated = () => localStorage.getItem(TOKEN_KEY) !== null;
 

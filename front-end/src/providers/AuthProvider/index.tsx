@@ -1,14 +1,15 @@
 import React, { createContext, useCallback, useContext, useState } from 'react';
 import { useHistory } from 'react-router';
 import { api } from '../../services/api';
-import { getUser, login, logout } from '../../services/auth';
+import { getUser, login, logout, USER_KEY } from '../../services/auth';
+// import { usersMock } from '../../services/mocks';
 
 interface User {
   id: string;
   name: string;
   email: string;
   cpf: string;
-  registrationNumber: number;
+  registrationNumber: string;
   admin: boolean;
   role: string;
 }
@@ -36,6 +37,7 @@ const AuthProvider: React.FC = ({ children }) => {
 
   const [data, setData] = useState<AuthState>(() => {
     const user = getUser();
+    // const user = JSON.stringify(usersMock[0]); //remove after
 
     if (user) {
       return { user: JSON.parse(user) };
@@ -67,7 +69,7 @@ const AuthProvider: React.FC = ({ children }) => {
 
   const updateUser = useCallback(
     (user: User) => {
-      localStorage.setItem('@GestIC:user', JSON.stringify(user));
+      localStorage.setItem(USER_KEY, JSON.stringify(user));
 
       setData({
         user,
