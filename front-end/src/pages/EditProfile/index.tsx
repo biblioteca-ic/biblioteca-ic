@@ -10,7 +10,12 @@ import { useAuth } from '../../providers/AuthProvider';
 
 const schema = yup.object().shape({
   email: yup.string().email('Precisa ser um e-mail válido.').required('E-mail é obrigatório'),
-  registrationNumber: yup.string().required('Matrícula é obrigatória'),
+  registrationNumber: yup
+    .string()
+    .required('Matrícula é obrigatória')
+    .matches(/^[0-9]+$/, 'Devem ser apenas dígitos')
+    .min(8, 'Precisam ser 8 dígitos')
+    .max(8, 'Não deve ultrapassar 8 dígitos'),
   name: yup.string().required('Nome é obrigatório'),
 });
 
@@ -82,6 +87,7 @@ const EditProfile = () => {
                 {...register('registrationNumber')}
                 placeholder="Matrícula"
                 defaultValue={user.registrationNumber}
+                maxLength={8}
               />
               {!!errors.registrationNumber?.message && (
                 <FormErrorMessage>{errors.registrationNumber.message}</FormErrorMessage>

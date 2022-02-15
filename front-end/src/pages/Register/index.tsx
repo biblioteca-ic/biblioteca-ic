@@ -33,7 +33,8 @@ const schema = yup.object().shape({
     .string()
     .required('Matrícula é obrigatória')
     .matches(/^[0-9]+$/, 'Devem ser apenas dígitos')
-    .max(25, 'Não deve ultrapassar 25 dígitos'),
+    .min(8, 'Precisam ser 8 dígitos')
+    .max(8, 'Não deve ultrapassar 8 dígitos'),
   name: yup.string().required('Nome é obrigatório'),
   admin: yup.boolean(),
   password: yup
@@ -130,7 +131,7 @@ const Register = () => {
             </FormControl>
 
             <FormControl my={2} isInvalid={!!errors.registrationNumber?.message}>
-              <Input {...register('registrationNumber')} placeholder="Matrícula" maxLength={25} />
+              <Input {...register('registrationNumber')} placeholder="Matrícula" maxLength={8} />
               {!!errors.registrationNumber?.message && (
                 <FormErrorMessage>{errors.registrationNumber.message}</FormErrorMessage>
               )}
