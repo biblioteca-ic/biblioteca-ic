@@ -21,17 +21,27 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { Page } from '../../components/Page';
 import { api } from '../../services/api';
+import InputWithMask from '../../components/InputWithMask';
 
 const schema = yup.object().shape({
   cpf: yup
     .string()
     // .matches(/(^\d{3}\x2E\d{3}\x2E\d{3}\x2D\d{2}$)$/, 'Precisa estar no formato de CPF') // regex para cpf
     .required('CPF é obrigatório'),
-  email: yup.string().email('Precisa ser um e-mail válido.').required('E-mail é obrigatório'),
-  registrationNumber: yup.string().required('Matrícula é obrigatória'),
+  email: yup.string().
+    required('E-mail é obrigatório')
+    .email('Precisa ser um e-mail válido.'),
+  registrationNumber: yup
+    .string()
+    .required('Matrícula é obrigatória')
+    .matches(/^[0-9]+$/, "Devem ser apenas dígitos")
+    .max(25, 'Não deve ultrapassar 25 dígitos'),
   name: yup.string().required('Nome é obrigatório'),
   admin: yup.boolean(),
-  password: yup.string().required('Senha é obrigatória'),
+  password: yup
+    .string()
+    .required('Senha é obrigatória')
+    .matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[$*.,&@#\W_-])[0-9a-zA-Z$*&@#.,-_]{6,}$/, 'A senha precisa ter no mínimo 6 caracteres, deve incluir letras maiúsculas e minúsculas e deve incluir pelo menos um caractere especial'),
   confirmPassword: yup
     .string()
     .required('Por favor, confirme sua senha')
@@ -109,7 +119,7 @@ const Register = () => {
     <Page>
       <Box textAlign="center" fontSize="xl" p={8} display="flex" justifyContent="center">
         <Stack spacing={3} display="flex" alignItems="center" w="80%" maxW={380} minW={320}>
-          <Text>Cadastrar</Text>
+          <Text>Cadastrar Usuário</Text>
 
           <form style={{ width: '100%' }} onSubmit={handleSubmit(onSubmitRegister)}>
             <FormControl my={2} isInvalid={!!errors.name?.message}>
@@ -118,25 +128,20 @@ const Register = () => {
             </FormControl>
 
             <FormControl my={2} isInvalid={!!errors.registrationNumber?.message}>
-              <Input {...register('registrationNumber')} placeholder="Matrícula" />
+              <Input {...register('registrationNumber')} placeholder="Matrícula" maxLength={25} />
               {!!errors.registrationNumber?.message && (
                 <FormErrorMessage>{errors.registrationNumber.message}</FormErrorMessage>
               )}
             </FormControl>
 
             <FormControl my={2} isInvalid={!!errors.cpf?.message}>
-              <Input {...register('cpf')} placeholder="CPF" />
+              <InputWithMask {...register('cpf')} placeholder="CPF" mask='999.999.999-99' maskChar={null} />
               {!!errors.cpf?.message && <FormErrorMessage>{errors.cpf.message}</FormErrorMessage>}
             </FormControl>
 
             <FormControl my={2} isInvalid={!!errors.email?.message}>
               <Input {...register('email')} type="email" placeholder="Email" />
               {!!errors.email?.message && <FormErrorMessage>{errors.email.message}</FormErrorMessage>}
-            </FormControl>
-
-            <FormControl my={2} isInvalid={!!errors.admin?.message}>
-              <Checkbox {...register('admin')}>É administrador?</Checkbox>
-              {!!errors.admin?.message && <FormErrorMessage>{errors.admin.message}</FormErrorMessage>}
             </FormControl>
 
             <FormControl my={2} isInvalid={!!errors.password?.message}>
@@ -188,19 +193,15 @@ const Register = () => {
               )}
             </FormControl>
 
+            <FormControl pb={2} isInvalid={!!errors.admin?.message} display="flex" justifyContent="start" alignItems="center" >
+              <Checkbox {...register('admin')}>Usuário administrador?</Checkbox>
+              {!!errors.admin?.message && <FormErrorMessage>{errors.admin.message}</FormErrorMessage>}
+            </FormControl>
+
             <Button colorScheme="teal" size="md" w="100%" type="submit">
               Criar conta
             </Button>
           </form>
-
-          <Box width="100%" display="flex">
-            <Text fontSize="md" mr={2}>
-              Já tem conta?
-            </Text>
-            <Link href="/login" color="teal">
-              <Text fontSize="md">Fazer login</Text>
-            </Link>
-          </Box>
         </Stack>
       </Box>
     </Page>

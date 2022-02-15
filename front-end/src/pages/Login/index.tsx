@@ -20,6 +20,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { useAuth } from '../../providers/AuthProvider';
 import { Page } from '../../components/Page';
+import InputWithMask from '../../components/InputWithMask';
 
 const schema = yup.object().shape({
   cpf: yup
@@ -89,7 +90,7 @@ const Login = () => {
           <Text>Login</Text>
           <form style={{ width: '100%' }} onSubmit={handleSubmit(onSubmitLogin)}>
             <FormControl my={2} isInvalid={!!errors.cpf?.message}>
-              <Input {...register('cpf')} placeholder="CPF" />
+              <InputWithMask {...register('cpf')} placeholder="CPF" mask='999.999.999-99' maskChar={null} />
               {!!errors.cpf?.message && <FormErrorMessage>{errors.cpf.message}</FormErrorMessage>}
             </FormControl>
 
