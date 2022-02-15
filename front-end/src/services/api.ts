@@ -10,7 +10,7 @@ api.interceptors.request.use(
     const token = getToken();
     if (token) {
       // eslint-disable-next-line no-param-reassign
-      config.headers.Authorization = `Bearer ${JSON.parse(token)}`;
+      config.headers['x-access-token'] = `${JSON.parse(token)}`;
     }
 
     return config;

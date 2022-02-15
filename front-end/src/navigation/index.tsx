@@ -1,22 +1,25 @@
 import React from 'react';
 import { Redirect, Route, Switch, RouteProps } from 'react-router-dom';
+import { useAuth } from '../providers/AuthProvider';
 import { isAuthenticated } from '../services/auth';
 import { routes } from './routes';
 
 interface CustomRouteProps {
   component: () => JSX.Element;
-  roles?: string[];
+  onlyAdmin?: boolean;
   path?: string;
   exact: boolean;
 }
 
-const PrivateRoute: React.FC<CustomRouteProps & RouteProps> = ({ component: Component, ...rest }) => {
-  // const user = {
-  //   profileTag: 'admin',
-  // };
+const PrivateRoute: React.FC<CustomRouteProps & RouteProps> = ({ component: Component, onlyAdmin, ...rest }) => {
+  const { user } = useAuth();
 
   if (!isAuthenticated()) {
     return <Redirect to="/login" />;
+  }
+
+  if (onlyAdmin && !user.admin) {
+    return <Redirect to="/" />;
   }
 
   return <Route {...rest} render={props => <Component {...props} />} />;
@@ -31,7 +34,13 @@ export const Navigation = () => {
     <Switch>
       {routes.map(route =>
         route.private ? (
-          <PrivateRoute roles={route.roles} key={route.path} path={route.path} exact component={route.component} />
+          <PrivateRoute
+            onlyAdmin={route.onlyAdmin}
+            key={route.path}
+            path={route.path}
+            exact
+            component={route.component}
+          />
         ) : (
           <PublicRoute key={route.path} path={route.path} exact component={route.component} />
         ),
