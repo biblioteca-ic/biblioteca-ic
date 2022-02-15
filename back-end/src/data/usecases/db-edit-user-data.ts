@@ -8,6 +8,7 @@ export class DbEditUserData implements EditUserData {
   async edit (params: EditUserData.Params): Promise<UserModelDto> {
     const { id, ...userWithoutId } = params
     const user = await this._updateUserById.update(id, userWithoutId)
-    return user
+    if (user) return user
+    return null
   }
 }
