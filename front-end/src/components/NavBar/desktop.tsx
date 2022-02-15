@@ -23,11 +23,12 @@ import {
 } from '@chakra-ui/react';
 import { HamburgerIcon } from '@chakra-ui/icons';
 import { BiChevronDown } from 'react-icons/bi';
-import { usersMock } from '../../services/mocks';
+// import { usersMock } from '../../services/mocks';
+import { useAuth } from '../../providers/AuthProvider';
 
 export const NavBarDesktop = () => {
   const { isOpen, onOpen, onClose, onToggle } = useDisclosure();
-  const user = usersMock[0];
+  const { user } = useAuth();
 
   return (
     <SimpleGrid
@@ -69,10 +70,12 @@ export const NavBarDesktop = () => {
                 {user && user.id !== '' ? (
                   <Box>
                     <Box fontSize="1.2rem" onClick={onToggle} mb={3}>
-                      <Link href="/perfil">Meu Perfil</Link>
+                      <Link href="/profile">Meu Perfil</Link>
                     </Box>
                     <Box fontSize="1.2rem" onClick={onToggle} mb={3}>
-                      <Link onClick={() => {}}>Sair</Link>
+                      <Link href="/login" onClick={() => {}}>
+                        Sair
+                      </Link>
                     </Box>
                   </Box>
                 ) : (
@@ -99,13 +102,17 @@ export const NavBarDesktop = () => {
               {user.name}
             </MenuButton>
             <MenuList>
-              <MenuItem>
-                <Link href="/perfil">
+              <Link href="/profile">
+                <MenuItem>
                   <span>Ir para perfil</span>
-                </Link>
-              </MenuItem>
+                </MenuItem>
+              </Link>
               <MenuDivider />
-              <MenuItem onClick={() => {}}>Sair</MenuItem>
+              <Link href="/login">
+                <MenuItem>
+                  <span>Sair</span>
+                </MenuItem>
+              </Link>
             </MenuList>
           </Menu>
         </Box>
