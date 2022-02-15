@@ -9,6 +9,7 @@
 
 ## Sprint 2 (15/Fev - 28/Fev) Módulo de Livros
 -  Desenvolver CRUD de livros, com nome do livro, autor(es), editora, ano e categorias.
+-  Desenvolver lógica de cópias, que não são exatamente livros, apenas cópias podem ser alugadas.
 -  Desenvolver busca de livros, com todos os parâmetros.
 - Desenvolver lógica de categorias: Ao adicionar um livro, pode-se criar uma categoria ou selecionar existentes. 
 - Criar lógica de código de livros, que deve ser único. 
