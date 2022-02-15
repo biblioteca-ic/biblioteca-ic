@@ -1,7 +1,5 @@
-import { hash } from 'bcrypt'
 import express, { NextFunction, Request, Response, Router } from 'express'
 import { serve, setup } from 'swagger-ui-express'
-import { PrismaHelper } from '../infra/db/prisma-helper'
 import swaggerConfig from './docs'
 import changeAdminRoute from './routes/change-admin-route'
 import changePasswordRoute from './routes/change-password-route'
@@ -28,19 +26,6 @@ loginRoute(router)
 editUserRoute(router)
 changePasswordRoute(router)
 changeAdminRoute(router)
-
-app.post('/create', async (req: Request, res: Response) => {
-  const { password, ...userWithoutPassword } = req.body
-  const hashedPass = await hash(password, 12)
-  const newUser = Object.assign({}, userWithoutPassword, { password: hashedPass })
-  const user = PrismaHelper.client.user.create({
-    data: newUser
-  })
-  if (user) {
-    return res.send('Usuario criado')
-  }
-  return res.send('não foi possível')
-})
 
 app.listen(3333, () => {
   console.log('listening at http://localhost:3333')
