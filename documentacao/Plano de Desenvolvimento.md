@@ -8,7 +8,7 @@
 -  Desenvolver alteração de senha
 
 ## Sprint 2 (15/Fev - 28/Fev) Módulo de Livros
-- Desenvolver listagem de usuários, deletar usuário e marcar como ADM.
+- Desenvolver listagem de usuários, desativar usuário e marcar como ADM.
 -  Desenvolver CRUD de livros, com nome do livro, autor(es), editora, ano e categorias.
 -  Desenvolver lógica de cópias, que não são exatamente livros, apenas cópias podem ser alugadas.
 -  Desenvolver busca de livros, com todos os parâmetros.
