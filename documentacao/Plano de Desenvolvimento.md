@@ -14,7 +14,7 @@
 -  Desenvolver busca de livros, com todos os parâmetros.
 - Desenvolver lógica de categorias: Ao adicionar um livro, pode-se criar uma categoria ou selecionar existentes. 
 - Criar lógica de código de livros, que deve ser único. 
-- Marcar um livro como **exemplar único** então este livro não poderá ser emprestado.
+- O livro que não tem cópia não pode ser emprestado.
 
 ## Sprint 3 (01/Mar - 14/Mar) Módulo de Empréstimo
 - Criar relacionamento entre alunos e livros
