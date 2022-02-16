@@ -27,6 +27,7 @@
 - A partir do 120° dia, marcar livro como extraviado.
 - Caso o aluno esteja com um livro atrasado, não deixar pegar emprestado outro.
 ## Sprint 5 (29/Mar - 12/Abr) Ajustes e correções e deploy
+- Desenvolver listagem de usuários, deletar usuário e marcar como ADM.
 - Decidir e desenvolver questões relativas aos emails de recuperação de senha.
 - Correções de bugs
 - Ajustes necessários
