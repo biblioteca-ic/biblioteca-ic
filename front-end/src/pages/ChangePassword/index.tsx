@@ -1,13 +1,16 @@
 import * as React from 'react';
 import { Box, Text, Input, Button, Stack, FormControl, FormErrorMessage, useToast, InputGroup, InputRightElement, IconButton } from '@chakra-ui/react';
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
-import { useHistory } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { Page } from '../../components/Page';
 import { api } from '../../services/api';
 import { useAuth } from '../../providers/AuthProvider';
+import { AxiosError } from 'axios';
+
+export const TOKEN_KEY = '@BibliotecaIC-Token';
+export const USER_KEY = '@BibliotecaIC-User';
 
 const schema = yup.object().shape({
   newPassword: yup
@@ -35,6 +38,7 @@ const ChangePassword = () => {
   const [showConfirmPassword, setShowConfirmPassword] = React.useState<boolean>(false);
 
   const { user, updateUser } = useAuth();
+  const { signIn, signOut } = useAuth();
   const toggleOldPassword = () => setShowOldPassword(!showOldPassword);
   const toggleNewPassword = () => setShowNewPassword(!showNewPassword);
   const toggleConfirmPassword = () => setShowConfirmPassword(!showConfirmPassword);
@@ -48,7 +52,6 @@ const ChangePassword = () => {
   });
 
   const toast = useToast();
-  const history = useHistory();
 
   const onSubmitEdit = async (data: EditFormInputs) => {
     try {
@@ -64,26 +67,37 @@ const ChangePassword = () => {
         return;
       }
 
-      const { data: updatedUser } = await api.patch(`/api/users/${user.id}/password`, {
+      const currentUser = JSON.parse(localStorage.getItem(USER_KEY) || '{}');
+
+      const { cpf } = currentUser;
+
+      await signIn({
+        cpf,
+        password: oldPassword,
+      });
+
+      await api.patch(`/api/users/${user.id}/password`, {
         oldPassword,
         newPassword,
         newPasswordConfirmation: confirmPassword,
+      }).then((res) => {
+        console.log(res.data)
+        toast({
+          title: 'Edição realizada com sucesso',
+          status: 'success',
+          position: 'top-right',
+          isClosable: true,
+        });
       });
 
-      updateUser(updatedUser);
 
-      toast({
-        title: 'Edição realizada com sucesso',
-        status: 'success',
-        position: 'top-right',
-        isClosable: true,
-      });
 
-      history.push('/profile');
-    } catch {
+      signOut();
+    } catch (error) {
+      const err = error as AxiosError;
       toast({
-        title: 'Ocorreu um erro ao editar o usuário na plataforma',
-        description: 'Tente novamente mais tarde',
+        title: 'Ocorreu um erro ao alterar a senha',
+        description: err?.response?.status === 401 ? 'CPF e/ou senha incorreto(s).' : 'Tente novamente mais tarde',
         status: 'error',
         position: 'top-right',
         isClosable: true,

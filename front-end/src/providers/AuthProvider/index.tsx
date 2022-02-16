@@ -1,5 +1,5 @@
 import React, { createContext, useCallback, useContext, useState } from 'react';
-import { useHistory } from 'react-router';
+import { useHistory } from 'react-router-dom';
 import { api } from '../../services/api';
 import { getUser, login, logout, USER_KEY } from '../../services/auth';
 // import { usersMock } from '../../services/mocks';
@@ -34,7 +34,7 @@ const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
 const AuthProvider: React.FC = ({ children }) => {
   const history = useHistory();
-
+  
   const [data, setData] = useState<AuthState>(() => {
     const user = getUser();
     // const user = JSON.stringify(usersMock[0]); //remove after

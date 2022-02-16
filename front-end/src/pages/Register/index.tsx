@@ -28,7 +28,11 @@ const schema = yup.object().shape({
     .string()
     // .matches(/(^\d{3}\x2E\d{3}\x2E\d{3}\x2D\d{2}$)$/, 'Precisa estar no formato de CPF') // regex para cpf
     .required('CPF é obrigatório'),
-  email: yup.string().required('E-mail é obrigatório').email('Precisa ser um e-mail válido.'),
+  email: yup
+  .string()
+  .required('E-mail é obrigatório')
+  .email('Precisa ser um e-mail válido.')
+  .matches(/[^@\s]*?(?=@ic\.ufal\.br)/, 'O email precisa pertencer ao domínio do IC.'),
   registrationNumber: yup
     .string()
     .required('Matrícula é obrigatória')
