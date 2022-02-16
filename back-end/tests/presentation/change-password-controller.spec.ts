@@ -35,7 +35,7 @@ const makeSut = (): SutTypes => {
   }
 }
 
-const mockInput = { id: 'any_id', oldPassword: 'any_password', newPassword: 'any_new_password', newPasswordConfirmation: 'any_new_password' }
+const mockInput = { id: 'any_id', oldPassword: 'any_password', newPassword: 'any_new_password1', newPasswordConfirmation: 'any_new_password1' }
 
 describe('ChangePassworController', () => {
   it('should call Validation with correct values', async () => {
