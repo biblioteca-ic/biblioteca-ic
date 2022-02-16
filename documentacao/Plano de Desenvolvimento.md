@@ -8,6 +8,7 @@
 -  Desenvolver alteração de senha
 
 ## Sprint 2 (15/Fev - 28/Fev) Módulo de Livros
+- Desenvolver listagem de usuários, deletar usuário e marcar como ADM.
 -  Desenvolver CRUD de livros, com nome do livro, autor(es), editora, ano e categorias.
 -  Desenvolver lógica de cópias, que não são exatamente livros, apenas cópias podem ser alugadas.
 -  Desenvolver busca de livros, com todos os parâmetros.
@@ -27,7 +28,6 @@
 - A partir do 120° dia, marcar livro como extraviado.
 - Caso o aluno esteja com um livro atrasado, não deixar pegar emprestado outro.
 ## Sprint 5 (29/Mar - 12/Abr) Ajustes e correções e deploy
-- Desenvolver listagem de usuários, deletar usuário e marcar como ADM.
 - Decidir e desenvolver questões relativas aos emails de recuperação de senha.
 - Correções de bugs
 - Ajustes necessários
