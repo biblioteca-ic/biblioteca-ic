@@ -20,15 +20,30 @@ import {
   MenuItem,
   MenuDivider,
   Heading,
+  useToast
 } from '@chakra-ui/react';
 import { HamburgerIcon } from '@chakra-ui/icons';
 import { BiChevronDown } from 'react-icons/bi';
-// import { usersMock } from '../../services/mocks';
 import { useAuth } from '../../providers/AuthProvider';
 
 export const NavBarDesktop = () => {
   const { isOpen, onOpen, onClose, onToggle } = useDisclosure();
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
+  const toast = useToast();
+
+  const onLogout = () => {
+    try {
+      signOut()
+    } catch {
+      toast({
+        title: 'Ocorreu um erro ao fazer o logout na plataforma',
+        description: 'Tente novamente mais tarde',
+        status: 'error',
+        position: 'top-right',
+        isClosable: true,
+      });
+    }
+  }
 
   return (
     <SimpleGrid
@@ -108,7 +123,7 @@ export const NavBarDesktop = () => {
                 </MenuItem>
               </Link>
               <MenuDivider />
-              <Link href="/login">
+              <Link href="/login" onClick={onLogout}>
                 <MenuItem>
                   <span>Sair</span>
                 </MenuItem>

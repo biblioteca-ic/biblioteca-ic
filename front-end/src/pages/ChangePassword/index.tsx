@@ -8,6 +8,7 @@ import { Page } from '../../components/Page';
 import { api } from '../../services/api';
 import { useAuth } from '../../providers/AuthProvider';
 import { AxiosError } from 'axios';
+import { useHistory } from 'react-router-dom';
 
 export const TOKEN_KEY = '@BibliotecaIC-Token';
 export const USER_KEY = '@BibliotecaIC-User';
@@ -39,6 +40,7 @@ const ChangePassword = () => {
 
   const { user, updateUser } = useAuth();
   const { signIn, signOut } = useAuth();
+  const history = useHistory();
   const toggleOldPassword = () => setShowOldPassword(!showOldPassword);
   const toggleNewPassword = () => setShowNewPassword(!showNewPassword);
   const toggleConfirmPassword = () => setShowConfirmPassword(!showConfirmPassword);
@@ -80,8 +82,7 @@ const ChangePassword = () => {
         oldPassword,
         newPassword,
         newPasswordConfirmation: confirmPassword,
-      }).then((res) => {
-        console.log(res.data)
+      }).then(() => {
         toast({
           title: 'Edição realizada com sucesso',
           status: 'success',
@@ -93,6 +94,7 @@ const ChangePassword = () => {
 
 
       signOut();
+      history.push("/login");
     } catch (error) {
       const err = error as AxiosError;
       toast({
