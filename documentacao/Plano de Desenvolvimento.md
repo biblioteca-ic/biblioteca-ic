@@ -2,7 +2,7 @@
 
 ## Sprint 1 (01/Fev - 14/Fev) - Início de Projeto
 -  Confirmar os aplicativos, backend e frontend.
--  Desenvolvedor módulo de usuários
+-  Desenvolver módulo de usuários
 -  Desenvolver login, autenticação e autorização
 -  Desenvolver lógica de admin
 -  Desenvolver alteração de senha
