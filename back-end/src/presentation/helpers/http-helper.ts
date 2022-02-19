@@ -6,12 +6,15 @@ export const ok = (body: any): HttpResponse => ({
   body
 })
 
-export const noContent = (): HttpResponse => ({
+export const noContent = (message?: string): HttpResponse => ({
   statusCode: 204,
-  body: null
+  body: {
+    statusCode: 204,
+    message
+  }
 })
 
-export const badRequest = (message?: string): HttpResponse => ({
+export const badRequest = (message: string): HttpResponse => ({
   statusCode: 400,
   body: message
 })

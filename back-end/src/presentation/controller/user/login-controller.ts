@@ -1,15 +1,21 @@
 import { Authentication } from '../../../domain/usecases/authentication'
-import { ok, serverError, unauthorized } from '../../helpers/http-helper'
+import { badRequest, ok, serverError, unauthorized } from '../../helpers/http-helper'
 import { Controller } from '../../protocols/controller'
 import { HttpResponse } from '../../protocols/http-response'
+import { Validation } from '../../validation/protocols/validation'
 
 export class LoginController implements Controller {
   constructor (
-    private readonly authentication: Authentication
+    private readonly authentication: Authentication,
+    private readonly validation: Validation
   ) { }
 
   async handle (request: LoginController.Request): Promise<HttpResponse> {
     try {
+      const error = this.validation.validate(request)
+      if (error) {
+        return badRequest(error.message)
+      }
       const authenticationModel = await this.authentication.auth(request)
       if (!authenticationModel) {
         return unauthorized()

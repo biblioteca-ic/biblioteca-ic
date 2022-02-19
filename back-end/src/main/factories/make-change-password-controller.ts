@@ -34,5 +34,5 @@ export const makeChangePasswordController = async (req: Request, res: Response):
   const controller = new ChangePasswordController(makeValidation(), makeChangePassword())
   const request = { ...req.body, ...req.params }
   const result = await controller.handle(request)
-  return res.status(result.statusCode).json(result.body)
+  return res.status(result.statusCode).json(result)
 }

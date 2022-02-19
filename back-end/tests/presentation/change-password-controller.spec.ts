@@ -4,7 +4,7 @@ import { Validation } from '../../src/presentation/validation/protocols/validati
 import { ChangePassword } from '../../src/domain/usecases/change-password'
 import { UserModelDto } from '../../src/domain/models/user'
 import { mockUserModelDto } from '../domain/mocks/user.mock'
-import { badRequest, noContent, serverError } from '../../src/presentation/helpers/http-helper'
+import { badRequest, ok, serverError } from '../../src/presentation/helpers/http-helper'
 
 type SutTypes = {
   sut: Controller
@@ -71,10 +71,10 @@ describe('ChangePassworController', () => {
     expect(result.statusCode).toBe(500)
   })
 
-  it('should return NoContent on success', async () => {
+  it('should return Ok on success', async () => {
     const { sut } = makeSut()
     const result = await sut.handle(mockInput)
-    expect(result).toEqual(noContent())
-    expect(result.statusCode).toBe(204)
+    expect(result).toEqual(ok({ message: 'password has been changed successfully' }))
+    expect(result.statusCode).toBe(200)
   })
 })

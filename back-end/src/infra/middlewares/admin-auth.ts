@@ -6,8 +6,8 @@ export const adminAuth = (req: Request, res: Response, next: NextFunction): any 
   if (!token) return res.status(401).json({})
 
   verify(token, process.env.SECRET_KEY, function (err, decoded: any) {
-    if (err) return res.status(500).json()
-    if (!decoded.admin) return res.status(403).json({})
+    if (err) return res.status(500).json({ statusCode: 500, error: 'Internal Server Error' })
+    if (!decoded.admin) return res.status(403).json({ statusCode: 403, error: 'Forbidden' })
     next()
   })
 }
