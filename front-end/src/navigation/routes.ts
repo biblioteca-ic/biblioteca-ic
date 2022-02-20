@@ -4,6 +4,7 @@ import Register from '../pages/Register';
 import EditProfile from '../pages/EditProfile';
 import Profile from '../pages/Profile';
 import ChangePassword from '../pages/ChangePassword';
+import { UsersItemPage, UsersList } from '../pages/Users';
 
 export const routes = [
   {
@@ -36,5 +37,17 @@ export const routes = [
     path: '/profile/edit/password',
     component: ChangePassword,
     private: true,
+  },
+  {
+    path: '/users',
+    component: UsersList,
+    private: true,
+    onlyAdmin: true,
+  },
+  {
+    path: '/users/show/:id',
+    component: UsersItemPage,
+    private: true,
+    onlyAdmin: true,
   },
 ];

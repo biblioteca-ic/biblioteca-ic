@@ -1,62 +1,53 @@
 import * as React from 'react';
 import { Box, Button, Container, Grid, GridItem, Heading, Link, Text } from '@chakra-ui/react';
-import { FaUserEdit, FaUserPlus, FaLock } from 'react-icons/fa';
+import { FaUserEdit, FaUserPlus, FaLock, FaUserFriends } from 'react-icons/fa';
 import { Page } from '../../components/Page';
 import { useAuth } from '../../providers/AuthProvider';
 import { formatCpf } from '../../helpers/formatCpf';
+import { UserDetails } from '../../components/UserDetails';
 
 const Profile = () => {
   const { user } = useAuth();
   return (
     <Page>
       <Container fontSize="xl" p={6}>
-        <Heading as="h4" textAlign="center" size="lg">
+        <Heading color="teal" textAlign="center" mb={6}>
           Perfil
         </Heading>
         <Box>
-          <Grid templateColumns="repeat(3, 1fr)" my={4} gap={6}>
-            <GridItem w="100%">
-              <Text fontWeight="bold">Nome:</Text>
-              <Text>{user.name}</Text>
-            </GridItem>
-            <GridItem w="100%">
-              <Text fontWeight="bold">Matrícula:</Text>
-              <Text>{user.registrationNumber}</Text>
-            </GridItem>
-            <GridItem w="100%">
-              <Text fontWeight="bold">E-mail:</Text>
-              <Text>{user.email}</Text>
-            </GridItem>
-          </Grid>
-          <Grid templateColumns="repeat(3, 1fr)" gap={6}>
-            <GridItem w="100%">
-              <Text fontWeight="bold">CPF:</Text>
-              <Text>{formatCpf(user.cpf)}</Text>
-            </GridItem>
-            <GridItem w="100%">
-              <Text fontWeight="bold">É administrador?</Text>
-              <Text>{user.admin ? 'Sim' : 'Não'}</Text>
-            </GridItem>
-            
-            <GridItem w="100%" alignSelf="center">
-              <Link href="/profile/edit" textDecoration="none">
-                <Button variant="link" colorScheme="teal" leftIcon={<FaUserEdit />}>
-                  Editar Perfil
-                </Button>
-              </Link>
-              
-              <Link href="/profile/edit/password" textDecoration="none">
-                <Button variant="link" colorScheme="teal" leftIcon={<FaLock />}>
-                  Alterar Senha
-                </Button>
-              </Link>
-            </GridItem>          
-          </Grid>
+          <Box display="flex" w="100%" justifyContent="space-between" gap={6}>
+            <Box>
+              <UserDetails user={user} showName />
+            </Box>
+            <Box>
+              <Box w="100%" alignSelf="center">
+                <Link href="/profile/edit" textDecoration="none">
+                  <Button variant="link" colorScheme="teal" leftIcon={<FaUserEdit />}>
+                    Editar Perfil
+                  </Button>
+                </Link>
+              </Box>
+              <Box w="100%" alignSelf="center">
+                <Link href="/profile/edit/password" textDecoration="none">
+                  <Button variant="link" colorScheme="teal" leftIcon={<FaLock />}>
+                    Alterar Senha
+                  </Button>
+                </Link>
+              </Box>
+            </Box>
+          </Box>
           {user.admin && (
             <Box>
               <Heading as="h6" size="md" my={4}>
                 Funções de Administrador
               </Heading>
+              <Box mb={4}>
+                <Link href="/users" textDecoration="none">
+                  <Button colorScheme="teal" leftIcon={<FaUserFriends />}>
+                    Ver usuários
+                  </Button>
+                </Link>
+              </Box>
               <Box>
                 <Link href="/register" textDecoration="none">
                   <Button colorScheme="teal" leftIcon={<FaUserPlus />}>
