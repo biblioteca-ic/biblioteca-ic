@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "start": "sucrase-node src/main/server.ts",
-    "test": "jest",
+    "test": "jest -i --coverage",
     "test:staged": "npm test -- --findRelatedTests",
     "migrate": "npx prisma migrate dev"
   },
@@ -23,6 +23,7 @@
     "eslint-plugin-promise": "^5.2.0",
     "husky": "^7.0.4",
     "jest": "^27.4.7",
+    "jest-mock-extended": "^2.0.4",
     "lint-staged": "^12.3.3",
     "prisma": "^3.9.1",
     "sucrase": "^3.20.3",
