@@ -3,6 +3,7 @@ import { Box, Button, Container, Grid, GridItem, Heading, Link, Text } from '@ch
 import { FaUserEdit, FaUserPlus, FaLock } from 'react-icons/fa';
 import { Page } from '../../components/Page';
 import { useAuth } from '../../providers/AuthProvider';
+import { formatCpf } from '../../helpers/formatCpf';
 
 const Profile = () => {
   const { user } = useAuth();
@@ -30,7 +31,7 @@ const Profile = () => {
           <Grid templateColumns="repeat(3, 1fr)" gap={6}>
             <GridItem w="100%">
               <Text fontWeight="bold">CPF:</Text>
-              <Text>{user.cpf}</Text>
+              <Text>{formatCpf(user.cpf)}</Text>
             </GridItem>
             <GridItem w="100%">
               <Text fontWeight="bold">É administrador?</Text>
