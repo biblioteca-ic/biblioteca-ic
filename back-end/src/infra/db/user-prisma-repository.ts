@@ -1,25 +1,12 @@
 import { LoadUserByCpfRepository } from '../../data/protocols/load-user-by-cpf.repository'
 import { LoadUserByIdRepository } from '../../data/protocols/load-user-by-id.repository'
-import { LoadUserByEmailRepository } from '../../data/protocols/load-user-by-email.repository'
-import { LoadUserByRegisterNumberepository } from '../../data/protocols/load-user-by-registernumber.repository'
 import { UpdateUserByIdRepository } from '../../data/protocols/update-user-by-id.repository'
-import { CreateUserRepository } from '../../data/protocols/create-user.repository'
 import { UserModel, UserModelDto } from '../../domain/models/user'
 import { PrismaHelper } from './prisma-helper'
 
-export class UserPrismaRepository implements LoadUserByCpfRepository, UpdateUserByIdRepository, LoadUserByIdRepository, CreateUserRepository, LoadUserByEmailRepository, LoadUserByRegisterNumberepository {
+export class UserPrismaRepository implements LoadUserByCpfRepository, UpdateUserByIdRepository, LoadUserByIdRepository {
   async loadByCpf (cpf: string): Promise<UserModel> {
     const user = await PrismaHelper.client.user.findFirst({ where: { cpf: cpf } })
-    return user && PrismaHelper.userMapper(user)
-  }
-
-  async loadByEmail (email: string): Promise<UserModel> {
-    const user = await PrismaHelper.client.user.findFirst({ where: { email: email } })
-    return user && PrismaHelper.userMapper(user)
-  }
-
-  async loadByRegisterNumber (registerNumber: string): Promise<UserModel> {
-    const user = await PrismaHelper.client.user.findFirst({ where: { registration_number: registerNumber } })
     return user && PrismaHelper.userMapper(user)
   }
 
@@ -32,12 +19,5 @@ export class UserPrismaRepository implements LoadUserByCpfRepository, UpdateUser
   async loadById (id: string): Promise<UserModel> {
     const user = await PrismaHelper.client.user.findFirst({ where: { id } })
     return user && PrismaHelper.userMapper(user)
-  }
-  
-  async create (data: any): Promise<UserModelDto> {
-    const mappedUser = PrismaHelper.userDbMapper(data)
-    const user = await PrismaHelper.client.user.create({ data: mappedUser })
-
-    return user && PrismaHelper.userDtoMapper(user)
   }
 }

@@ -33,41 +33,6 @@ export const loginPath = {
   }
 }
 
-export const createUserPath = {
-  post: {
-    tags: ['Users'],
-    summary: 'Criação de usuário',
-    requestBody: {
-      content: {
-        'application/json': {
-          schema: {
-            $ref: '#/schemas/createUserRequest'
-          }
-        }
-      },
-      required: true
-    },
-    responses: {
-      200: {
-        description: 'Sucesso',
-        content: {
-          'application/json': {
-            schema: {
-              $ref: '#/schemas/createUserResponse'
-            }
-          }
-        }
-      },
-      401: {
-        description: 'Unauthorized'
-      },
-      500: {
-        description: 'ServerError'
-      }
-    }
-  }
-}
-
 export const editUserPath = {
   patch: {
     tags: ['Users'],

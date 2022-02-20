@@ -4,7 +4,6 @@ import swaggerConfig from './docs'
 import changeAdminRoute from './routes/change-admin-route'
 import changePasswordRoute from './routes/change-password-route'
 import editUserRoute from './routes/edit-user-route'
-import createUserRoute from './routes/create-user-route'
 import loginRoute from './routes/login-route'
 
 const app = express()
@@ -25,7 +24,6 @@ const router = Router()
 app.use('/api', router)
 loginRoute(router)
 editUserRoute(router)
-createUserRoute(router)
 changePasswordRoute(router)
 changeAdminRoute(router)
 
