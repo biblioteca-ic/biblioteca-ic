@@ -26,7 +26,7 @@ const schema = yup.object().shape({
   oldPassword: yup.string().required('Senha antiga é obrigatória'),
   newPassword: yup
     .string()
-    .required('Senha é obrigatória')
+    .required('Nova senha é obrigatória')
     // eslint-disable-next-line func-names
     .test('comparar senha antiga com atual', 'Senha não pode ser igual a antiga', function (value) {
       const { oldPassword } = this.parent;
@@ -105,7 +105,7 @@ const ChangePassword = () => {
     <Page>
       <Box textAlign="center" fontSize="xl" p={8} display="flex" justifyContent="center">
         <Stack spacing={3} display="flex" alignItems="center" w="80%" maxW={380} minW={320}>
-          <Text>Editar perfil</Text>
+          <Text>Editar senha</Text>
 
           <form style={{ width: '100%' }} onSubmit={handleSubmit(onSubmitEdit)}>
             <FormControl my={2} isInvalid={!!errors.oldPassword?.message}>
