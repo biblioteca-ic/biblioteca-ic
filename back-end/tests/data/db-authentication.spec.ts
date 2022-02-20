@@ -16,10 +16,12 @@ const mockUser = (): UserModel => ({
   id: 'uuid',
   name: 'any_name',
   email: 'any_email@email.com',
-  cpf: '11122233345',
-  registrationNumber: 123456,
+  cpf: '123.456.789-09',
+  registration_number: '21112900',
   password: 'hashed_password',
-  admin: false
+  admin: false,
+  created_at: new Date,
+  updated_at: new Date
 })
 
 class LoadAccountByCpfRepositoryStub implements LoadUserByCpfRepository {

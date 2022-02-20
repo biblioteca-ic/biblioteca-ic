@@ -1,7 +1,7 @@
 import { AuthenticationModel } from '../models/authentication'
 
 export interface Authentication {
-  auth: (params: Authentication.Params) => Promise<AuthenticationModel>
+  auth: (params: Authentication.Params) => Promise<AuthenticationModel|null>
 }
 
 export namespace Authentication {

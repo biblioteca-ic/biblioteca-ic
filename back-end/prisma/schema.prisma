@@ -10,11 +10,14 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Student {
-  id                  String @id @default(uuid())
-  email               String @db.VarChar(255)
-  password            String @db.VarChar(60)
-  registrationNumber  String @db.VarChar(8)
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
+model Users {
+  id                  String   @id @default(uuid())
+  name                String   @db.VarChar(255)
+  email               String   @db.VarChar(255) @unique
+  password            String   @db.VarChar(60)
+  registration_number String   @db.VarChar(8) @unique
+  cpf                 String   @db.VarChar(14) @unique
+  admin               Boolean  @db.Boolean @default(false)
+  created_at          DateTime @default(now())
+  updated_at          DateTime @updatedAt
 }

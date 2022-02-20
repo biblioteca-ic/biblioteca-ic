@@ -11,7 +11,7 @@ type SutTypes = {
 const mockAuthenticationModel: AuthenticationModel = { accessToken: 'any_token' }
 
 class AuthenticationStub implements Authentication {
-  async auth (data: Authentication.Params): Promise<AuthenticationModel> {
+  async auth (data: Authentication.Params): Promise<AuthenticationModel|null> {
     return Promise.resolve(mockAuthenticationModel)
   }
 }

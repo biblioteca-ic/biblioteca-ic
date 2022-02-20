@@ -1,0 +1,8 @@
+import { UserModel } from '../../../domain/models/user'
+
+export const PrismaHelper = {
+  userMapper: (prismaUser: any): UserModel => {
+    const { registration_number, ...userWithoutRegistrationNumber } = prismaUser
+    return Object.assign({}, userWithoutRegistrationNumber, { registration_number: registration_number })
+  }
+}

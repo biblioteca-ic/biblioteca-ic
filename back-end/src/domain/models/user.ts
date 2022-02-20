@@ -3,7 +3,9 @@ export type UserModel = {
   name: string
   email: string
   cpf: string
-  registrationNumber: number
+  registration_number: string
   admin: boolean
   password: string
+  created_at: Date
+  updated_at: Date
 }

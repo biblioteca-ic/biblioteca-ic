@@ -11,7 +11,7 @@ export class DbAuthentication implements Authentication {
     private readonly _encrypter: Encrypter
   ) { }
 
-  async auth (params: Authentication.Params): Promise<AuthenticationModel> {
+  async auth (params: Authentication.Params): Promise<AuthenticationModel|null> {
     const { cpf, password } = params
     const user = await this._loadUserByCpfRepository.loadByCpf(cpf)
     if (user) {
