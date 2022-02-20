@@ -18,6 +18,7 @@ import { useHistory } from 'react-router-dom';
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { AxiosError } from 'axios';
 import * as yup from 'yup';
 import { Page } from '../../components/Page';
 import { api } from '../../services/api';
@@ -111,10 +112,11 @@ const Register = () => {
         email,
         password,
       });
-    } catch {
+    } catch (error) {
+      const err = error as AxiosError;
       toast({
         title: 'Ocorreu um erro ao fazer o cadastro na plataforma',
-        description: 'Tente novamente mais tarde',
+        description: err?.message ? err?.message : 'Tente novamente mais tarde',
         status: 'error',
         position: 'top-right',
         isClosable: true,
