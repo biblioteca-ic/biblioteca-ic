@@ -1,4 +1,4 @@
-import { UserModelDto } from '../models/user'
+import { UserModelDto } from '../../models/user'
 
 export interface EditUserData {
   edit: (params: EditUserData.Params) => Promise<UserModelDto>

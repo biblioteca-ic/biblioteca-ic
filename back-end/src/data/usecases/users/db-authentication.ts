@@ -1,8 +1,8 @@
-import { AuthenticationModel } from '../../domain/models/authentication'
-import { Authentication } from '../../domain/usecases/authentication'
-import { Encrypter } from '../protocols/encrypter'
-import { HashComparer } from '../protocols/hash-comparer'
-import { LoadUserByCpfRepository } from '../protocols/load-user-by-cpf.repository'
+import { AuthenticationModel } from '../../../domain/models/authentication'
+import { Authentication } from '../../../domain/usecases/users/authentication'
+import { Encrypter } from '../../protocols/encrypter'
+import { HashComparer } from '../../protocols/hash-comparer'
+import { LoadUserByCpfRepository } from '../../protocols/users/load-user-by-cpf.repository'
 
 export class DbAuthentication implements Authentication {
   constructor (

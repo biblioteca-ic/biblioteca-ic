@@ -1,4 +1,4 @@
-import { UserModelDto } from '../models/user'
+import { UserModelDto } from '../../models/user'
 
 export interface ChangePassword {
   change: (params: ChangePassword.Params) => Promise<UserModelDto>

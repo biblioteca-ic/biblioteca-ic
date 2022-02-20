@@ -1,9 +1,9 @@
-import { UserModel, UserModelDto } from '../../domain/models/user'
-import { ChangePassword } from '../../domain/usecases/change-password'
-import { HashComparer } from '../protocols/hash-comparer'
-import { Hasher } from '../protocols/hasher'
-import { LoadUserByIdRepository } from '../protocols/load-user-by-id.repository'
-import { UpdateUserByIdRepository } from '../protocols/update-user-by-id.repository'
+import { UserModel, UserModelDto } from '../../../domain/models/user'
+import { ChangePassword } from '../../../domain/usecases/users/change-password'
+import { HashComparer } from '../../protocols/hash-comparer'
+import { Hasher } from '../../protocols/hasher'
+import { LoadUserByIdRepository } from '../../protocols/users/load-user-by-id.repository'
+import { UpdateUserByIdRepository } from '../../protocols/users/update-user-by-id.repository'
 
 export class DbChangePassword implements ChangePassword {
   constructor (

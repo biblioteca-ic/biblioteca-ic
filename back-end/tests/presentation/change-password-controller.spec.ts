@@ -1,7 +1,7 @@
 import { Controller } from '../../src/presentation/protocols/controller'
 import { ChangePasswordController } from '../../src/presentation/controller/user/change-password-controller'
 import { Validation } from '../../src/presentation/validation/protocols/validation'
-import { ChangePassword } from '../../src/domain/usecases/change-password'
+import { ChangePassword } from '../../src/domain/usecases/users/change-password'
 import { UserModelDto } from '../../src/domain/models/user'
 import { mockUserModelDto } from '../domain/mocks/user.mock'
 import { badRequest, ok, serverError } from '../../src/presentation/helpers/http-helper'

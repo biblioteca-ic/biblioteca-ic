@@ -1,7 +1,7 @@
-import { UserModelDto } from '../../domain/models/user'
-import { ChangeAdmin } from '../../domain/usecases/make-admin'
-import { LoadUserByIdRepository } from '../protocols/load-user-by-id.repository'
-import { UpdateUserByIdRepository } from '../protocols/update-user-by-id.repository'
+import { UserModelDto } from '../../../domain/models/user'
+import { ChangeAdmin } from '../../../domain/usecases/users/make-admin'
+import { LoadUserByIdRepository } from '../../protocols/users/load-user-by-id.repository'
+import { UpdateUserByIdRepository } from '../../protocols/users/update-user-by-id.repository'
 
 export class DbChangeAdmin implements ChangeAdmin {
   constructor (

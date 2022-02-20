@@ -1,12 +1,12 @@
-import { DbAuthentication } from '../../data/usecases/db-authentication'
-import { BcryptAdapter } from '../../infra/criptography/bcrypt-adapter'
-import { JwtAdapter } from '../../infra/criptography/jwt-adapter'
-import { UserPrismaRepository } from '../../infra/db/user-prisma-repository'
-import { LoginController } from '../../presentation/controller/user/login-controller'
+import { DbAuthentication } from '../../../data/usecases/users/db-authentication'
+import { BcryptAdapter } from '../../../infra/criptography/bcrypt-adapter'
+import { JwtAdapter } from '../../../infra/criptography/jwt-adapter'
+import { UserPrismaRepository } from '../../../infra/db/user-prisma-repository'
+import { LoginController } from '../../../presentation/controller/user/login-controller'
 import { Request, Response } from 'express'
-import { Validation } from '../../presentation/validation/protocols/validation'
-import { RequiredFieldValidator } from '../../presentation/validation/validators/required-field-validator'
-import { ValidationComposite } from '../../presentation/validation/validators/validation-composite'
+import { Validation } from '../../../presentation/validation/protocols/validation'
+import { RequiredFieldValidator } from '../../../presentation/validation/validators/required-field-validator'
+import { ValidationComposite } from '../../../presentation/validation/validators/validation-composite'
 
 const makeLoginValidation = (): Validation => {
   const validations: Validation[] = []

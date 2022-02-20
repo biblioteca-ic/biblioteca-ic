@@ -1,6 +1,6 @@
-import { UserModelDto } from '../../domain/models/user'
-import { EditUserData } from '../../domain/usecases/edit-user-data'
-import { UpdateUserByIdRepository } from '../protocols/update-user-by-id.repository'
+import { UserModelDto } from '../../../domain/models/user'
+import { EditUserData } from '../../../domain/usecases/users/edit-user-data'
+import { UpdateUserByIdRepository } from '../../protocols/users/update-user-by-id.repository'
 
 export class DbEditUserData implements EditUserData {
   constructor (private readonly _updateUserById: UpdateUserByIdRepository) { }

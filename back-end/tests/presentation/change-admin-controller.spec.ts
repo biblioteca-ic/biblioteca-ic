@@ -1,4 +1,4 @@
-import { ChangeAdmin } from '../../src/domain/usecases/make-admin'
+import { ChangeAdmin } from '../../src/domain/usecases/users/make-admin'
 import { Controller } from '../../src/presentation/protocols/controller'
 import { Validation } from '../../src/presentation/validation/protocols/validation'
 import { mockUserModelDto } from '../domain/mocks/user.mock'

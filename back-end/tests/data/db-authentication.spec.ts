@@ -1,10 +1,10 @@
-import { DbAuthentication } from '../../src/data/usecases/db-authentication'
-import { UserModel } from '../domain/models/user'
-import { Authentication } from '../domain/usecases/authentication'
-import { Encrypter } from './protocols/encrypter'
-import { HashComparer } from './protocols/hash-comparer'
-import { Hasher } from './protocols/hasher'
-import { LoadUserByCpfRepository } from './protocols/load-user-by-cpf.repository'
+import { DbAuthentication } from '../../src/data/usecases/users/db-authentication'
+import { UserModel } from '../../src/domain/models/user'
+import { Authentication } from '../../src/domain/usecases/users/authentication'
+import { Encrypter } from '../../src/data/protocols/encrypter'
+import { HashComparer } from '../../src/data/protocols/hash-comparer'
+import { Hasher } from '../../src/data/protocols/hasher'
+import { LoadUserByCpfRepository } from '../../src/data/protocols/users/load-user-by-cpf.repository'
 
 type SutTypes = {
   sut: Authentication

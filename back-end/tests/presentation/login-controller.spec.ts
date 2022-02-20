@@ -1,4 +1,4 @@
-import { Authentication } from '../../src/domain/usecases/authentication'
+import { Authentication } from '../domain/usecases/users/authentication'
 import { LoginController } from '../../src/presentation/controller/user/login-controller'
 import { Controller } from '../../src/presentation/protocols/controller'
 import { AuthenticationModel } from '../domain/models/authentication'

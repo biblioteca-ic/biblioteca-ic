@@ -1,11 +1,11 @@
 import { mockUserModel, mockUserModelDto } from '../domain/mocks/user.mock'
 import { UserModel, UserModelDto } from '../../src/domain/models/user'
-import { ChangePassword } from '../../src/domain/usecases/change-password'
+import { ChangePassword } from '../../src/domain/usecases/users/change-password'
 import { HashComparer } from '../../src/data/protocols/hash-comparer'
 import { Hasher } from '../../src/data/protocols/hasher'
-import { LoadUserByIdRepository } from '../../src/data/protocols/load-user-by-id.repository'
-import { UpdateUserByIdRepository } from '../../src/data/protocols/update-user-by-id.repository'
-import { DbChangePassword } from '../../src/data/usecases/db-change-password'
+import { LoadUserByIdRepository } from '../../src/data/protocols/users/load-user-by-id.repository'
+import { UpdateUserByIdRepository } from '../../src/data/protocols/users/update-user-by-id.repository'
+import { DbChangePassword } from '../../src/data/usecases/users/db-change-password'
 
 class LoadUserByIdRepositoryStub implements LoadUserByIdRepository {
   async loadById (id: string): Promise<UserModel> {
