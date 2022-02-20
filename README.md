@@ -7,9 +7,11 @@ Bash Eco makes building and running Docker easy, passing the commands to docker-
 ```bash
 ./eco build                     # build docker containers
 ./eco up                        # up containers
-./eco back-end npm install      # run npm install into docker container
-./eco back-end test             # run npm run test into docker container
-./eco back-end shell            # acesss container via shell
+./eco backend npm install $@    # run npm install into docker container
+./eco backend test              # run npm run test into docker container
+./eco backend test --debug      # run npm run test into docker container with active debug
+./eco backend prisma $@         # run prisma command into docker container
+./eco backend shell             # acesss container via shell
 ./eco postgres                  # access postgres database via terminal client
 ```
 

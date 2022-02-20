@@ -6,6 +6,9 @@ services:
       args:
         WWWGROUP: '${WWWGROUP}'
     command: npm start
+    ports:
+      - '${BACKEND_PORT:-3333}:3333'
+      - '${BACKEND_DEBUG_PORT:-9229}:9229'
     volumes:
       - ./back-end:/usr/app
     networks:
