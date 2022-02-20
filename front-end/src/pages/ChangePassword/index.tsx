@@ -1,5 +1,19 @@
 import * as React from 'react';
-import { Box, Text, Input, Button, Stack, FormControl, FormErrorMessage, useToast, InputGroup, InputRightElement, IconButton } from '@chakra-ui/react';
+import {
+  Box,
+  Text,
+  Input,
+  Button,
+  Stack,
+  FormControl,
+  FormErrorMessage,
+  useToast,
+  InputGroup,
+  InputRightElement,
+  IconButton,
+} from '@chakra-ui/react';
+import { AxiosError } from 'axios';
+import { useHistory } from 'react-router-dom';
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -7,16 +21,17 @@ import * as yup from 'yup';
 import { Page } from '../../components/Page';
 import { api } from '../../services/api';
 import { useAuth } from '../../providers/AuthProvider';
-import { AxiosError } from 'axios';
-import { useHistory } from 'react-router-dom';
-
-export const TOKEN_KEY = '@BibliotecaIC-Token';
-export const USER_KEY = '@BibliotecaIC-User';
 
 const schema = yup.object().shape({
+  oldPassword: yup.string().required('Senha antiga é obrigatória'),
   newPassword: yup
     .string()
     .required('Senha é obrigatória')
+    // eslint-disable-next-line func-names
+    .test('comparar senha antiga com atual', 'Senha não pode ser igual a antiga', function (value) {
+      const { oldPassword } = this.parent;
+      return oldPassword !== value;
+    })
     .matches(
       /^(?=.*)(?=.*[a-z])(?=.*[A-Z])(?=.*[$*.,&@#\W_-])[a-zA-Z$*&@#.,-_]{6,}$/,
       'A senha precisa ter no mínimo 6 caracteres, deve incluir letras maiúsculas e minúsculas e deve incluir pelo menos um caractere especial',
@@ -38,8 +53,8 @@ const ChangePassword = () => {
   const [showNewPassword, setShowNewPassword] = React.useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] = React.useState<boolean>(false);
 
-  const { user, updateUser } = useAuth();
-  const { signIn, signOut } = useAuth();
+  const { user } = useAuth();
+  const { signOut } = useAuth();
   const history = useHistory();
   const toggleOldPassword = () => setShowOldPassword(!showOldPassword);
   const toggleNewPassword = () => setShowNewPassword(!showNewPassword);
@@ -59,47 +74,26 @@ const ChangePassword = () => {
     try {
       const { oldPassword, newPassword, confirmPassword } = data;
 
-      if (oldPassword === newPassword) {
-        toast({
-          title: 'As senhas precisam ser diferentes',
-          status: 'error',
-          position: 'top-right',
-          isClosable: true,
-        });
-        return;
-      }
-
-      const currentUser = JSON.parse(localStorage.getItem(USER_KEY) || '{}');
-
-      const { cpf } = currentUser;
-
-      await signIn({
-        cpf,
-        password: oldPassword,
-      });
-
       await api.patch(`/api/users/${user.id}/password`, {
         oldPassword,
         newPassword,
         newPasswordConfirmation: confirmPassword,
-      }).then(() => {
-        toast({
-          title: 'Edição realizada com sucesso',
-          status: 'success',
-          position: 'top-right',
-          isClosable: true,
-        });
       });
 
-
+      toast({
+        title: 'Edição de senha realizada com sucesso',
+        status: 'success',
+        position: 'top-right',
+        isClosable: true,
+      });
 
       signOut();
-      history.push("/login");
+      history.push('/login');
     } catch (error) {
       const err = error as AxiosError;
       toast({
         title: 'Ocorreu um erro ao alterar a senha',
-        description: err?.response?.status === 401 ? 'CPF e/ou senha incorreto(s).' : 'Tente novamente mais tarde',
+        description: err?.message ? err?.message : 'Tente novamente mais tarde',
         status: 'error',
         position: 'top-right',
         isClosable: true,
@@ -114,10 +108,13 @@ const ChangePassword = () => {
           <Text>Editar perfil</Text>
 
           <form style={{ width: '100%' }} onSubmit={handleSubmit(onSubmitEdit)}>
-
             <FormControl my={2} isInvalid={!!errors.oldPassword?.message}>
               <InputGroup size="md" maxW={380}>
-                <Input {...register('oldPassword')} type={showOldPassword ? 'text' : 'password'} placeholder="Senha atual" />
+                <Input
+                  {...register('oldPassword')}
+                  type={showOldPassword ? 'text' : 'password'}
+                  placeholder="Senha atual"
+                />
                 <InputRightElement width="4.5rem">
                   {showOldPassword ? (
                     <IconButton
@@ -127,7 +124,12 @@ const ChangePassword = () => {
                       onClick={toggleOldPassword}
                     />
                   ) : (
-                    <IconButton aria-label="Mostrar senha" icon={<AiOutlineEye />} size="sm" onClick={toggleOldPassword} />
+                    <IconButton
+                      aria-label="Mostrar senha"
+                      icon={<AiOutlineEye />}
+                      size="sm"
+                      onClick={toggleOldPassword}
+                    />
                   )}
                 </InputRightElement>
               </InputGroup>
@@ -136,7 +138,11 @@ const ChangePassword = () => {
 
             <FormControl my={2} isInvalid={!!errors.newPassword?.message}>
               <InputGroup size="md" maxW={380}>
-                <Input {...register('newPassword')} type={showNewPassword ? 'text' : 'password'} placeholder="Nova senha" />
+                <Input
+                  {...register('newPassword')}
+                  type={showNewPassword ? 'text' : 'password'}
+                  placeholder="Nova senha"
+                />
                 <InputRightElement width="4.5rem">
                   {showNewPassword ? (
                     <IconButton
@@ -146,7 +152,12 @@ const ChangePassword = () => {
                       onClick={toggleNewPassword}
                     />
                   ) : (
-                    <IconButton aria-label="Mostrar senha" icon={<AiOutlineEye />} size="sm" onClick={toggleNewPassword} />
+                    <IconButton
+                      aria-label="Mostrar senha"
+                      icon={<AiOutlineEye />}
+                      size="sm"
+                      onClick={toggleNewPassword}
+                    />
                   )}
                 </InputRightElement>
               </InputGroup>
