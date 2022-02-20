@@ -1,5 +1,7 @@
+import { UserModelDto } from '../models/user'
+
 export interface ChangePassword {
-  change: (params: ChangePassword.Params) => Promise<void>
+  change: (params: ChangePassword.Params) => Promise<UserModelDto>
 }
 
 export namespace ChangePassword {

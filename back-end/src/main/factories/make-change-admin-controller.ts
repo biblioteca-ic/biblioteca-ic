@@ -26,5 +26,5 @@ export const makeChangeAdminController = async (req: Request, res: Response): Pr
   const controller = new ChangeAdminController(makeValidation(), makeChangeAdmin())
   const request = { ...req.body, ...req.params }
   const result = await controller.handle(request)
-  return res.status(result.statusCode).json(result.body)
+  return res.status(result.statusCode).json(result)
 }

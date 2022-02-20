@@ -40,7 +40,7 @@ class HashComparerStub implements HashComparer, Hasher {
 }
 
 class EncrypterStub implements Encrypter {
-  async encrypt (data: { email: string, admin: boolean }): Promise<string> {
+  async encrypt (data: { id: string, admin: boolean }): Promise<string> {
     return Promise.resolve('any_string')
   }
 }
@@ -92,7 +92,7 @@ describe('DbAuthentication', () => {
     const encryptSpy = jest.spyOn(encrypterStub, 'encrypt')
     await sut.auth({ cpf: '00000000000', password: '123456' })
     const user = mockUser()
-    expect(encryptSpy).toHaveBeenCalledWith({ admin: user.admin, email: user.email })
+    expect(encryptSpy).toHaveBeenCalledWith({ admin: user.admin, id: user.id })
   })
 
   test('should return a valid accessToken', async () => {

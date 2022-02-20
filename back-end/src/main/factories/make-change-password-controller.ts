@@ -6,6 +6,7 @@ import { UserPrismaRepository } from '../../infra/db/user-prisma-repository'
 import { ChangePasswordController } from '../../presentation/controller/user/change-password-controller'
 import { Validation } from '../../presentation/validation/protocols/validation'
 import { CompareFieldsValidator } from '../../presentation/validation/validators/compare-fields-validator'
+import { FieldsAreDifferentValidator } from '../../presentation/validation/validators/fields-are-different-validator'
 import { PasswordValidator } from '../../presentation/validation/validators/password-validator'
 import { RequiredFieldValidator } from '../../presentation/validation/validators/required-field-validator'
 import { ValidationComposite } from '../../presentation/validation/validators/validation-composite'
@@ -16,6 +17,7 @@ const makeValidation = (): Validation => {
     validations.push(new RequiredFieldValidator(field))
   }
   validations.push(new CompareFieldsValidator('newPassword', 'newPasswordConfirmation'))
+  validations.push(new FieldsAreDifferentValidator('oldPassword', 'newPassword'))
   validations.push(new PasswordValidator('newPassword'))
   const validationComposite = new ValidationComposite(validations)
   return validationComposite
@@ -24,7 +26,7 @@ const makeValidation = (): Validation => {
 const makeChangePassword = (): ChangePassword => {
   const prismaRepository = new UserPrismaRepository()
   const hasher = new BcryptAdapter()
-  const changePassword = new DbChangePassword(prismaRepository, prismaRepository, hasher)
+  const changePassword = new DbChangePassword(prismaRepository, prismaRepository, hasher, hasher)
   return changePassword
 }
 
@@ -32,5 +34,5 @@ export const makeChangePasswordController = async (req: Request, res: Response):
   const controller = new ChangePasswordController(makeValidation(), makeChangePassword())
   const request = { ...req.body, ...req.params }
   const result = await controller.handle(request)
-  return res.status(result.statusCode).json(result.body)
+  return res.status(result.statusCode).json(result)
 }

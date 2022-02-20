@@ -28,5 +28,5 @@ export const makeEditUserController = async (req: Request, res: Response): Promi
   const controller = new EditUserController(makeEditUserData(), makeEditUserValidation())
   const request = { ...req.body, ...req.params }
   const result = await controller.handle(request)
-  return res.status(result.statusCode).json(result.body)
+  return res.status(result.statusCode).json(result)
 }
