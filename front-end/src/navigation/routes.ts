@@ -5,6 +5,7 @@ import EditProfile from '../pages/EditProfile';
 import Profile from '../pages/Profile';
 import ChangePassword from '../pages/ChangePassword';
 import { UsersItemPage, UsersList } from '../pages/Users';
+import RegisterBook from '../pages/RegisterBook';
 
 export const routes = [
   {
@@ -49,5 +50,11 @@ export const routes = [
     component: UsersItemPage,
     private: true,
     onlyAdmin: true,
+  },
+  {
+    path: '/books/register',
+    component: RegisterBook,
+    private: false,
+    onlyAdmin: false,
   },
 ];
