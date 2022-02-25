@@ -58,6 +58,7 @@ const Register = () => {
     handleSubmit,
     formState: { errors },
     control,
+    getValues,
   } = useForm<RegisterFormInputs & Authors>({
     resolver: yupResolver(schema),
     defaultValues: {
@@ -123,13 +124,17 @@ const Register = () => {
 
             {fields.map((field, index) => (
               <FormControl my={2} isInvalid={!!errors.author?.message}>
-                <FormLabel htmlFor='authors'>Autores (separados por vírgula)</FormLabel>
+                <FormLabel htmlFor={`authors-${index}`}>Autores (separados por vírgula)</FormLabel>
                 <InputGroup size="md" maxW={380}>
-                  <Input key={field.id} id="authors" {...register(`authors.${index}.author`)}
-                    placeholder="Ex.: Machado de Assis" pr="6rem"/>
-                  <InputRightElement width="6em" justifyContent="space-around" >
-                    <IconButton aria-label="Adicionar autor" icon={<AiOutlinePlus />} size="sm" onClick={() => append({ author: "" })} />
-                    <IconButton aria-label="Remover autor" icon={<AiOutlineMinus />} size="sm" onClick={() => remove() }/>
+                  <Input key={field.id} id={`authors-${index}`} {...register(`authors.${index}.author`)}
+                    placeholder="Ex.: Machado de Assis" pr={getValues("authors").length > 1 ? "6rem" : "4.5rem"} />
+                  <InputRightElement width={getValues("authors").length > 1 ? "6rem" : "4.5rem"} justifyContent="space-around" >
+                    <IconButton aria-label="Adicionar autor" icon={<AiOutlinePlus />} size="sm" onClick={() => { if (getValues("authors").length < 4) append({ author: "" }) }} />
+                    {getValues("authors").length > 1 ? (
+                      <IconButton aria-label="Remover autor" icon={<AiOutlineMinus />} size="sm" onClick={() => remove(index)} />
+                    ) : (<>
+                    </>)}
+
                   </InputRightElement>
                 </InputGroup>
                 {!!errors.author?.message && <FormErrorMessage>{errors.author.message}</FormErrorMessage>}
