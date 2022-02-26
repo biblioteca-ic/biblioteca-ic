@@ -1,7 +1,6 @@
 import * as React from 'react';
 import {
-  Checkbox,
-  Link,
+  Select,
   FormLabel,
   Box,
   Text,
@@ -14,6 +13,7 @@ import {
   FormControl,
   FormErrorMessage,
   useToast,
+  SelectField,
 } from '@chakra-ui/react';
 import { useHistory } from 'react-router-dom';
 import { AiOutlinePlus, AiOutlineMinus } from 'react-icons/ai';
@@ -32,13 +32,12 @@ const schema = yup.object().shape({
     .array()
     .of(
       yup.object().shape({
-        author: yup
-        .string()
-        .required('O nome do autor é obrigatório')
-        .min(3, 'Autor inválido')
+        name: yup
+          .string()
+          .required('O nome do autor é obrigatório')
+          .min(3, 'Autor inválido')
       })
     ),
-
   year: yup
     .number()
     .typeError('O ano precisa ser um número')
@@ -47,18 +46,41 @@ const schema = yup.object().shape({
   publishingCompany: yup
     .string()
     .required('A editora é obrigatória'),
+  categories: yup
+    .array()
+    .of(
+      yup.object().shape({
+        name: yup
+          .string()
+          .required('Selecione pelo menos uma categoria')
+      })
+    ),
 });
 
-type Authors = {
-  author: string;
+type Author = {
+  name: string;
 };
+
+type Category = {
+  name: string;
+}
 
 type RegisterFormInputs = {
   bookName: string;
-  authors: Array<Authors>;
+  authors: Array<Author>;
   year: number;
   publishingCompany: string;
+  categories: Array<Category>;
 };
+
+const categoriesOptions = [
+  { value: "Computer Science and Engineering", label: "Ciência da Computação e Engenharia" },
+  { value: "Physics and Math", label: "Matemática e Física" },
+  { value: "Biology", label: "Biologia" },
+  { value: "Sci-Fi", label: "Ficção Científica" },
+  { value: "Fantasy", label: "Fantasia" },
+  { value: "Romance", label: "Romance" }
+];
 
 const Register = () => {
   const {
@@ -70,13 +92,19 @@ const Register = () => {
   } = useForm<RegisterFormInputs>({
     resolver: yupResolver(schema),
     defaultValues: {
-      authors: [{ author: "" }]
+      authors: [{ name: "" }],
+      categories: [{ name: "" }],
     }
   });
 
-  const { fields, append, remove } = useFieldArray({
+  const { fields: authorsFields, append: authorsAppend, remove: authorsRemove } = useFieldArray({
     control,
     name: "authors"
+  });
+
+  const { fields: categoriesFields, append: categoriesAppend, remove: categoriesRemove } = useFieldArray({
+    control,
+    name: "categories"
   });
 
   const toast = useToast();
@@ -86,10 +114,7 @@ const Register = () => {
     console.log({ data });
     try {
       const { bookName, authors, year, publishingCompany } = data;
-
       console.log(data)
-
-
       // fazer chamada a api
       await api.post('/books', {
         bookName,
@@ -132,25 +157,30 @@ const Register = () => {
               <Input id="bookName" {...register('bookName')} placeholder="Ex.: O alienista" />
               {!!errors.bookName?.message && <FormErrorMessage>{errors.bookName.message}</FormErrorMessage>}
             </FormControl>
+            <FormLabel htmlFor="authors">Autores</FormLabel>
 
-            {fields.map((field, index) => (
-              <FormControl my={2} isInvalid={!!errors?.authors?.[index]?.author?.message}>
-                <FormLabel htmlFor={`authors-${index}`}>Autor</FormLabel>
+            {authorsFields.map((field, index) => {
+              const qt = getValues("authors").length;
+              const multiples = qt > 1;
+
+              return (
+              <FormControl my={2} isInvalid={!!errors?.authors?.[index]?.name?.message}>
                 <InputGroup size="md" maxW={380}>
-                  <Input key={field.id} id={`authors-${index}`} {...register(`authors.${index}.author`)}
-                    placeholder="Ex.: Machado de Assis" pr={getValues("authors").length > 1 ? "6rem" : "4.5rem"} />
-                  <InputRightElement width={getValues("authors").length > 1 ? "6rem" : "4.5rem"} justifyContent="space-around" >
-                    <IconButton aria-label="Adicionar autor" icon={<AiOutlinePlus />} size="sm" onClick={() => { if (getValues("authors").length < 4) append({ author: "" }) }} />
-                    {getValues("authors").length > 1 ? (
-                      <IconButton aria-label="Remover autor" icon={<AiOutlineMinus />} size="sm" onClick={() => remove(index)} />
+                  <Input key={field.id} id={`authors-${index}`} {...register(`authors.${index}.name`)}
+                    placeholder="Ex.: Machado de Assis" pr={multiples ? "6rem" : "4.5rem"} />
+                  <InputRightElement width={multiples ? "6rem" : "4.5rem"} justifyContent="space-around" >
+                    <IconButton aria-label="Adicionar autor" icon={<AiOutlinePlus />} size="sm" onClick={() => { if (getValues("authors").length < 4) authorsAppend({ name: "" }) }} />
+                    {multiples ? (
+                      <IconButton aria-label="Remover autor" icon={<AiOutlineMinus />} size="sm" onClick={() => authorsRemove(index)} />
                     ) : (<>
                     </>)}
 
                   </InputRightElement>
                 </InputGroup>
-                {!!errors?.authors?.[index]?.author?.message && <FormErrorMessage>{errors?.authors?.[index]?.author?.message}</FormErrorMessage>}
+                {!!errors?.authors?.[index]?.name?.message && <FormErrorMessage>{errors?.authors?.[index]?.name?.message}</FormErrorMessage>}
               </FormControl>
-            ))}
+              )
+            })}
 
             <FormControl my={2} isInvalid={!!errors.year?.message}>
               <FormLabel htmlFor='year'>Ano de publicação</FormLabel>
@@ -164,8 +194,32 @@ const Register = () => {
               {!!errors.publishingCompany?.message && <FormErrorMessage>{errors.publishingCompany.message}</FormErrorMessage>}
             </FormControl>
 
+            <FormLabel htmlFor="categories">Categorias</FormLabel>
+
+            {categoriesFields.map((field, index) => (
+              <FormControl my={2} isInvalid={!!errors?.categories?.[index]?.name?.message}>
+                <InputGroup size="md" maxW={380}>
+                  <Select key={field.id} id="categories" {...register(`categories.${index}.name`)}
+                    placeholder="Selecionar categoria" width={getValues("categories").length > 1 ? "70%" : "80%"}>
+                    {categoriesOptions.map((category) => {
+                      return <option value={category.value}>{category.label}</option>
+                    })}
+                  </Select>
+                  <InputRightElement width={getValues("categories").length > 1 ? "6rem" : "4.5rem"} justifyContent="space-around" >
+                    <IconButton aria-label="Adicionar categoria" icon={<AiOutlinePlus />} size="sm" onClick={() => { if (getValues("categories").length < 4) categoriesAppend({ name: "" }) }} />
+                    {getValues("categories").length > 1 ? (
+                      <IconButton aria-label="Remover categoria" icon={<AiOutlineMinus />} size="sm" onClick={() => categoriesRemove(index)} />
+                    ) : (<>
+                    </>)}
+
+                  </InputRightElement>
+                </InputGroup>
+                {!!errors?.authors?.[index]?.name?.message && <FormErrorMessage>{errors?.authors?.[index]?.name?.message}</FormErrorMessage>}
+              </FormControl>
+            ))}
+
             <Button colorScheme="teal" size="md" w="100%" type="submit">
-              Cadastrar livro
+              Cadastrar Livro
             </Button>
           </form>
         </Stack>
