@@ -16,8 +16,8 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import { useHistory } from 'react-router-dom';
-import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
-import { useForm } from 'react-hook-form';
+import { AiOutlinePlus, AiOutlineMinus } from 'react-icons/ai';
+import { useForm, useFieldArray } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { AxiosError } from 'axios';
 import * as yup from 'yup';
@@ -29,8 +29,16 @@ const schema = yup.object().shape({
     .string()
     .required('O nome do livro é obrigatório'),
   authors: yup
-    .string()
-    .required('O livro precisa ter pelo menos um autor'),
+    .array()
+    .of(
+      yup.object().shape({
+        author: yup
+        .string()
+        .required('O nome do autor é obrigatório')
+        .min(3, 'Autor inválido')
+      })
+    ),
+
   year: yup
     .number()
     .typeError('O ano precisa ser um número')
@@ -41,22 +49,34 @@ const schema = yup.object().shape({
     .required('A editora é obrigatória'),
 });
 
+type Authors = {
+  author: string;
+};
+
 type RegisterFormInputs = {
   bookName: string;
-  authors: string;
+  authors: Array<Authors>;
   year: number;
   publishingCompany: string;
 };
 
 const Register = () => {
-
   const {
     register,
     handleSubmit,
     formState: { errors },
     control,
+    getValues,
   } = useForm<RegisterFormInputs>({
     resolver: yupResolver(schema),
+    defaultValues: {
+      authors: [{ author: "" }]
+    }
+  });
+
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "authors"
   });
 
   const toast = useToast();
@@ -67,7 +87,8 @@ const Register = () => {
     try {
       const { bookName, authors, year, publishingCompany } = data;
 
-      
+      console.log(data)
+
 
       // fazer chamada a api
       await api.post('/books', {
@@ -112,12 +133,24 @@ const Register = () => {
               {!!errors.bookName?.message && <FormErrorMessage>{errors.bookName.message}</FormErrorMessage>}
             </FormControl>
 
-            <FormControl my={2} isInvalid={!!errors.authors?.message}>
-              <FormLabel htmlFor='authors'>Autores (separados por vírgula)</FormLabel>
-              <Input id="authors" {...register('authors')} placeholder="Ex.: Machado de Assis, José de Alencar" />
-              {!!errors.authors?.message && <FormErrorMessage>{errors.authors.message}</FormErrorMessage>}
-            </FormControl>
+            {fields.map((field, index) => (
+              <FormControl my={2} isInvalid={!!errors?.authors?.[index]?.author?.message}>
+                <FormLabel htmlFor={`authors-${index}`}>Autor</FormLabel>
+                <InputGroup size="md" maxW={380}>
+                  <Input key={field.id} id={`authors-${index}`} {...register(`authors.${index}.author`)}
+                    placeholder="Ex.: Machado de Assis" pr={getValues("authors").length > 1 ? "6rem" : "4.5rem"} />
+                  <InputRightElement width={getValues("authors").length > 1 ? "6rem" : "4.5rem"} justifyContent="space-around" >
+                    <IconButton aria-label="Adicionar autor" icon={<AiOutlinePlus />} size="sm" onClick={() => { if (getValues("authors").length < 4) append({ author: "" }) }} />
+                    {getValues("authors").length > 1 ? (
+                      <IconButton aria-label="Remover autor" icon={<AiOutlineMinus />} size="sm" onClick={() => remove(index)} />
+                    ) : (<>
+                    </>)}
 
+                  </InputRightElement>
+                </InputGroup>
+                {!!errors?.authors?.[index]?.author?.message && <FormErrorMessage>{errors?.authors?.[index]?.author?.message}</FormErrorMessage>}
+              </FormControl>
+            ))}
 
             <FormControl my={2} isInvalid={!!errors.year?.message}>
               <FormLabel htmlFor='year'>Ano de publicação</FormLabel>
