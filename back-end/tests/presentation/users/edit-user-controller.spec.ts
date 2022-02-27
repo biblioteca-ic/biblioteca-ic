@@ -1,10 +1,10 @@
-import { mockUserModelDto } from '../domain/mocks/user.mock'
-import { UserModelDto } from '../../src/domain/models/user'
-import { EditUserData } from '../../src/domain/usecases/users/edit-user-data'
-import { EditUserController } from '../../src/presentation/controller/user/edit-user-controller'
-import { Controller } from '../../src/presentation/protocols/controller'
-import { Validation } from '../../src/presentation/validation/protocols/validation'
-import { badRequest, ok, serverError } from '../../src/presentation/helpers/http-helper'
+import { mockUserModelDto } from '../../domain/mocks/user.mock'
+import { UserModelDto } from '../../../src/domain/models/user'
+import { EditUserData } from '../../../src/domain/usecases/users/edit-user-data'
+import { EditUserController } from '../../../src/presentation/controller/user/edit-user-controller'
+import { Controller } from '../../../src/presentation/protocols/controller'
+import { Validation } from '../../../src/presentation/validation/protocols/validation'
+import { badRequest, ok, serverError } from '../../../src/presentation/helpers/http-helper'
 
 type SutTypes = {
   editUserDataStub: EditUserData

@@ -1,10 +1,10 @@
-import { ChangeAdmin } from '../../src/domain/usecases/users/make-admin'
-import { Controller } from '../../src/presentation/protocols/controller'
-import { Validation } from '../../src/presentation/validation/protocols/validation'
-import { mockUserModelDto } from '../domain/mocks/user.mock'
-import { UserModelDto } from '../domain/models/user'
-import { ChangeAdminController } from '../../src/presentation/controller/user/change-admin.controller'
-import { badRequest, ok, serverError } from '../../src/presentation/helpers/http-helper'
+import { ChangeAdmin } from '../../../src/domain/usecases/users/make-admin'
+import { Controller } from '../../../src/presentation/protocols/controller'
+import { Validation } from '../../../src/presentation/validation/protocols/validation'
+import { mockUserModelDto } from '../../domain/mocks/user.mock'
+import { UserModelDto } from '../../../src/domain/models/user'
+import { ChangeAdminController } from '../../../src/presentation/controller/user/change-admin.controller'
+import { badRequest, ok, serverError } from '../../../src/presentation/helpers/http-helper'
 
 type SutTypes = {
   sut: Controller

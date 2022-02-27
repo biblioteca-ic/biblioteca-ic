@@ -8,7 +8,10 @@ export namespace RegisterBook {
   export type Params = {
     title: string
     publishingHouse: string
+    authors: string[]
+    categories: string[]
     createdBy: string
-    publishedAt: Date
+    code: string
+    publishedIn: Date
   }
 }
