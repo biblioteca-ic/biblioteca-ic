@@ -12,12 +12,16 @@ import {
   IconButton,
   FormControl,
   FormErrorMessage,
-  useToast,
-  SelectField,
+  useToast
 } from '@chakra-ui/react';
+import {
+  AsyncCreatableSelect,
+  AsyncSelect,
+  CreatableSelect,
+} from "chakra-react-select";
 import { useHistory } from 'react-router-dom';
 import { AiOutlinePlus, AiOutlineMinus } from 'react-icons/ai';
-import { useForm, useFieldArray } from 'react-hook-form';
+import { useForm, useFieldArray, NestedValue } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { AxiosError } from 'axios';
 import * as yup from 'yup';
@@ -48,32 +52,27 @@ const schema = yup.object().shape({
     .required('A editora é obrigatória'),
   categories: yup
     .array()
-    .of(
-      yup.object().shape({
-        name: yup
-          .string()
-          .required('Selecione pelo menos uma categoria')
-      })
-    ),
+    .required('Selecione pelo menos uma categoria'),
 });
 
 type Author = {
   name: string;
 };
 
-type Category = {
-  name: string;
-}
-
 type RegisterFormInputs = {
   bookName: string;
   authors: Array<Author>;
   year: number;
   publishingCompany: string;
-  categories: Array<Category>;
+  categories: Array<string>
 };
 
-const categoriesOptions = [
+interface CategoriesOptions {
+  value: string,
+  label: string,
+}
+
+const categoriesOptions: CategoriesOptions[] = [
   { value: "Computer Science and Engineering", label: "Ciência da Computação e Engenharia" },
   { value: "Physics and Math", label: "Matemática e Física" },
   { value: "Biology", label: "Biologia" },
@@ -93,18 +92,12 @@ const Register = () => {
     resolver: yupResolver(schema),
     defaultValues: {
       authors: [{ name: "" }],
-      categories: [{ name: "" }],
     }
   });
 
   const { fields: authorsFields, append: authorsAppend, remove: authorsRemove } = useFieldArray({
     control,
     name: "authors"
-  });
-
-  const { fields: categoriesFields, append: categoriesAppend, remove: categoriesRemove } = useFieldArray({
-    control,
-    name: "categories"
   });
 
   const toast = useToast();
@@ -164,21 +157,21 @@ const Register = () => {
               const multiples = qt > 1;
 
               return (
-              <FormControl my={2} isInvalid={!!errors?.authors?.[index]?.name?.message}>
-                <InputGroup size="md" maxW={380}>
-                  <Input key={field.id} id={`authors-${index}`} {...register(`authors.${index}.name`)}
-                    placeholder="Ex.: Machado de Assis" pr={multiples ? "6rem" : "4.5rem"} />
-                  <InputRightElement width={multiples ? "6rem" : "4.5rem"} justifyContent="space-around" >
-                    <IconButton aria-label="Adicionar autor" icon={<AiOutlinePlus />} size="sm" onClick={() => { if (getValues("authors").length < 4) authorsAppend({ name: "" }) }} />
-                    {multiples ? (
-                      <IconButton aria-label="Remover autor" icon={<AiOutlineMinus />} size="sm" onClick={() => authorsRemove(index)} />
-                    ) : (<>
-                    </>)}
+                <FormControl my={2} isInvalid={!!errors?.authors?.[index]?.name?.message}>
+                  <InputGroup size="md" maxW={380}>
+                    <Input key={field.id} id={`authors-${index}`} {...register(`authors.${index}.name`)}
+                      placeholder="Ex.: Machado de Assis" pr={multiples ? "6rem" : "4.5rem"} />
+                    <InputRightElement width={multiples ? "6rem" : "4.5rem"} justifyContent="space-around" >
+                      <IconButton aria-label="Adicionar autor" icon={<AiOutlinePlus />} size="sm" onClick={() => { if (getValues("authors").length < 4) authorsAppend({ name: "" }) }} />
+                      {multiples ? (
+                        <IconButton aria-label="Remover autor" icon={<AiOutlineMinus />} size="sm" onClick={() => authorsRemove(index)} />
+                      ) : (<>
+                      </>)}
 
-                  </InputRightElement>
-                </InputGroup>
-                {!!errors?.authors?.[index]?.name?.message && <FormErrorMessage>{errors?.authors?.[index]?.name?.message}</FormErrorMessage>}
-              </FormControl>
+                    </InputRightElement>
+                  </InputGroup>
+                  {!!errors?.authors?.[index]?.name?.message && <FormErrorMessage>{errors?.authors?.[index]?.name?.message}</FormErrorMessage>}
+                </FormControl>
               )
             })}
 
@@ -217,6 +210,18 @@ const Register = () => {
                 {!!errors?.authors?.[index]?.name?.message && <FormErrorMessage>{errors?.authors?.[index]?.name?.message}</FormErrorMessage>}
               </FormControl>
             ))}
+
+            <FormControl my={2} isInvalid={!!(errors?.categories as any)?.message}>
+              <CreatableSelect
+                {...register('categories')}
+                isMulti
+                options={categoriesOptions}
+                placeholder="Adicione uma ou mais categorias"
+                formatCreateLabel={() => `Criar nova categoria`}
+                noOptionsMessage={() => "Sem mais categorias"}
+              />
+              {!!(errors?.categories as any)?.message && <FormErrorMessage>{(errors?.categories as any)?.message}</FormErrorMessage>}
+            </FormControl>
 
             <Button colorScheme="teal" size="md" w="100%" type="submit">
               Cadastrar Livro
