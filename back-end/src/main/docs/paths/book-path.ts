@@ -36,3 +36,26 @@ export const registerBookPath = {
     }
   }
 }
+
+export const listBooksPath = {
+  get: {
+    tags: ['Books'],
+    summary: 'Registro de um livro',
+    security: [{ apiKeyAuth: [] }],
+    responses: {
+      200: {
+        description: 'Sucesso',
+        content: {
+          'application/json': {
+            schema: {
+              $ref: '#/schemas/listBooksResponse'
+            }
+          }
+        }
+      },
+      401: { description: 'Unauthorized' },
+      404: { description: 'NotFound' },
+      500: { description: 'ServerError' }
+    }
+  }
+}

@@ -4,6 +4,7 @@ import swaggerConfig from './docs'
 import changeAdminRoute from './routes/change-admin-route'
 import changePasswordRoute from './routes/change-password-route'
 import editUserRoute from './routes/edit-user-route'
+import listBooksRoute from './routes/list-books-route'
 import loginRoute from './routes/login-route'
 import registerBookRoute from './routes/register-book-route'
 
@@ -28,6 +29,7 @@ editUserRoute(router)
 changePasswordRoute(router)
 changeAdminRoute(router)
 registerBookRoute(router)
+listBooksRoute(router)
 
 app.listen(3333, () => {
   console.log('listening at http://localhost:3333')
