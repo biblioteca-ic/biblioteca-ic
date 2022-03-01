@@ -40,7 +40,7 @@ export const registerBookPath = {
 export const listBooksPath = {
   get: {
     tags: ['Books'],
-    summary: 'Registro de um livro',
+    summary: 'Listagem dos livros',
     security: [{ apiKeyAuth: [] }],
     responses: {
       200: {
