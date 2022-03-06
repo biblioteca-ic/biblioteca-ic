@@ -7,13 +7,15 @@ export class DbBookCodeGenerator implements BookCodeGenerator {
   ) { }
 
   async generate (): Promise<string> {
-    let { code } = (await this._findLastBookCodeInsertedRepository.find())[0]
-    if (!code || code.length === 0) code = '0000-000'
+    const lastCode = await this._findLastBookCodeInsertedRepository.find()
+    let code = ''
+    if (!lastCode || lastCode.length === 0) code = '0000-000'
+    else code = lastCode[0].code
 
     const fullCode = code.split('-')
     const bookCode = fullCode[0]
     const copyCode = fullCode[1]
-    const n = bookCode.match(/[1-9]/).index
+    const n = bookCode.match(/[1-9]/) ? bookCode.match(/[1-9]/).index : 3
     const k = bookCode.substring(n, bookCode.length)
     const numeric = Number.parseInt(k)
     let l = ''
