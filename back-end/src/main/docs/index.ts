@@ -1,6 +1,6 @@
-import { registerBookPath } from './paths/book-path'
+import { listBooksPath, registerBookPath } from './paths/book-path'
 import { changeAdminPath, changePasswordPath, editUserPath, loginPath } from './paths/user-paths'
-import { registerBookRequestSchema, registerBookResponseSchema } from './schemas/book-schemas'
+import { listBooksResponseSchema, registerBookRequestSchema, registerBookResponseSchema } from './schemas/book-schemas'
 import { changeAdminRequestSchema, changeAdminResponseSchema, changePasswordRequestSchema, changePasswordResponseSchema, editUserRequestSchema, editUserResponseSchema, loginRequestSchema, loginResponseSchema } from './schemas/user-schemas'
 
 export default {
@@ -23,7 +23,8 @@ export default {
     '/users/{id}': editUserPath,
     '/users/{id}/password': changePasswordPath,
     '/users/{id}/admin': changeAdminPath,
-    '/books': registerBookPath
+    '/books': registerBookPath,
+    '/list-books': listBooksPath
   },
   schemas: {
     loginRequest: loginRequestSchema,
@@ -35,7 +36,8 @@ export default {
     changeAdminRequest: changeAdminRequestSchema,
     changeAdminResponse: changeAdminResponseSchema,
     registerBookRequest: registerBookRequestSchema,
-    registerBookResponse: registerBookResponseSchema
+    registerBookResponse: registerBookResponseSchema,
+    listBooksResponse: listBooksResponseSchema
   },
   components: {
     securitySchemes: {

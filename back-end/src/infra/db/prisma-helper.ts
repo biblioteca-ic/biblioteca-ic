@@ -23,5 +23,9 @@ export const PrismaHelper = {
   bookDbMapper: (entityBook: any): any => {
     const { publishingHouse, createdBy, publishedIn, createdAt, ...rest } = entityBook
     return Object.assign({}, rest, { publishing_house: publishingHouse, created_by: createdBy, published_in: publishedIn, created_at: createdAt })
+  },
+  booksMapper: (prismaBooks: any[]): BookModel[] => {
+    const books = prismaBooks.map((book) => PrismaHelper.bookMapper(book))
+    return books
   }
 }
