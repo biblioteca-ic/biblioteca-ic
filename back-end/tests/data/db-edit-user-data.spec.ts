@@ -1,7 +1,7 @@
-import { UpdateUserByIdRepository } from '../../src/data/protocols/update-user-by-id.repository'
+import { UpdateUserByIdRepository } from '../../src/data/protocols/users/update-user-by-id.repository'
 import { mockUserModelDto } from '../domain/mocks/user.mock'
 import { UserModelDto } from '../../src/domain/models/user'
-import { DbEditUserData } from '../../src/data/usecases/db-edit-user-data'
+import { DbEditUserData } from '../../src/data/usecases/users/db-edit-user-data'
 
 class UpdateUserByIdRepositoryStub implements UpdateUserByIdRepository {
   async update (id: string): Promise<UserModelDto> {

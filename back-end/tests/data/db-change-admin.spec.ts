@@ -1,9 +1,9 @@
-import { DbChangeAdmin } from '../../src/data/usecases/db-change-admin'
-import { ChangeAdmin } from '../../src/domain/usecases/make-admin'
-import { LoadUserByIdRepository } from '../../src/data/protocols/load-user-by-id.repository'
+import { DbChangeAdmin } from '../../src/data/usecases/users/db-change-admin'
+import { ChangeAdmin } from '../../src/domain/usecases/users/make-admin'
+import { LoadUserByIdRepository } from '../../src/data/protocols/users/load-user-by-id.repository'
 import { UserModel, UserModelDto } from '../domain/models/user'
 import { mockUserModel, mockUserModelDto } from '../domain/mocks/user.mock'
-import { UpdateUserByIdRepository } from '../../src/data/protocols/update-user-by-id.repository'
+import { UpdateUserByIdRepository } from '../../src/data/protocols/users/update-user-by-id.repository'
 
 class LoadUserByIdRepositoryStub implements LoadUserByIdRepository {
   async loadById (id: string): Promise<UserModel> {

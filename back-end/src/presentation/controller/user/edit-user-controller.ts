@@ -1,4 +1,4 @@
-import { EditUserData } from '../../../domain/usecases/edit-user-data'
+import { EditUserData } from '../../../domain/usecases/users/edit-user-data'
 import { badRequest, ok, serverError } from '../../helpers/http-helper'
 import { Controller } from '../../protocols/controller'
 import { HttpResponse } from '../../protocols/http-response'

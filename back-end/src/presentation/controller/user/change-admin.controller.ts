@@ -1,4 +1,4 @@
-import { ChangeAdmin } from '../../../domain/usecases/make-admin'
+import { ChangeAdmin } from '../../../domain/usecases/users/make-admin'
 import { badRequest, ok, serverError } from '../../helpers/http-helper'
 import { Controller } from '../../protocols/controller'
 import { HttpResponse } from '../../protocols/http-response'

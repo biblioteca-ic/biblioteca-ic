@@ -1,4 +1,4 @@
-import { ChangePassword } from '../../../domain/usecases/change-password'
+import { ChangePassword } from '../../../domain/usecases/users/change-password'
 import { badRequest, ok, serverError } from '../../helpers/http-helper'
 import { Controller } from '../../protocols/controller'
 import { HttpResponse } from '../../protocols/http-response'

@@ -1,6 +1,6 @@
-import { LoadUserByCpfRepository } from '../../data/protocols/load-user-by-cpf.repository'
-import { LoadUserByIdRepository } from '../../data/protocols/load-user-by-id.repository'
-import { UpdateUserByIdRepository } from '../../data/protocols/update-user-by-id.repository'
+import { LoadUserByCpfRepository } from '../../data/protocols/users/load-user-by-cpf.repository'
+import { LoadUserByIdRepository } from '../../data/protocols/users/load-user-by-id.repository'
+import { UpdateUserByIdRepository } from '../../data/protocols/users/update-user-by-id.repository'
 import { UserModel, UserModelDto } from '../../domain/models/user'
 import { PrismaHelper } from './prisma-helper'
 
