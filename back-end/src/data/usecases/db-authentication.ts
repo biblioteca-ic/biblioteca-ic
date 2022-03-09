@@ -17,8 +17,9 @@ export class DbAuthentication implements Authentication {
     if (user) {
       const isAuth = await this._hashComparer.compare(password, user.password)
       if (isAuth) {
-        const accessToken = await this._encrypter.encrypt({ email: user.email, admin: user.admin })
-        return { accessToken }
+        const accessToken = await this._encrypter.encrypt({ id: user.id, admin: user.admin })
+        const { password, ...userWithoutPass } = user
+        return Object.assign({}, userWithoutPass, { accessToken })
       }
     }
     return null

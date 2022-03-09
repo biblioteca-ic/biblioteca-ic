@@ -1,5 +1,5 @@
-import { loginPath } from './paths/user-paths'
-import { loginRequestSchema, loginResponseSchema } from './schemas/login-schemas'
+import { changeAdminPath, changePasswordPath, editUserPath, loginPath } from './paths/user-paths'
+import { changeAdminRequestSchema, changeAdminResponseSchema, changePasswordRequestSchema, changePasswordResponseSchema, editUserRequestSchema, editUserResponseSchema, loginRequestSchema, loginResponseSchema } from './schemas/user-schemas'
 
 export default {
   openapi: '3.0.0',
@@ -15,10 +15,28 @@ export default {
     name: 'Users'
   }],
   paths: {
-    '/login': loginPath
+    '/login': loginPath,
+    '/users/{id}': editUserPath,
+    '/users/{id}/password': changePasswordPath,
+    '/users/{id}/admin': changeAdminPath
   },
   schemas: {
     loginRequest: loginRequestSchema,
-    loginResponse: loginResponseSchema
+    loginResponse: loginResponseSchema,
+    editUserRequest: editUserRequestSchema,
+    editUserResponse: editUserResponseSchema,
+    changePasswordRequest: changePasswordRequestSchema,
+    changePasswordResponse: changePasswordResponseSchema,
+    changeAdminRequest: changeAdminRequestSchema,
+    changeAdminResponse: changeAdminResponseSchema
+  },
+  components: {
+    securitySchemes: {
+      apiKeyAuth: {
+        type: 'apiKey',
+        name: 'x-access-token',
+        in: 'header'
+      }
+    }
   }
 }

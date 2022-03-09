@@ -3,6 +3,7 @@ import { UserModel } from '../domain/models/user'
 import { Authentication } from '../domain/usecases/authentication'
 import { Encrypter } from './protocols/encrypter'
 import { HashComparer } from './protocols/hash-comparer'
+import { Hasher } from './protocols/hasher'
 import { LoadUserByCpfRepository } from './protocols/load-user-by-cpf.repository'
 
 type SutTypes = {
@@ -17,7 +18,7 @@ const mockUser = (): UserModel => ({
   name: 'any_name',
   email: 'any_email@email.com',
   cpf: '11122233345',
-  registrationNumber: 123456,
+  registrationNumber: '123456',
   password: 'hashed_password',
   admin: false
 })
@@ -28,14 +29,18 @@ class LoadAccountByCpfRepositoryStub implements LoadUserByCpfRepository {
   }
 }
 
-class HashComparerStub implements HashComparer {
+class HashComparerStub implements HashComparer, Hasher {
   async compare (value: string, hash: string): Promise<boolean> {
     return Promise.resolve(true)
+  }
+
+  async hash (value: string): Promise<string> {
+    return Promise.resolve('any_hash')
   }
 }
 
 class EncrypterStub implements Encrypter {
-  async encrypt (data: { email: string, admin: boolean }): Promise<string> {
+  async encrypt (data: { id: string, admin: boolean }): Promise<string> {
     return Promise.resolve('any_string')
   }
 }
@@ -87,12 +92,21 @@ describe('DbAuthentication', () => {
     const encryptSpy = jest.spyOn(encrypterStub, 'encrypt')
     await sut.auth({ cpf: '00000000000', password: '123456' })
     const user = mockUser()
-    expect(encryptSpy).toHaveBeenCalledWith({ admin: user.admin, email: user.email })
+    expect(encryptSpy).toHaveBeenCalledWith({ admin: user.admin, id: user.id })
   })
 
   test('should return a valid accessToken', async () => {
-    const { sut } = makeSut()
+    const { sut, loadUserByCpfRepositoryStub } = makeSut()
+    jest.spyOn(loadUserByCpfRepositoryStub, 'loadByCpf').mockReturnValueOnce(Promise.resolve(mockUser()))
     const token = await sut.auth({ cpf: '00000000000', password: '123456' })
-    expect(token).toEqual({ accessToken: 'any_string' })
+    expect(token).toEqual({
+      id: 'uuid',
+      name: 'any_name',
+      email: 'any_email@email.com',
+      cpf: '11122233345',
+      registrationNumber: '123456',
+      admin: false,
+      accessToken: 'any_string'
+    })
   })
 })
