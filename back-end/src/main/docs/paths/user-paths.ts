@@ -37,6 +37,7 @@ export const createUserPath = {
   post: {
     tags: ['Users'],
     summary: 'Criação de usuário',
+    security: [{ apiKeyAuth: [] }],
     requestBody: {
       content: {
         'application/json': {

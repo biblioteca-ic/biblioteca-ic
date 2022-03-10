@@ -1,5 +1,5 @@
 import { CreateUserData } from '../../../domain/usecases/create-user-data'
-import { badRequest, ok, serverError } from '../../helpers/http-helper'
+import { badRequest, created, serverError } from '../../helpers/http-helper'
 import { Controller } from '../../protocols/controller'
 import { HttpResponse } from '../../protocols/http-response'
 import { Validation } from '../../validation/protocols/validation'
@@ -13,18 +13,14 @@ export class CreateUserController implements Controller {
   async handle (request: CreateUserController.Request): Promise<HttpResponse> {
     try {
       const error = this._validation.validate(request)
-
       if (error) {
         return badRequest(error.message)
       }
-
-      const user = await this._createUserData.create(request)
-
-      if(!user) {
-        return badRequest("Usuário já existe.")
+      const user = await this._createUserData.create(Object.assign({}, request, { admin: false }))
+      if (!user) {
+        return badRequest('Usuário já existe.')
       }
-      
-      return ok(user)
+      return created(user)
     } catch (error) {
       return serverError()
     }
@@ -38,6 +34,6 @@ export namespace CreateUserController {
     cpf: string
     registrationNumber: string
     password: string
-    password_confirmation: string
+    passwordConfirmation: string
   }
 }

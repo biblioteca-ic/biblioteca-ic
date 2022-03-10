@@ -1,9 +1,9 @@
-import { LoadUserByCpfRepository } from '../../data/protocols/load-user-by-cpf.repository'
-import { LoadUserByIdRepository } from '../../data/protocols/load-user-by-id.repository'
+import { CreateUserRepository } from '../../data/protocols/create-user.repository'
 import { LoadUserByEmailRepository } from '../../data/protocols/load-user-by-email.repository'
 import { LoadUserByRegisterNumberepository } from '../../data/protocols/load-user-by-registernumber.repository'
-import { UpdateUserByIdRepository } from '../../data/protocols/update-user-by-id.repository'
-import { CreateUserRepository } from '../../data/protocols/create-user.repository'
+import { LoadUserByCpfRepository } from '../../data/protocols/users/load-user-by-cpf.repository'
+import { LoadUserByIdRepository } from '../../data/protocols/users/load-user-by-id.repository'
+import { UpdateUserByIdRepository } from '../../data/protocols/users/update-user-by-id.repository'
 import { UserModel, UserModelDto } from '../../domain/models/user'
 import { PrismaHelper } from './prisma-helper'
 
@@ -33,7 +33,7 @@ export class UserPrismaRepository implements LoadUserByCpfRepository, UpdateUser
     const user = await PrismaHelper.client.user.findFirst({ where: { id } })
     return user && PrismaHelper.userMapper(user)
   }
-  
+
   async create (data: any): Promise<UserModelDto> {
     const mappedUser = PrismaHelper.userDbMapper(data)
     const user = await PrismaHelper.client.user.create({ data: mappedUser })

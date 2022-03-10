@@ -7,7 +7,7 @@ export class RegistrationNumberValidator implements Validation {
   validate (input: any): Error {
     if (input[this.fieldName]) {
       if (input[this.fieldName].length !== 8 || !input[this.fieldName].match(/^[0-9]+$/)) {
-        return new InvalidFormatError(input[this.fieldName])
+        return new InvalidFormatError(this.fieldName)
       }
     }
   }

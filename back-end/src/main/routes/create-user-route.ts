@@ -1,7 +1,7 @@
 import { Router } from 'express'
-import { identityAuth } from '../../infra/middlewares/identity-auth'
+import { adminAuth } from '../../infra/middlewares/admin-auth'
 import { makeCreateUserController } from '../factories/make-create-user-controller'
 
 export default (router: Router): void => {
-  router.post('/users', identityAuth, async (req, res) => makeCreateUserController(req, res))
+  router.post('/users', adminAuth, async (req, res) => makeCreateUserController(req, res))
 }

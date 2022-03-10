@@ -19,5 +19,21 @@ model User {
   password            String
   admin               Boolean
 
+  Book Book[]
   @@map("users")
+}
+
+model Book {
+  id               String   @id @default(uuid())
+  title            String
+  code             String   @unique()
+  published_in     DateTime
+  publishing_house String
+  authors          String[]
+  categories       String[]
+  created_by       String
+  created_at       DateTime @default(now())
+  user             User     @relation(fields: [created_by], references: [id])
+
+  @@map("books")
 }

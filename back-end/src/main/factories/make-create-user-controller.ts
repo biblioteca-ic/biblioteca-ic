@@ -23,12 +23,16 @@ const makeCreateUserData = (): CreateUserData => {
 }
 
 const makeCreateUserValidation = (): Validation => {
-  const emailFormat = new EmailValidator('email', new EmailValidatorAdapter())
-  const registrationNumberFormat = new RegistrationNumberValidator('registrationNumber')
-  const cpfValidator = new CpfValidator('cpf')
-  const equalPasswords = new CompareFieldsValidator('password', 'password_confirmation')
-  const passwordFormat = new PasswordValidator('password')
-  const validation = new ValidationComposite([emailFormat, registrationNumberFormat, equalPasswords, passwordFormat, cpfValidator])
+  const validations: Validation[] = []
+  for (const field of ['name', 'email', 'registrationNumber', 'cpf', 'password', 'passwordConfirmation']) {
+    validations.push(new RequiredFieldValidator(field))
+  }
+  validations.push(new EmailValidator('email', new EmailValidatorAdapter()))
+  validations.push(new RegistrationNumberValidator('registrationNumber'))
+  validations.push(new CpfValidator('cpf'))
+  validations.push(new CompareFieldsValidator('password', 'passwordConfirmation'))
+  validations.push(new PasswordValidator('password'))
+  const validation = new ValidationComposite(validations)
 
   return validation
 }

@@ -1,10 +1,10 @@
-import { DbAuthentication } from '../../src/data/usecases/db-authentication'
-import { UserModel } from '../domain/models/user'
-import { Authentication } from '../domain/usecases/authentication'
-import { Encrypter } from './protocols/encrypter'
-import { HashComparer } from './protocols/hash-comparer'
-import { Hasher } from './protocols/hasher'
-import { LoadUserByCpfRepository } from './protocols/load-user-by-cpf.repository'
+import { DbAuthentication } from '../../src/data/usecases/users/db-authentication'
+import { UserModel } from '../../src/domain/models/user'
+import { Authentication } from '../../src/domain/usecases/users/authentication'
+import { Encrypter } from '../../src/data/protocols/encrypter'
+import { HashComparer } from '../../src/data/protocols/hash-comparer'
+import { Hasher } from '../../src/data/protocols/hasher'
+import { LoadUserByCpfRepository } from '../../src/data/protocols/users/load-user-by-cpf.repository'
 
 type SutTypes = {
   sut: Authentication
@@ -40,7 +40,7 @@ class HashComparerStub implements HashComparer, Hasher {
 }
 
 class EncrypterStub implements Encrypter {
-  async encrypt (data: { email: string, admin: boolean }): Promise<string> {
+  async encrypt (data: { id: string, admin: boolean }): Promise<string> {
     return Promise.resolve('any_string')
   }
 }
@@ -92,7 +92,7 @@ describe('DbAuthentication', () => {
     const encryptSpy = jest.spyOn(encrypterStub, 'encrypt')
     await sut.auth({ cpf: '00000000000', password: '123456' })
     const user = mockUser()
-    expect(encryptSpy).toHaveBeenCalledWith({ admin: user.admin, email: user.email })
+    expect(encryptSpy).toHaveBeenCalledWith({ admin: user.admin, id: user.id })
   })
 
   test('should return a valid accessToken', async () => {

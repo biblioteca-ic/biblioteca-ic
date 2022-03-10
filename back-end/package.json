@@ -8,6 +8,7 @@
     "test": "jest",
     "test:staged": "npm test -- --findRelatedTests",
     "test:cov": "npm test -- --coverage",
+    "test:coveralls": "npm run test:cov && coveralls < coverage/lcov.info",
     "migrate": "npx prisma migrate dev"
   },
   "devDependencies": {

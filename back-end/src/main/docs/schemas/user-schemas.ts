@@ -56,9 +56,9 @@ export const createUserRequestSchema = {
     password: {
       type: 'string'
     },
-    password_confirmation: {
+    passwordConfirmation: {
       type: 'string'
-    },
+    }
   }
 }
 
