@@ -38,6 +38,51 @@ export const loginResponseSchema = {
   }
 }
 
+export const createUserRequestSchema = {
+  type: 'object',
+  properties: {
+    name: {
+      type: 'string'
+    },
+    email: {
+      type: 'string'
+    },
+    registrationNumber: {
+      type: 'string'
+    },
+    cpf: {
+      type: 'string'
+    },
+    password: {
+      type: 'string'
+    },
+    passwordConfirmation: {
+      type: 'string'
+    }
+  }
+}
+
+export const createUserResponseSchema = {
+  type: 'object',
+  properties: {
+    name: {
+      type: 'string'
+    },
+    email: {
+      type: 'string'
+    },
+    cpf: {
+      type: 'string'
+    },
+    registrationNumber: {
+      type: 'string'
+    },
+    admin: {
+      type: 'boolean'
+    }
+  }
+}
+
 export const editUserRequestSchema = {
   type: 'object',
   properties: {

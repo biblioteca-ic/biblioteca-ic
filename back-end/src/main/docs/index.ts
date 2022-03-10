@@ -1,7 +1,7 @@
 import { listBooksPath, registerBookPath } from './paths/book-path'
-import { changeAdminPath, changePasswordPath, editUserPath, loginPath } from './paths/user-paths'
+import { changeAdminPath, changePasswordPath, createUserPath, editUserPath, loginPath } from './paths/user-paths'
 import { listBooksResponseSchema, registerBookRequestSchema, registerBookResponseSchema } from './schemas/book-schemas'
-import { changeAdminRequestSchema, changeAdminResponseSchema, changePasswordRequestSchema, changePasswordResponseSchema, editUserRequestSchema, editUserResponseSchema, loginRequestSchema, loginResponseSchema } from './schemas/user-schemas'
+import { changeAdminRequestSchema, changeAdminResponseSchema, changePasswordRequestSchema, changePasswordResponseSchema, createUserRequestSchema, createUserResponseSchema, editUserRequestSchema, editUserResponseSchema, loginRequestSchema, loginResponseSchema } from './schemas/user-schemas'
 
 export default {
   openapi: '3.0.0',
@@ -20,6 +20,7 @@ export default {
   }],
   paths: {
     '/login': loginPath,
+    '/users': createUserPath,
     '/users/{id}': editUserPath,
     '/users/{id}/password': changePasswordPath,
     '/users/{id}/admin': changeAdminPath,
@@ -29,6 +30,8 @@ export default {
   schemas: {
     loginRequest: loginRequestSchema,
     loginResponse: loginResponseSchema,
+    createUserRequest: createUserRequestSchema,
+    createUserResponse: createUserResponseSchema,
     editUserRequest: editUserRequestSchema,
     editUserResponse: editUserResponseSchema,
     changePasswordRequest: changePasswordRequestSchema,
