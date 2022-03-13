@@ -17,25 +17,39 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import { useHistory, useParams } from 'react-router-dom';
-import { BsTrashFill } from 'react-icons/bs';
 import { useAuth } from '../../../providers/AuthProvider';
 import { booksMock } from '../../../services/mocks';
 import { Page } from '../../../components/Page';
 // import { api } from '../../../services/api';
 import { BookType } from '../../../types/Book';
+import { UserType } from '../../../types/User';
 import { BookDetails } from '../../../components/BookDetails';
 
 type ItemParams = {
   id: string;
 };
 
-export const BookItem = ({ bookData }: { bookData: BookType }) => {
-   
+export const BookItem = ({ bookData, userData }: { bookData: BookType, userData: UserType | undefined }) => {
+  const history = useHistory();
+  // const toast = useToast();
+
+  const checkIfCanEdit = () => {
+    if (userData) return userData.admin;
+    return null
+  };
+
   return (
     <>
       <Box mt={4} mb={8}>
         <Box mb={3} display="flex" alignItems="center" justifyContent="space-between">
           <Heading>{bookData.title}</Heading>
+          <Box>
+            {checkIfCanEdit() ? (
+              <Button variant="outline" colorScheme="blue" mr={2} onClick={() => history.push(`/books/edit/${bookData.id}`)}>
+                Editar livro
+              </Button>
+            ) : null}
+          </Box>
         </Box>
         <BookDetails book={bookData} />
       </Box>
@@ -45,9 +59,11 @@ export const BookItem = ({ bookData }: { bookData: BookType }) => {
 
 const BookItemPage = () => {
   const [isLargerThan766] = useMediaQuery('(max-width: 766px)');
-  const [bookData, setBookData] = useState<BookType | undefined>();
+  const [bookData, setBookData] = useState<BookType>();
+  const [userData, setUserData] = useState<UserType>();
   const [isLoading, setIsLoading] = useState(true);
   const { id } = useParams<ItemParams>();
+  const { user } = useAuth() as any;
 
   const getBookData = async () => {
     try {
@@ -62,8 +78,28 @@ const BookItemPage = () => {
     }
   };
 
+  const getUserData = async () => {
+    try {
+      // const { data } = await api.get(`/users/${id}`);
+
+
+      const data = user.body;
+      delete data.accessToken;
+
+      console.log(data)
+
+      setUserData(data);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
+
+  }
+
   useEffect(() => {
     getBookData();
+    getUserData();
   }, [id]);
 
   return (
@@ -94,7 +130,7 @@ const BookItemPage = () => {
               </Box>
             </Box>
             <Box maxW="80vh" margin="auto">
-              <BookItem bookData={bookData} />
+              <BookItem bookData={bookData} userData={userData} />
             </Box>
           </>
         )}
