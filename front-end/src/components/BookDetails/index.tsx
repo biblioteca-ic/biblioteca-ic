@@ -14,7 +14,9 @@ export const BookDetails = ({ book }: { book: BookType }) => (
     <Box mt={3} textAlign="left">
       <Text fontSize="18px">
         <b>Autores: </b>
-        {book.authors}
+        {book.authors.map((item, i) => {
+         return (i ? ', ': '') + item
+        })}
       </Text>
     </Box>
 
@@ -28,7 +30,9 @@ export const BookDetails = ({ book }: { book: BookType }) => (
     <Box mt={3} textAlign="left">
       <Text fontSize="18px">
         <b>Categorias: </b>
-        {book.categories}
+        {book.categories.map((item, i) => {
+         return (i ? ', ': '') + item
+        })}
       </Text>
     </Box>
 
