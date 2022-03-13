@@ -71,6 +71,22 @@ export const listUsersPath = {
   tags: ['Users'],
   summary: 'Listagem de usuários',
   security: [{ apiKeyAuth: [] }],
+  parameters: [
+    {
+      name: 'name',
+      in: 'query',
+      description: 'Nome ou parte do nome de um usuário',
+      required: false,
+      type: 'string'
+    },
+    {
+      name: 'admin',
+      in: 'query',
+      description: 'Valor pode ser true ou false',
+      required: false,
+      type: 'string'
+    }
+  ],
   responses: {
     200: {
       description: 'Sucesso',
