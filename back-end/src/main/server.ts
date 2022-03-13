@@ -8,6 +8,7 @@ import createUserRoute from './routes/create-user-route'
 import listBooksRoute from './routes/list-books-route'
 import loginRoute from './routes/login-route'
 import registerBookRoute from './routes/register-book-route'
+import listUsersRoute from './routes/list-users-route'
 
 const app = express()
 
@@ -25,11 +26,14 @@ app.use(cors)
 
 const router = Router()
 app.use('/api', router)
+
 loginRoute(router)
-editUserRoute(router)
 createUserRoute(router)
+listUsersRoute(router)
+editUserRoute(router)
 changePasswordRoute(router)
 changeAdminRoute(router)
+
 registerBookRoute(router)
 listBooksRoute(router)
 

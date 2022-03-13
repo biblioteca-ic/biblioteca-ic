@@ -12,6 +12,9 @@ export const PrismaHelper = {
     const { registration_number, password, ...data } = prismaUser
     return Object.assign({}, data, { registrationNumber: registration_number })
   },
+  usersDtoMapper: (prismaUsers: any[]): UserModelDto[] => {
+    return prismaUsers.map((user) => PrismaHelper.userDtoMapper(user))
+  },
   userDbMapper: (entityUser: any): any => {
     const { registrationNumber, ...userWithoutRegistrationNumber } = entityUser
     return Object.assign({}, userWithoutRegistrationNumber, { registration_number: registrationNumber })

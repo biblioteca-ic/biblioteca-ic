@@ -10,7 +10,7 @@ export namespace CreateUserData {
     email: string
     cpf: string
     registrationNumber: string
-    password: string,
+    password: string
     admin: boolean
   }
 }

@@ -34,37 +34,78 @@ export const loginPath = {
 }
 
 export const createUserPath = {
-  post: {
-    tags: ['Users'],
-    summary: 'Criação de usuário',
-    security: [{ apiKeyAuth: [] }],
-    requestBody: {
+  tags: ['Users'],
+  summary: 'Criação de usuário',
+  security: [{ apiKeyAuth: [] }],
+  requestBody: {
+    content: {
+      'application/json': {
+        schema: {
+          $ref: '#/schemas/createUserRequest'
+        }
+      }
+    },
+    required: true
+  },
+  responses: {
+    200: {
+      description: 'Sucesso',
       content: {
         'application/json': {
           schema: {
-            $ref: '#/schemas/createUserRequest'
+            $ref: '#/schemas/createUserResponse'
           }
         }
-      },
-      required: true
-    },
-    responses: {
-      200: {
-        description: 'Sucesso',
-        content: {
-          'application/json': {
-            schema: {
-              $ref: '#/schemas/createUserResponse'
-            }
-          }
-        }
-      },
-      401: {
-        description: 'Unauthorized'
-      },
-      500: {
-        description: 'ServerError'
       }
+    },
+    401: {
+      description: 'Unauthorized'
+    },
+    500: {
+      description: 'ServerError'
+    }
+  }
+}
+
+export const listUsersPath = {
+  tags: ['Users'],
+  summary: 'Listagem de usuários',
+  security: [{ apiKeyAuth: [] }],
+  parameters: [
+    {
+      name: 'name',
+      in: 'query',
+      description: 'Nome ou parte do nome de um usuário',
+      required: false,
+      type: 'string'
+    },
+    {
+      name: 'admin',
+      in: 'query',
+      description: 'Valor pode ser true ou false',
+      required: false,
+      type: 'string'
+    }
+  ],
+  responses: {
+    200: {
+      description: 'Sucesso',
+      content: {
+        'application/json': {
+          schema: {
+            $ref: '#/schemas/listUsersResponse'
+          }
+        }
+      }
+    },
+    401: {
+      description: 'Unauthorized'
+    },
+    403: {
+      description: 'Forbidden'
+    },
+    500: {
+      description: 'ServerError'
     }
   }
 }
