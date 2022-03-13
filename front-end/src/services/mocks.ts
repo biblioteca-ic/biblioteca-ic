@@ -27,3 +27,17 @@ export const usersMock = [
     admin: false,
   },
 ];
+
+export const booksMock = [
+  {
+    id: '1',
+    title: 'O alienista',
+    publishingHouse: 'Editora Ática',
+    authors: ['Machado de Assis', 'Jose de Alencar'],
+    categories: ['Literatura brasileira', 'Romance'],
+    createdBy: '1',
+    code: '001-001',
+    publishedIn: '1884',
+    createdAt: '2022'
+  },
+];

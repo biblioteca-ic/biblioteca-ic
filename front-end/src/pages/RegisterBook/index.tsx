@@ -189,6 +189,7 @@ const Register = () => {
 
             <FormLabel htmlFor="categories">Categorias</FormLabel>
 
+            {/*
             {categoriesFields.map((field, index) => (
               <FormControl my={2} isInvalid={!!errors?.categories?.[index]?.name?.message}>
                 <InputGroup size="md" maxW={380}>
@@ -209,11 +210,11 @@ const Register = () => {
                 </InputGroup>
                 {!!errors?.authors?.[index]?.name?.message && <FormErrorMessage>{errors?.authors?.[index]?.name?.message}</FormErrorMessage>}
               </FormControl>
-            ))}
+            ))} */}
 
             <FormControl my={2} isInvalid={!!(errors?.categories as any)?.message}>
               <CreatableSelect
-                {...register('categories')}
+                // {...register('categories')} // fix the bug to uncomment this line
                 isMulti
                 options={categoriesOptions}
                 placeholder="Adicione uma ou mais categorias"
