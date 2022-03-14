@@ -6,6 +6,7 @@ import Profile from '../pages/Profile';
 import ChangePassword from '../pages/ChangePassword';
 import { UsersItemPage, UsersList } from '../pages/Users';
 import RegisterBook from '../pages/RegisterBook';
+import EditBook from '../pages/EditBook';
 import { BooksItemPage } from '../pages/Books';
 
 export const routes = [
@@ -61,6 +62,12 @@ export const routes = [
   {
     path: '/books/show/:id',
     component: BooksItemPage,
+    private: false,
+    onlyAdmin: false,
+  },
+  {
+    path: '/books/edit/:id',
+    component: EditBook,
     private: false,
     onlyAdmin: false,
   },

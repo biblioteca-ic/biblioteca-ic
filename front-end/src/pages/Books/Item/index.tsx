@@ -1,20 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Box,
   Heading,
   Text,
   Button,
-  IconButton,
-  AlertDialog,
-  AlertDialogOverlay,
-  AlertDialogContent,
-  AlertDialogHeader,
-  AlertDialogBody,
-  AlertDialogFooter,
   useMediaQuery,
   Center,
-  Spinner,
-  useToast,
+  Spinner
 } from '@chakra-ui/react';
 import { useHistory, useParams } from 'react-router-dom';
 import { useAuth } from '../../../providers/AuthProvider';
@@ -35,7 +27,7 @@ export const BookItem = ({ bookData, userData }: { bookData: BookType, userData:
 
   const checkIfCanEdit = () => {
     if (userData) return userData.admin;
-    return null
+    return false
   };
 
   return (
@@ -68,7 +60,6 @@ const BookItemPage = () => {
   const getBookData = async () => {
     try {
       // const { data } = await api.get(`/users/${id}`);
-
       const data = booksMock;
       setBookData(data[Number(id) - 1]);
     } catch (err) {
@@ -81,12 +72,8 @@ const BookItemPage = () => {
   const getUserData = async () => {
     try {
       // const { data } = await api.get(`/users/${id}`);
-
-
       const data = user.body;
       delete data.accessToken;
-
-      console.log(data)
 
       setUserData(data);
     } catch (err) {
@@ -94,7 +81,6 @@ const BookItemPage = () => {
     } finally {
       setIsLoading(false);
     }
-
   }
 
   useEffect(() => {
