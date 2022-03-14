@@ -6,6 +6,8 @@ import changePasswordRoute from './routes/change-password-route'
 import editUserRoute from './routes/edit-user-route'
 import loginRoute from './routes/login-route'
 import registerBookRoute from './routes/register-book-route'
+import registerBookCopyRoute from './routes/register-book-copy-route'
+import deleteBookCopyRoute from './routes/delete-book-copy-route'
 
 const app = express()
 
@@ -28,6 +30,8 @@ editUserRoute(router)
 changePasswordRoute(router)
 changeAdminRoute(router)
 registerBookRoute(router)
+registerBookCopyRoute(router)
+deleteBookCopyRoute(router)
 
 app.listen(3333, () => {
   console.log('listening at http://localhost:3333')
