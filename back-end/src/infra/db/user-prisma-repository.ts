@@ -9,20 +9,21 @@ import { UserModel, UserModelDto } from '../../domain/models/user'
 import { PrismaHelper } from './prisma-helper'
 import { LoadUserByNameRepository } from '../../data/protocols/users/load-user-by-name.repository'
 import { LoadUserByAdminRepository } from '../../data/protocols/users/load-users-by-admin.repository'
+import { DeleteUserRepository } from '../../data/protocols/users/delete-user.repository'
 
-export class UserPrismaRepository implements LoadUserByCpfRepository, UpdateUserByIdRepository, LoadUserByAdminRepository, LoadUserByIdRepository, CreateUserRepository, LoadUsersRepository, LoadUserByNameRepository, LoadUserByEmailRepository, LoadUserByRegisterNumberepository {
+export class UserPrismaRepository implements LoadUserByCpfRepository, UpdateUserByIdRepository, DeleteUserRepository, LoadUserByAdminRepository, LoadUserByIdRepository, CreateUserRepository, LoadUsersRepository, LoadUserByNameRepository, LoadUserByEmailRepository, LoadUserByRegisterNumberepository {
   async loadByCpf (cpf: string): Promise<UserModel> {
-    const user = await PrismaHelper.client.user.findFirst({ where: { cpf: cpf } })
+    const user = await PrismaHelper.client.user.findFirst({ where: { cpf: cpf, active: true } })
     return user && PrismaHelper.userMapper(user)
   }
 
   async loadByEmail (email: string): Promise<UserModel> {
-    const user = await PrismaHelper.client.user.findFirst({ where: { email: email } })
+    const user = await PrismaHelper.client.user.findFirst({ where: { email: email, active: true } })
     return user && PrismaHelper.userMapper(user)
   }
 
   async loadByRegisterNumber (registerNumber: string): Promise<UserModel> {
-    const user = await PrismaHelper.client.user.findFirst({ where: { registration_number: registerNumber } })
+    const user = await PrismaHelper.client.user.findFirst({ where: { registration_number: registerNumber, active: true } })
     return user && PrismaHelper.userMapper(user)
   }
 
@@ -33,7 +34,7 @@ export class UserPrismaRepository implements LoadUserByCpfRepository, UpdateUser
   }
 
   async loadById (id: string): Promise<UserModel> {
-    const user = await PrismaHelper.client.user.findFirst({ where: { id } })
+    const user = await PrismaHelper.client.user.findFirst({ where: { id, active: true } })
     return user && PrismaHelper.userMapper(user)
   }
 
@@ -45,17 +46,22 @@ export class UserPrismaRepository implements LoadUserByCpfRepository, UpdateUser
   }
 
   async loadAll (): Promise<UserModelDto[]> {
-    const users = await PrismaHelper.client.user.findMany()
+    const users = await PrismaHelper.client.user.findMany({ where: { active: true } })
     return users && PrismaHelper.usersDtoMapper(users)
   }
 
   async loadByName (name: string): Promise<UserModelDto> {
-    const user = await PrismaHelper.client.user.findFirst({ where: { name: { contains: name } } })
+    const user = await PrismaHelper.client.user.findFirst({ where: { name: { contains: name }, active: true } })
     return user && PrismaHelper.userDtoMapper(user)
   }
 
   async loadByAdmin (admin: boolean): Promise<UserModelDto[]> {
-    const users = await PrismaHelper.client.user.findMany({ where: { admin } })
+    const users = await PrismaHelper.client.user.findMany({ where: { admin, active: true } })
     return users && PrismaHelper.usersDtoMapper(users)
+  }
+
+  async deactivate (id: string): Promise<UserModel> {
+    const deactivatedUser = await PrismaHelper.client.user.update({ where: { id }, data: { active: false } })
+    return deactivatedUser && PrismaHelper.userMapper(deactivatedUser)
   }
 }

@@ -9,6 +9,7 @@ import listBooksRoute from './routes/list-books-route'
 import loginRoute from './routes/login-route'
 import registerBookRoute from './routes/register-book-route'
 import listUsersRoute from './routes/list-users-route'
+import deleteUserRoute from './routes/delete-user-route'
 
 const app = express()
 
@@ -31,6 +32,7 @@ loginRoute(router)
 createUserRoute(router)
 listUsersRoute(router)
 editUserRoute(router)
+deleteUserRoute(router)
 changePasswordRoute(router)
 changeAdminRoute(router)
 

@@ -111,49 +111,47 @@ export const listUsersPath = {
 }
 
 export const editUserPath = {
-  patch: {
-    tags: ['Users'],
-    summary: 'Edição de usuário',
-    security: [{ apiKeyAuth: [] }],
-    requestBody: {
+  tags: ['Users'],
+  summary: 'Edição de usuário',
+  security: [{ apiKeyAuth: [] }],
+  requestBody: {
+    content: {
+      'application/json': {
+        schema: {
+          $ref: '#/schemas/editUserRequest'
+        }
+      }
+    },
+    required: true
+  },
+  parameters: [{
+    in: 'path',
+    name: 'id',
+    description: 'ID do usuário que será editado',
+    schema: {
+      type: 'string'
+    },
+    required: true
+  }],
+  responses: {
+    200: {
+      description: 'Sucesso',
       content: {
         'application/json': {
           schema: {
-            $ref: '#/schemas/editUserRequest'
+            $ref: '#/schemas/editUserResponse'
           }
         }
-      },
-      required: true
-    },
-    parameters: [{
-      in: 'path',
-      name: 'id',
-      description: 'ID do usuário que será editado',
-      schema: {
-        type: 'string'
-      },
-      required: true
-    }],
-    responses: {
-      200: {
-        description: 'Sucesso',
-        content: {
-          'application/json': {
-            schema: {
-              $ref: '#/schemas/editUserResponse'
-            }
-          }
-        }
-      },
-      401: {
-        description: 'Unauthorized'
-      },
-      403: {
-        description: 'Forbidden'
-      },
-      500: {
-        description: 'ServerError'
       }
+    },
+    401: {
+      description: 'Unauthorized'
+    },
+    403: {
+      description: 'Forbidden'
+    },
+    500: {
+      description: 'ServerError'
     }
   }
 }
@@ -245,6 +243,42 @@ export const changeAdminPath = {
       500: {
         description: 'ServerError'
       }
+    }
+  }
+}
+
+export const deleteUserPath = {
+  tags: ['Users'],
+  summary: 'Deleção de usuário',
+  security: [{ apiKeyAuth: [] }],
+  parameters: [{
+    in: 'path',
+    name: 'id',
+    description: 'ID do usuário que será deletado',
+    schema: {
+      type: 'string'
+    },
+    required: true
+  }],
+  responses: {
+    200: {
+      description: 'Sucesso',
+      content: {
+        'application/json': {
+          schema: {
+            $ref: '#/schemas/deleteUserResponse'
+          }
+        }
+      }
+    },
+    401: {
+      description: 'Unauthorized'
+    },
+    403: {
+      description: 'Forbidden'
+    },
+    500: {
+      description: 'ServerError'
     }
   }
 }
