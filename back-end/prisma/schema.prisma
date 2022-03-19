@@ -10,14 +10,32 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Users {
+model User {
   id                  String   @id @default(uuid())
-  name                String   @db.VarChar(255)
-  email               String   @db.VarChar(255) @unique
-  password            String   @db.VarChar(60)
-  registration_number String   @db.VarChar(8) @unique
-  cpf                 String   @db.VarChar(14) @unique
-  admin               Boolean  @db.Boolean @default(false)
+  name                String
+  email               String   @unique()
+  cpf                 String   @unique()
+  registration_number String   @unique()
+  password            String
+  admin               Boolean  @default(false)
   created_at          DateTime @default(now())
   updated_at          DateTime @updatedAt
+
+  Book Book[]
+  @@map("users")
+}
+
+model Book {
+  id               String   @id @default(uuid())
+  title            String
+  code             String   @unique()
+  published_in     DateTime
+  publishing_house String
+  authors          String[]
+  categories       String[]
+  created_by       String
+  created_at       DateTime @default(now())
+  user             User     @relation(fields: [created_by], references: [id])
+
+  @@map("books")
 }

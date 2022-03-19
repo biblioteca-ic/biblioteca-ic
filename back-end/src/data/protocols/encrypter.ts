@@ -4,7 +4,7 @@ export interface Encrypter {
 
 export namespace Encrypter {
   export type Params = {
-    email: string
+    id: string
     admin: boolean
   }
 }

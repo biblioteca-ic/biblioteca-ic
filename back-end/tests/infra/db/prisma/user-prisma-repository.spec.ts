@@ -1,9 +1,9 @@
 // Attention: Mock prisma singleton after import repository
-import { prismaMock } from '../../src/infra/db/prisma/prisma-singleton'
+import { prismaMock } from '../../../../src/infra/db/prisma/prisma-singleton'
 
-import { UserModel } from '../../src/domain/models/user'
-import { LoadUserByCpfRepository } from '../../src/data/protocols/load-user-by-cpf.repository'
-import { UserPrismaRepository } from '../../src/infra/db/prisma/user-prisma-repository'
+import { UserModel } from '../../../../src/domain/models/user'
+import { LoadUserByCpfRepository } from '../../../../src/data/protocols/users/load-user-by-cpf.repository'
+import { UserPrismaRepository } from '../../../../src/infra/db/prisma/user-prisma-repository'
 
 type SutTypes = {
   userPR: LoadUserByCpfRepository
@@ -30,7 +30,7 @@ describe('UserPrismaRepository', () => {
       created_at: new Date,
       updated_at: new Date()
     }
-    prismaMock.users.findFirst.mockResolvedValue(user)
+    prismaMock.user.findFirst.mockResolvedValue(user)
     await expect(userPR.loadByCpf(user.cpf)).resolves.toEqual(user)
   })
 })

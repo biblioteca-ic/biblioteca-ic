@@ -9,3 +9,12 @@ export type UserModel = {
   created_at: Date
   updated_at: Date
 }
+
+export type UserModelDto = {
+  id: string
+  name: string
+  email: string
+  cpf: string
+  registration_number: string
+  admin: boolean
+}

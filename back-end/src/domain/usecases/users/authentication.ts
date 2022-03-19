@@ -1,4 +1,4 @@
-import { AuthenticationModel } from '../models/authentication'
+import { AuthenticationModel } from '../../models/authentication'
 
 export interface Authentication {
   auth: (params: Authentication.Params) => Promise<AuthenticationModel|null>
