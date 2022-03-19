@@ -20,6 +20,7 @@ model User {
   admin               Boolean  @default(false)
   created_at          DateTime @default(now())
   updated_at          DateTime @updatedAt
+  active              Boolean @default(true)
 
   Book Book[]
   @@map("users")

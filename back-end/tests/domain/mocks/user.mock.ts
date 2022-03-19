@@ -18,5 +18,6 @@ export const mockUserModelDto: UserModelDto = {
   email: 'any_email',
   cpf: '123.456.789-01',
   registration_number: '12345678',
-  admin: true
+  admin: true,
+  active: true
 }

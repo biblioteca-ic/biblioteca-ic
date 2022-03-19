@@ -17,4 +17,5 @@ export type UserModelDto = {
   cpf: string
   registration_number: string
   admin: boolean
+  active: boolean
 }

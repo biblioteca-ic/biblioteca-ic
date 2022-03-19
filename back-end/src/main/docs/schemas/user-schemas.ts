@@ -189,3 +189,24 @@ export const listUsersResponseSchema = {
     }
   }
 }
+
+export const deleteUserResponseSchema = {
+  type: 'object',
+  properties: {
+    name: {
+      type: 'string'
+    },
+    email: {
+      type: 'string'
+    },
+    cpf: {
+      type: 'string'
+    },
+    registrationNumber: {
+      type: 'string'
+    },
+    admin: {
+      type: 'boolean'
+    }
+  }
+}

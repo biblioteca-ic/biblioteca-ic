@@ -99,18 +99,10 @@ describe('DbAuthentication', () => {
 
   test('should return a valid accessToken', async () => {
     const { sut, loadUserByCpfRepositoryStub } = makeSut()
-    jest.spyOn(loadUserByCpfRepositoryStub, 'loadByCpf').mockReturnValueOnce(Promise.resolve(mockUser()))
+    const user = mockUser()
+    jest.spyOn(loadUserByCpfRepositoryStub, 'loadByCpf').mockReturnValueOnce(Promise.resolve(user))
     const token = await sut.auth({ cpf: '123.456.789-09', password: '123456' })
-    expect(token).toEqual({
-      id: 'uuid',
-      name: 'any_name',
-      email: 'any_email@email.com',
-      cpf: '123.456.789-09',
-      registration_number: '21112900',
-      admin: false,
-      accessToken: 'any_string',
-      created_at: new Date,
-      updated_at: new Date
-    })
+    const { password, ...userWithoutPassword } = user
+    expect(token).toEqual(Object.assign({}, userWithoutPassword, { accessToken: 'any_string'}))
   })
 })
