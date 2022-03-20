@@ -24,7 +24,6 @@ export class DbRegisterBookCopy implements RegisterBookCopy {
       const copyCode = await this._bookCopyCodeGenerator.generate(prefix)
       const copyBook = await this._createBookCopy.create({
         code: copyCode,
-        isAvailable: true,
         created_by: userExists.id,
         book_id: bookExists.id
       })

@@ -26,11 +26,11 @@ export const PrismaHelper = {
     return Object.assign({}, rest, { publishing_house: publishingHouse, created_by: createdBy, published_in: publishedIn, created_at: createdAt })
   },
   bookCopyMapper: (prismaBookCopy: any): BookCopyModel => {
-    const { code, isAvailable, created_by, book_id, ...rest } = prismaBookCopy
-    return Object.assign({}, rest, { code , isAvailable, created_by, book_id })
+    const { code, created_by, book_id, ...rest } = prismaBookCopy
+    return Object.assign({}, rest, { code, created_by, book_id })
   },
   bookCopyDbMapper: (entityBookCopy: any): any => {
-    const { code, isAvailable, created_by, book_id, ...rest } = entityBookCopy
-    return Object.assign({}, rest, { code, isAvailable, created_by, book_id })
+    const { code, created_by, book_id, ...rest } = entityBookCopy
+    return Object.assign({}, rest, { code, created_by, book_id })
   }
 }

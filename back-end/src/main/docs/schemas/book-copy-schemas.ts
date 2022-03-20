@@ -19,8 +19,8 @@ export const registerBookCopyResponseSchema = {
     code: {
       type: 'string'
     },
-    isAvailable: {
-      type: 'boolean'
+    status: {
+      type: 'string'
     },
     book_id: {
       type: 'string'

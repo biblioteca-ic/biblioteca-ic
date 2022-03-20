@@ -43,12 +43,18 @@ model Book {
   @@map("books")
 }
 
+enum BookStatus {
+  AVAILABLE
+  RENTED
+  LOST
+}
+
 model Book_Copy {
   id               String   @id @default(uuid())
   code             String
   book_id          String
   created_at       DateTime @default(now())
-  isAvailable      Boolean
+  status           BookStatus @default(AVAILABLE)
   lease_date       DateTime?
   located_by       String?
   created_by       String

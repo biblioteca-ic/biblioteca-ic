@@ -7,7 +7,6 @@ export interface CreateBookCopyRepository {
 export namespace CreateBookCopyRepository {
   export type Params = {
     code: string
-    isAvailable: boolean
     created_by: string
     book_id: string
   }

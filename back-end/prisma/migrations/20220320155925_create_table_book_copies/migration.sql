@@ -1,10 +1,13 @@
+-- CreateEnum
+CREATE TYPE "BookStatus" AS ENUM ('AVAILABLE', 'RENTED', 'LOST');
+
 -- CreateTable
 CREATE TABLE "book_copies" (
     "id" TEXT NOT NULL,
     "code" TEXT NOT NULL,
     "book_id" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "isAvailable" BOOLEAN NOT NULL,
+    "status" "BookStatus" NOT NULL DEFAULT E'AVAILABLE',
     "lease_date" TIMESTAMP(3),
     "located_by" TEXT,
     "created_by" TEXT NOT NULL,

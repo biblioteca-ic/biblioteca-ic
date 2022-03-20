@@ -13,11 +13,12 @@ export class DbDeleteBookCopy implements DeleteBookCopy {
     const { book_id } = params
     const bookExists = await this._loadBookCopyByIdRepository.loadById(book_id)
 
-    if (bookExists) {
+    if (bookExists && String(bookExists.status) === 'AVAILABLE') {
       await this._deleteBookCopyRepository.delete(book_id)
 
       return true
     }
+
     return false
   }
 }
