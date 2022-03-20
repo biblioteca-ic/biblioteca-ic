@@ -33,50 +33,125 @@ export const loginPath = {
   }
 }
 
-export const editUserPath = {
-  patch: {
-    tags: ['Users'],
-    summary: 'Edição de usuário',
-    security: [{ apiKeyAuth: [] }],
-    requestBody: {
+export const createUserPath = {
+  tags: ['Users'],
+  summary: 'Criação de usuário',
+  security: [{ apiKeyAuth: [] }],
+  requestBody: {
+    content: {
+      'application/json': {
+        schema: {
+          $ref: '#/schemas/createUserRequest'
+        }
+      }
+    },
+    required: true
+  },
+  responses: {
+    200: {
+      description: 'Sucesso',
       content: {
         'application/json': {
           schema: {
-            $ref: '#/schemas/editUserRequest'
+            $ref: '#/schemas/createUserResponse'
           }
         }
-      },
-      required: true
-    },
-    parameters: [{
-      in: 'path',
-      name: 'id',
-      description: 'ID do usuário que será editado',
-      schema: {
-        type: 'string'
-      },
-      required: true
-    }],
-    responses: {
-      200: {
-        description: 'Sucesso',
-        content: {
-          'application/json': {
-            schema: {
-              $ref: '#/schemas/editUserResponse'
-            }
-          }
-        }
-      },
-      401: {
-        description: 'Unauthorized'
-      },
-      403: {
-        description: 'Forbidden'
-      },
-      500: {
-        description: 'ServerError'
       }
+    },
+    401: {
+      description: 'Unauthorized'
+    },
+    500: {
+      description: 'ServerError'
+    }
+  }
+}
+
+export const listUsersPath = {
+  tags: ['Users'],
+  summary: 'Listagem de usuários',
+  security: [{ apiKeyAuth: [] }],
+  parameters: [
+    {
+      name: 'name',
+      in: 'query',
+      description: 'Nome ou parte do nome de um usuário',
+      required: false,
+      type: 'string'
+    },
+    {
+      name: 'admin',
+      in: 'query',
+      description: 'Valor pode ser true ou false',
+      required: false,
+      type: 'string'
+    }
+  ],
+  responses: {
+    200: {
+      description: 'Sucesso',
+      content: {
+        'application/json': {
+          schema: {
+            $ref: '#/schemas/listUsersResponse'
+          }
+        }
+      }
+    },
+    401: {
+      description: 'Unauthorized'
+    },
+    403: {
+      description: 'Forbidden'
+    },
+    500: {
+      description: 'ServerError'
+    }
+  }
+}
+
+export const editUserPath = {
+  tags: ['Users'],
+  summary: 'Edição de usuário',
+  security: [{ apiKeyAuth: [] }],
+  requestBody: {
+    content: {
+      'application/json': {
+        schema: {
+          $ref: '#/schemas/editUserRequest'
+        }
+      }
+    },
+    required: true
+  },
+  parameters: [{
+    in: 'path',
+    name: 'id',
+    description: 'ID do usuário que será editado',
+    schema: {
+      type: 'string'
+    },
+    required: true
+  }],
+  responses: {
+    200: {
+      description: 'Sucesso',
+      content: {
+        'application/json': {
+          schema: {
+            $ref: '#/schemas/editUserResponse'
+          }
+        }
+      }
+    },
+    401: {
+      description: 'Unauthorized'
+    },
+    403: {
+      description: 'Forbidden'
+    },
+    500: {
+      description: 'ServerError'
     }
   }
 }
@@ -168,6 +243,42 @@ export const changeAdminPath = {
       500: {
         description: 'ServerError'
       }
+    }
+  }
+}
+
+export const deleteUserPath = {
+  tags: ['Users'],
+  summary: 'Deleção de usuário',
+  security: [{ apiKeyAuth: [] }],
+  parameters: [{
+    in: 'path',
+    name: 'id',
+    description: 'ID do usuário que será deletado',
+    schema: {
+      type: 'string'
+    },
+    required: true
+  }],
+  responses: {
+    200: {
+      description: 'Sucesso',
+      content: {
+        'application/json': {
+          schema: {
+            $ref: '#/schemas/deleteUserResponse'
+          }
+        }
+      }
+    },
+    401: {
+      description: 'Unauthorized'
+    },
+    403: {
+      description: 'Forbidden'
+    },
+    500: {
+      description: 'ServerError'
     }
   }
 }

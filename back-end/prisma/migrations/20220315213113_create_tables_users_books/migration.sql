@@ -7,6 +7,7 @@ CREATE TABLE "users" (
     "registration_number" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "admin" BOOLEAN NOT NULL,
+    "active" BOOLEAN NOT NULL DEFAULT true,
 
     CONSTRAINT "users_pkey" PRIMARY KEY ("id")
 );
@@ -15,9 +16,11 @@ CREATE TABLE "users" (
 CREATE TABLE "books" (
     "id" TEXT NOT NULL,
     "title" TEXT NOT NULL,
+    "code" TEXT NOT NULL,
     "published_in" TIMESTAMP(3) NOT NULL,
     "publishing_house" TEXT NOT NULL,
     "authors" TEXT[],
+    "categories" TEXT[],
     "created_by" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
@@ -32,6 +35,9 @@ CREATE UNIQUE INDEX "users_cpf_key" ON "users"("cpf");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "users_registration_number_key" ON "users"("registration_number");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "books_code_key" ON "books"("code");
 
 -- AddForeignKey
 ALTER TABLE "books" ADD CONSTRAINT "books_created_by_fkey" FOREIGN KEY ("created_by") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
