@@ -9,7 +9,7 @@ import { ValidationComposite } from '../../../presentation/validation/validators
 
 const makeDeleteUser = (): DeleteUser => {
   const userPrismaRepository = new UserPrismaRepository()
-  const editUserData = new DbDeleteUser(userPrismaRepository)
+  const editUserData = new DbDeleteUser(userPrismaRepository, userPrismaRepository, userPrismaRepository)
   return editUserData
 }
 
