@@ -1,5 +1,7 @@
+import { deleteBookCopyPath, registerBookCopyPath } from './paths/book-copy-path'
 import { listBooksPath, registerBookPath } from './paths/book-path'
 import { changeAdminPath, changePasswordPath, createUserPath, deleteUserPath, editUserPath, listUsersPath, loginPath } from './paths/user-paths'
+import { registerBookCopyRequestSchema, registerBookCopyResponseSchema } from './schemas/book-copy-schemas'
 import { listBooksResponseSchema, registerBookRequestSchema, registerBookResponseSchema } from './schemas/book-schemas'
 import { changeAdminRequestSchema, changeAdminResponseSchema, changePasswordRequestSchema, changePasswordResponseSchema, createUserRequestSchema, createUserResponseSchema, deleteUserResponseSchema, editUserRequestSchema, editUserResponseSchema, listUsersResponseSchema, loginRequestSchema, loginResponseSchema } from './schemas/user-schemas'
 
@@ -33,7 +35,9 @@ export default {
     '/books': {
       post: registerBookPath,
       get: listBooksPath
-    }
+    },
+    '/book-copy': registerBookCopyPath,
+    '/book-copy/{book_id}': deleteBookCopyPath
   },
   schemas: {
     loginRequest: loginRequestSchema,
@@ -50,7 +54,9 @@ export default {
     changeAdminResponse: changeAdminResponseSchema,
     registerBookRequest: registerBookRequestSchema,
     registerBookResponse: registerBookResponseSchema,
-    listBooksResponse: listBooksResponseSchema
+    listBooksResponse: listBooksResponseSchema,
+    registerBookCopyRequest: registerBookCopyRequestSchema,
+    registerBookCopyResponse: registerBookCopyResponseSchema
   },
   components: {
     securitySchemes: {

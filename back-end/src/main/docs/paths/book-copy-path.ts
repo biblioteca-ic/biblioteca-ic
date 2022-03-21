@@ -55,20 +55,19 @@ export const deleteBookCopyPath = {
       204: {
         description: 'Sucesso',
         content: {}
-        }
-      },
-      401: {
-        description: 'Unauthorized'
-      },
-      403: {
-        description: 'Forbidden'
-      },
-      500: {
-        description: 'ServerError'
-      },
-      404: {
-        description: 'NotFound'
       }
+    },
+    401: {
+      description: 'Unauthorized'
+    },
+    403: {
+      description: 'Forbidden'
+    },
+    500: {
+      description: 'ServerError'
+    },
+    404: {
+      description: 'NotFound'
     }
   }
 }
