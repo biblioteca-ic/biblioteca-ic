@@ -8,6 +8,8 @@ import createUserRoute from './routes/create-user-route'
 import listBooksRoute from './routes/list-books-route'
 import loginRoute from './routes/login-route'
 import registerBookRoute from './routes/register-book-route'
+import registerBookCopyRoute from './routes/register-book-copy-route'
+import deleteBookCopyRoute from './routes/delete-book-copy-route'
 import listUsersRoute from './routes/list-users-route'
 import deleteUserRoute from './routes/delete-user-route'
 
@@ -35,8 +37,9 @@ editUserRoute(router)
 deleteUserRoute(router)
 changePasswordRoute(router)
 changeAdminRoute(router)
-
 registerBookRoute(router)
+registerBookCopyRoute(router)
+deleteBookCopyRoute(router)
 listBooksRoute(router)
 
 app.listen(3333, () => {

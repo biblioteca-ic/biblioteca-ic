@@ -46,3 +46,8 @@ export const serverError = (message?: string): HttpResponse => ({
   statusCode: 500,
   body: message
 })
+
+export const notFound = (message?: string): HttpResponse => ({
+  statusCode: 404,
+  body: message
+})

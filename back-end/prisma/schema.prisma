@@ -21,6 +21,10 @@ model User {
   active              Boolean @default(true)
 
   Book Book[]
+
+  UserWhoRented        Book_Copy[]    @relation("ReferenceToWhoRented")
+  UserWhoCreatedBook   Book_Copy[]    @relation("ReferenceToBookUserCreated")
+
   @@map("users")
 }
 
@@ -35,6 +39,29 @@ model Book {
   created_by       String
   created_at       DateTime @default(now())
   user             User     @relation(fields: [created_by], references: [id])
+  Book_Copy Book_Copy[]     @relation("ReferenceToOriginalBook")
 
   @@map("books")
+}
+
+enum BookStatus {
+  AVAILABLE
+  RENTED
+  LOST
+}
+
+model Book_Copy {
+  id               String   @id @default(uuid())
+  code             String
+  book_id          String
+  created_at       DateTime @default(now())
+  status           BookStatus @default(AVAILABLE)
+  lease_date       DateTime?
+  located_by       String?
+  created_by       String
+  user_rented      User?     @relation("ReferenceToWhoRented", fields: [located_by], references: [id])
+  user             User     @relation("ReferenceToBookUserCreated", fields: [created_by], references: [id])
+  book             Book     @relation("ReferenceToOriginalBook", fields: [book_id], references: [id])
+
+  @@map("book_copies")
 }
