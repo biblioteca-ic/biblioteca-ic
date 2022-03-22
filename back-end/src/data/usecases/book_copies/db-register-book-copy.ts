@@ -5,13 +5,15 @@ import { CreateBookCopyRepository } from '../../protocols/book_copies/create-boo
 import { LoadUserByIdRepository } from '../../protocols/users/load-user-by-id.repository'
 import { LoadBookByCodeRepository } from '../../protocols/books/load-book-by-code.repository'
 import { BookCopyCodeGenerator } from '@/domain/usecases/book_copies/book-copy-code-generator'
+import { LoadBookCopyByCodeRepository } from '@/data/protocols/book_copies/load-book-copy-by-code.repository'
 
 export class DbRegisterBookCopy implements RegisterBookCopy {
   constructor (
     private readonly _createBookCopy: CreateBookCopyRepository,
     private readonly _loadUserByIdRepository: LoadUserByIdRepository,
     private readonly _loadBookByCodeRepository: LoadBookByCodeRepository,
-    private readonly _bookCopyCodeGenerator: BookCopyCodeGenerator
+    private readonly _bookCopyCodeGenerator: BookCopyCodeGenerator,
+    private readonly _loadBookCopyByCodeRepository: LoadBookCopyByCodeRepository
   ) { }
 
   async add (params: RegisterBookCopy.Params): Promise<BookCopyModel> {
@@ -22,13 +24,18 @@ export class DbRegisterBookCopy implements RegisterBookCopy {
     if (bookExists && userExists && userExists.admin) {
       const prefix = bookExists.code.split('-')[0]
       const copyCode = await this._bookCopyCodeGenerator.generate(prefix)
-      const copyBook = await this._createBookCopy.create({
-        code: copyCode,
-        created_by: userExists.id,
-        book_id: bookExists.id
-      })
 
-      return copyBook
+      const copyExists = await this._loadBookCopyByCodeRepository.loadByCode(copyCode)
+
+      if (!copyExists) {
+        const copyBook = await this._createBookCopy.create({
+          code: copyCode,
+          created_by: userExists.id,
+          book_id: bookExists.id
+        })
+
+        return copyBook
+      }
     }
     return null
   }
