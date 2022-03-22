@@ -13,7 +13,7 @@ export class DbBookCopyCodeGenerator implements BookCopyCodeGenerator {
     else code = lastCode[0].code
 
     const fullCode = code.split('-')
-    const bookCode = fullCode[0]
+    const bookCode = prefix
     const copyCode = fullCode[1]
     const n = copyCode.match(/[1-9]/) ? copyCode.match(/[1-9]/).index : 2
     const k = copyCode.substring(n, copyCode.length)
