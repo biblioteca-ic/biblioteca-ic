@@ -1,7 +1,7 @@
-import { registerBookPath } from './paths/book-path'
-import { changeAdminPath, changePasswordPath, editUserPath, loginPath } from './paths/user-paths'
-import { registerBookRequestSchema, registerBookResponseSchema } from './schemas/book-schemas'
-import { changeAdminRequestSchema, changeAdminResponseSchema, changePasswordRequestSchema, changePasswordResponseSchema, editUserRequestSchema, editUserResponseSchema, loginRequestSchema, loginResponseSchema } from './schemas/user-schemas'
+import { listBooksPath, registerBookPath } from './paths/book-path'
+import { changeAdminPath, changePasswordPath, createUserPath, deleteUserPath, editUserPath, listUsersPath, loginPath } from './paths/user-paths'
+import { listBooksResponseSchema, registerBookRequestSchema, registerBookResponseSchema } from './schemas/book-schemas'
+import { changeAdminRequestSchema, changeAdminResponseSchema, changePasswordRequestSchema, changePasswordResponseSchema, createUserRequestSchema, createUserResponseSchema, deleteUserResponseSchema, editUserRequestSchema, editUserResponseSchema, listUsersResponseSchema, loginRequestSchema, loginResponseSchema } from './schemas/user-schemas'
 
 export default {
   openapi: '3.0.0',
@@ -20,22 +20,37 @@ export default {
   }],
   paths: {
     '/login': loginPath,
-    '/users/{id}': editUserPath,
+    '/users': {
+      post: createUserPath,
+      get: listUsersPath
+    },
+    '/users/{id}': {
+      patch: editUserPath,
+      delete: deleteUserPath
+    },
     '/users/{id}/password': changePasswordPath,
     '/users/{id}/admin': changeAdminPath,
-    '/books': registerBookPath
+    '/books': {
+      post: registerBookPath,
+      get: listBooksPath
+    }
   },
   schemas: {
     loginRequest: loginRequestSchema,
     loginResponse: loginResponseSchema,
+    createUserRequest: createUserRequestSchema,
+    createUserResponse: createUserResponseSchema,
+    listUsersResponse: listUsersResponseSchema,
     editUserRequest: editUserRequestSchema,
     editUserResponse: editUserResponseSchema,
+    deleteUserResponse: deleteUserResponseSchema,
     changePasswordRequest: changePasswordRequestSchema,
     changePasswordResponse: changePasswordResponseSchema,
     changeAdminRequest: changeAdminRequestSchema,
     changeAdminResponse: changeAdminResponseSchema,
     registerBookRequest: registerBookRequestSchema,
-    registerBookResponse: registerBookResponseSchema
+    registerBookResponse: registerBookResponseSchema,
+    listBooksResponse: listBooksResponseSchema
   },
   components: {
     securitySchemes: {

@@ -18,6 +18,7 @@ model User {
   registration_number String  @unique()
   password            String
   admin               Boolean
+  active              Boolean @default(true)
 
   Book Book[]
 
