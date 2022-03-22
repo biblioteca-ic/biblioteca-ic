@@ -26,7 +26,7 @@ const makeRegisterBookCopy = (): RegisterBookCopy => {
   const bookCopyPrismaRepository = new BookCopyPrismaRepository()
   const userPrismaRepository = new UserPrismaRepository()
   const bookPrismaRepository = new BookPrismaRepository()
-  const bookCopy = new DbRegisterBookCopy(bookCopyPrismaRepository, userPrismaRepository, bookPrismaRepository, new DbBookCopyCodeGenerator(bookCopyPrismaRepository))
+  const bookCopy = new DbRegisterBookCopy(bookCopyPrismaRepository, userPrismaRepository, bookPrismaRepository, new DbBookCopyCodeGenerator(bookCopyPrismaRepository), bookCopyPrismaRepository)
   return bookCopy
 }
 
