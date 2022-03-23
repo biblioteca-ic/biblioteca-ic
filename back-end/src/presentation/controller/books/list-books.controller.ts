@@ -8,13 +8,42 @@ export class ListBooksController implements Controller {
     private readonly _listBooks: ListBooks
   ) { }
 
-  async handle (request: any): Promise<HttpResponse> {
+  async handle (request: ListBooksRequest): Promise<HttpResponse> {
     try {
-      const books = await this._listBooks.list()
+      let { admin, ...params } = request
+      const { categories, authors, title, ...rest } = params
+      if (!admin) {
+        params = Object.assign({}, rest, { available_copies: { gt: 0 } })
+      }
+      for (const key in params) {
+        if (key === 'categories') {
+          params = Object.assign({}, rest, { categories: { hasEvery: categories } })
+        }
+        if (key === 'authors') {
+          params = Object.assign({}, params, { authors: { hasEvery: authors } })
+        }
+        if (key === 'title') {
+          params = Object.assign({}, params, { title: { contains: title } })
+        }
+      }
+      const books = await this._listBooks.list(params)
       if (!books || books.length === 0) return notFound()
       return ok(books)
     } catch (error) {
-      serverError(error)
+      return serverError(error)
     }
   }
+}
+
+export type ListBooksRequest = {
+  id?: string
+  title?: string
+  publishing_house?: string
+  authors?: string[]
+  categories?: string[]
+  created_by?: string
+  code?: string
+  published_in?: string
+  created_at?: Date
+  admin: boolean
 }

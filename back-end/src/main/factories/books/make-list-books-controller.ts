@@ -11,7 +11,7 @@ const makeListBooks = (): ListBooks => {
 
 export const makeListBooksController = async (req: Request, res: Response): Promise<any> => {
   const controller = new ListBooksController(makeListBooks())
-  const request = { ...req.body, ...req.params }
+  const request = { ...req.body, ...req.params, ...req.query }
   const result = await controller.handle(request)
   return res.status(result.statusCode).json(result)
 }

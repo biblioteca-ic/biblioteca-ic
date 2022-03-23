@@ -5,8 +5,8 @@ import { ListBooksRepository } from '../../protocols/books/list-books.repository
 export class DbListBooks implements ListBooks {
   constructor (private readonly _listBooksRepository: ListBooksRepository) { }
 
-  async list (): Promise<BookModel[]> {
-    const books = await this._listBooksRepository.listAll()
+  async list (params: any): Promise<BookModel[]> {
+    const books = await this._listBooksRepository.listAll(params)
     return books
   }
 }

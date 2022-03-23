@@ -1,5 +1,5 @@
-import { BookModel } from '../../../domain/models/book'
+import { BookModelDto } from '../../../domain/models/book'
 
 export interface ListBooksRepository {
-  listAll: () => Promise<BookModel[]>
+  listAll: (params: any) => Promise<BookModelDto[]>
 }

@@ -106,6 +106,18 @@ export const listBooksResponseSchema = {
     },
     createdAt: {
       type: 'string'
+    },
+    copies: {
+      type: 'number'
+    },
+    borrowedCopies: {
+      type: 'number'
+    },
+    lostCopies: {
+      type: 'number'
+    },
+    availableCopies: {
+      type: 'number'
     }
   }
 }
