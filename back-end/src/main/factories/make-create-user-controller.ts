@@ -7,7 +7,7 @@ import { CreateUserController } from '../../presentation/controller/user/create-
 import { Validation } from '../../presentation/validation/protocols/validation'
 import { EmailValidator } from '../../presentation/validation/validators/email-validator'
 import { CpfValidator } from '../../presentation/validation/validators/cpf-validator'
-import { RegistrationNumberValidator } from '../../presentation/validation/validators/registrationNumber-validator'
+import { NumberValidator } from '../../presentation/validation/validators/number-validator'
 import { RequiredFieldValidator } from '../../presentation/validation/validators/required-field-validator'
 import { BcryptAdapter } from '../../infra/criptography/bcrypt-adapter'
 import { ValidationComposite } from '../../presentation/validation/validators/validation-composite'
@@ -28,7 +28,7 @@ const makeCreateUserValidation = (): Validation => {
     validations.push(new RequiredFieldValidator(field))
   }
   validations.push(new EmailValidator('email', new EmailValidatorAdapter()))
-  validations.push(new RegistrationNumberValidator('registrationNumber'))
+  validations.push(new NumberValidator('registrationNumber', 8))
   validations.push(new CpfValidator('cpf'))
   validations.push(new CompareFieldsValidator('password', 'passwordConfirmation'))
   validations.push(new PasswordValidator('password'))

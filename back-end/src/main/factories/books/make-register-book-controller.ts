@@ -10,6 +10,7 @@ import { IsArrayValidator } from '../../../presentation/validation/validators/is
 import { RequiredFieldValidator } from '../../../presentation/validation/validators/required-field-validator'
 import { ValidationComposite } from '../../../presentation/validation/validators/validation-composite'
 import { DbBookCodeGenerator } from '../../../data/usecases/books/db-book-code-generator'
+import { NumberValidator } from '../../../presentation/validation/validators/number-validator'
 
 const makeValidation = (): Validation => {
   const validations: Validation[] = []
@@ -18,6 +19,7 @@ const makeValidation = (): Validation => {
   }
   validations.push(new IsArrayValidator('authors'))
   validations.push(new IsArrayValidator('categories'))
+  validations.push(new NumberValidator('publishedIn', 4))
   const validationComposite = new ValidationComposite(validations)
   return validationComposite
 }
