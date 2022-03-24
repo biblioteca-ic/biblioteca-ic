@@ -21,7 +21,7 @@ import {
 } from "chakra-react-select";
 import { useHistory, useParams } from 'react-router-dom';
 import { AiOutlinePlus, AiOutlineMinus } from 'react-icons/ai';
-import { useForm, useFieldArray, NestedValue } from 'react-hook-form';
+import { useForm, useFieldArray } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { AxiosError } from 'axios';
 import * as yup from 'yup';
@@ -90,17 +90,25 @@ const categoriesOptions: CategoriesOptions[] = [
 const EditBook = () => {
   const { id } = useParams<ItemParams>();
   const [bookData, setBookData] = useState<BookType>();
-  const [formAuthors, setFormAuthors] = useState<Array<Author>>();
+  const [formAuthors, setFormAuthors] = useState<Array<Author>>([{ name: "" }]);
 
   const getBookData = async () => {
     try {
       // const { data } = await api.get(`/users/${id}`);
-
+      console.log("aa", formAuthors)
       const data = booksMock;
       setBookData(data[Number(id) - 1]);
       const { authors } = data[Number(id) - 1];
-      
-      // console.log(authors.reduce((a, v) => ({ ...a, []: v}), {}));
+      console.log(authors)
+      const authorsConverted = [];
+      for (let i = 0; i < authors.length; i += 1) {
+        const author = { "name": authors[i] };
+        authorsConverted.push(author);
+      }
+
+      setFormAuthors(authorsConverted);
+      console.log("authors", authorsConverted)
+
 
     } catch (err) {
       console.error(err);
@@ -109,7 +117,7 @@ const EditBook = () => {
 
   useEffect(() => {
     getBookData();
-    
+
   }, [id]);
 
   const {
@@ -121,7 +129,9 @@ const EditBook = () => {
   } = useForm<RegisterFormInputs>({
     resolver: yupResolver(schema),
     defaultValues: {
-      authors: [{ name: "" }],
+      bookName: bookData?.title,
+      authors: formAuthors // [{ name: "" }],
+
     }
   });
 
@@ -172,12 +182,12 @@ const EditBook = () => {
     <Page>
       <Box textAlign="center" fontSize="xl" p={8} display="flex" justifyContent="center">
         <Stack spacing={3} display="flex" alignItems="center" w="80%" maxW={380} minW={320}>
-          <Text>Cadastrar Livro</Text>
+          <Text>Editar Livro</Text>
 
           <form style={{ width: '100%' }} onSubmit={handleSubmit(onSubmitRegister)}>
             <FormControl my={2} isInvalid={!!errors.bookName?.message}>
               <FormLabel htmlFor='bookName'>Nome do livro</FormLabel>
-              <Input id="bookName" {...register('bookName')} placeholder="Ex.: O alienista" defaultValue={bookData?.title} />
+              <Input id="bookName" {...register('bookName')} placeholder="Ex.: O alienista" defaultValue={bookData?.title}/>
               {!!errors.bookName?.message && <FormErrorMessage>{errors.bookName.message}</FormErrorMessage>}
             </FormControl>
             <FormLabel htmlFor="authors">Autores</FormLabel>
@@ -255,7 +265,7 @@ const EditBook = () => {
             </FormControl>
 
             <Button colorScheme="teal" size="md" w="100%" type="submit">
-              Cadastrar Livro
+              Editar Livro
             </Button>
           </form>
         </Stack>
