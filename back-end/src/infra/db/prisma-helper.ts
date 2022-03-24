@@ -50,8 +50,8 @@ export const PrismaHelper = {
     return books
   },
   rentedCopyMapper: (rentedCopy: any) => {
-    const { user_id, book_id, ...rest } = rentedCopy
-    return Object.assign({}, rest, { bookId: book_id, userId: user_id })
+    const { user_id, book_id, copy_id, ...rest } = rentedCopy
+    return Object.assign({}, rest, { bookId: book_id, userId: user_id, copyId: copy_id })
   },
   rentedCopiesMapper: (prismaRentedCopies: any[]): RentedCopy[] => {
     const copies = prismaRentedCopies.map((copy) => PrismaHelper.rentedCopyMapper(copy))

@@ -154,3 +154,36 @@ export const listBooksPath = {
     }
   }
 }
+
+export const deleteBookPath = {
+  tags: ['Books'],
+  summary: 'Exclusão de um livro e todas as suas cópias',
+  security: [{ apiKeyAuth: [] }],
+  parameters: [{
+    in: 'path',
+    name: 'id',
+    description: 'ID do livro a ser excluído',
+    schema: {
+      type: 'string'
+    },
+    required: true
+  }],
+  responses: {
+    204: {
+      description: 'Sucesso',
+      content: {}
+    }
+  },
+  401: {
+    description: 'Unauthorized'
+  },
+  403: {
+    description: 'Forbidden'
+  },
+  500: {
+    description: 'ServerError'
+  },
+  404: {
+    description: 'NotFound'
+  }
+}

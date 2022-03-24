@@ -1,5 +1,5 @@
 import { deleteBookCopyPath, registerBookCopyPath } from './paths/book-copy-path'
-import { listBooksPath, registerBookPath } from './paths/book-path'
+import { deleteBookPath, listBooksPath, registerBookPath } from './paths/book-path'
 import { changeAdminPath, changePasswordPath, createUserPath, deleteUserPath, editUserPath, listUsersPath, loginPath } from './paths/user-paths'
 import { registerBookCopyRequestSchema, registerBookCopyResponseSchema } from './schemas/book-copy-schemas'
 import { listBooksResponseSchema, registerBookRequestSchema, registerBookResponseSchema } from './schemas/book-schemas'
@@ -35,6 +35,9 @@ export default {
     '/books': {
       post: registerBookPath,
       get: listBooksPath
+    },
+    '/books/{id}': {
+      delete: deleteBookPath
     },
     '/book-copy': registerBookCopyPath,
     '/book-copy/{book_id}': deleteBookCopyPath

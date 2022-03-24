@@ -16,7 +16,7 @@ export class DbDeleteUser implements DeleteUser {
 
   async deactivate (id: string): Promise<UserModelDto> {
     const user = await this._loadUserByIdRepository.loadById(id)
-    const rentedCopies = await this._loadRentedCopiesByUserIdRepository.load(id)
+    const rentedCopies = await this._loadRentedCopiesByUserIdRepository.loadByUserId(id)
     const adminUsers = await this._loadUserByAdminRepository.loadByAdmin(true)
     if (((adminUsers.length > 1) || (!user.admin)) && rentedCopies.length === 0) {
       const deactivatedUser = await this._deleteUserRepository.deactivate(id)
