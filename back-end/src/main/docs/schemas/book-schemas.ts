@@ -25,7 +25,8 @@ export const registerBookRequestSchema = {
         type: 'string'
       }
     }
-  }
+  },
+  required: ['title', 'publishingHouse', 'publishedIn', 'createdBy', 'authors', 'categories']
 }
 
 export const registerBookResponseSchema = {
@@ -121,6 +122,72 @@ export const listBooksResponseSchema = {
     },
     availableCopies: {
       type: 'number'
+    }
+  }
+}
+
+export const updateBookRequestSchema = {
+  type: 'object',
+  properties: {
+    title: {
+      type: 'string'
+    },
+    publishingHouse: {
+      type: 'string'
+    },
+    publishedIn: {
+      type: 'string'
+    },
+    authors: {
+      type: 'array',
+      items: {
+        type: 'string'
+      }
+    },
+    categories: {
+      type: 'array',
+      items: {
+        type: 'string'
+      }
+    }
+  }
+}
+
+export const updateBookResponseSchema = {
+  type: 'object',
+  properties: {
+    id: {
+      type: 'string'
+    },
+    code: {
+      type: 'string'
+    },
+    title: {
+      type: 'string'
+    },
+    authors: {
+      type: 'array',
+      items: {
+        type: 'string'
+      }
+    },
+    categories: {
+      type: 'array',
+      items: {
+        type: 'string'
+      }
+    },
+    publishingHouse: {
+      type: 'string'
+    },
+    createdBy: {
+      type: 'string'
+    },
+    publishedIn: {
+      type: 'string'
+    },
+    createdAt: {
+      type: 'string'
     }
   }
 }

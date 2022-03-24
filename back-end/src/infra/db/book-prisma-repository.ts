@@ -6,8 +6,9 @@ import { BookModel, BookModelDto } from '../../domain/models/book'
 import { PrismaHelper } from './prisma-helper'
 import { LoadBookByCodeRepository } from '@/data/protocols/books/load-book-by-code.repository'
 import { DeleteBookAndCopiesRepository } from '../../data/protocols/books/delete-book-and-copies.repository'
+import { UpdateBookRepository } from '../../data/protocols/books/update-book.repository'
 
-export class BookPrismaRepository implements CreateBookRepository, FindLastBookCodeInsertedRepository, LoadBookByIdRepository, LoadBookByCodeRepository, ListBooksRepository, DeleteBookAndCopiesRepository {
+export class BookPrismaRepository implements CreateBookRepository, FindLastBookCodeInsertedRepository, LoadBookByIdRepository, LoadBookByCodeRepository, ListBooksRepository, DeleteBookAndCopiesRepository, UpdateBookRepository {
   async create (data: any): Promise<BookModel> {
     const mappedBook = PrismaHelper.bookDbMapper(data)
     const book = await PrismaHelper.client.book.create({
@@ -54,5 +55,10 @@ export class BookPrismaRepository implements CreateBookRepository, FindLastBookC
       })
     ])
     return book && PrismaHelper.bookDtoMapper(book)
+  }
+
+  async update (id: string, params: any): Promise<BookModelDto> {
+    const updatedBook = await PrismaHelper.client.book.update({ data: params, where: { id } })
+    return updatedBook && PrismaHelper.bookDtoMapper(updatedBook)
   }
 }

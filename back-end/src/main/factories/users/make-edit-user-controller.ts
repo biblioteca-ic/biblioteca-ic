@@ -19,7 +19,7 @@ const makeEditUserData = (): EditUserData => {
 const makeEditUserValidation = (): Validation => {
   const idRequired = new RequiredFieldValidator('id')
   const emailFormat = new EmailValidator('email', new EmailValidatorAdapter())
-  const registrationNumberFormat = new NumberValidator('registrationNumber')
+  const registrationNumberFormat = new NumberValidator('registrationNumber', 8)
   const validation = new ValidationComposite([idRequired, emailFormat, registrationNumberFormat])
   return validation
 }

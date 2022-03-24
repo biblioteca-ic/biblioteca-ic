@@ -1,8 +1,8 @@
 import { deleteBookCopyPath, registerBookCopyPath } from './paths/book-copy-path'
-import { deleteBookPath, listBooksPath, registerBookPath } from './paths/book-path'
+import { deleteBookPath, listBooksPath, registerBookPath, updateBookPath } from './paths/book-path'
 import { changeAdminPath, changePasswordPath, createUserPath, deleteUserPath, editUserPath, listUsersPath, loginPath } from './paths/user-paths'
 import { registerBookCopyRequestSchema, registerBookCopyResponseSchema } from './schemas/book-copy-schemas'
-import { listBooksResponseSchema, registerBookRequestSchema, registerBookResponseSchema } from './schemas/book-schemas'
+import { listBooksResponseSchema, registerBookRequestSchema, registerBookResponseSchema, updateBookRequestSchema, updateBookResponseSchema } from './schemas/book-schemas'
 import { changeAdminRequestSchema, changeAdminResponseSchema, changePasswordRequestSchema, changePasswordResponseSchema, createUserRequestSchema, createUserResponseSchema, deleteUserResponseSchema, editUserRequestSchema, editUserResponseSchema, listUsersResponseSchema, loginRequestSchema, loginResponseSchema } from './schemas/user-schemas'
 
 export default {
@@ -37,7 +37,8 @@ export default {
       get: listBooksPath
     },
     '/books/{id}': {
-      delete: deleteBookPath
+      delete: deleteBookPath,
+      patch: updateBookPath
     },
     '/book-copy': registerBookCopyPath,
     '/book-copy/{book_id}': deleteBookCopyPath
@@ -57,6 +58,8 @@ export default {
     changeAdminResponse: changeAdminResponseSchema,
     registerBookRequest: registerBookRequestSchema,
     registerBookResponse: registerBookResponseSchema,
+    updateBookRequest: updateBookRequestSchema,
+    updateBookResponse: updateBookResponseSchema,
     listBooksResponse: listBooksResponseSchema,
     registerBookCopyRequest: registerBookCopyRequestSchema,
     registerBookCopyResponse: registerBookCopyResponseSchema

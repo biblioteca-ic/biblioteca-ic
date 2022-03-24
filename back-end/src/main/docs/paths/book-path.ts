@@ -35,37 +35,51 @@ export const registerBookPath = {
   }
 }
 
-export const listBookPath = {
+export const updateBookPath = {
   tags: ['Books'],
-  summary: 'Listagem dos livros',
+  summary: 'Atualização de um livro',
   security: [{ apiKeyAuth: [] }],
+  parameters: [{
+    in: 'path',
+    name: 'id',
+    description: 'ID do livro a ser atualizado',
+    schema: {
+      type: 'string'
+    },
+    required: true
+  }],
+  requestBody: {
+    content: {
+      'application/json': {
+        schema: {
+          $ref: '#/schemas/updateBookRequest'
+        }
+      }
+    },
+    required: true
+  },
   responses: {
     200: {
       description: 'Sucesso',
       content: {
         'application/json': {
           schema: {
-            $ref: '#/schemas/listBooksResponse'
+            $ref: '#/schemas/updateBookResponse'
           }
         }
       }
     },
-    401: { description: 'Unauthorized' },
-    404: { description: 'NotFound' },
-    500: { description: 'ServerError' }
+    401: {
+      description: 'Unauthorized'
+    },
+    403: {
+      description: 'Forbidden'
+    },
+    500: {
+      description: 'ServerError'
+    }
   }
 }
-/**
- *   id: string
-  title: string
-  publishingHouse: string
-  authors: string[]
-  categories: string[]
-  createdBy: string
-  code: string
-  publishedIn: Date
-  createdAt: Date
- */
 
 export const listBooksPath = {
   tags: ['Books'],

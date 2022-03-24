@@ -27,8 +27,8 @@ const makeValidation = (): Validation => {
 const makeRegisterBook = (): RegisterBook => {
   const bookPrismaRepository = new BookPrismaRepository()
   const userPrismaRepository = new UserPrismaRepository()
-  const changeAdmin = new DbRegisterBook(bookPrismaRepository, userPrismaRepository)
-  return changeAdmin
+  const registerBook = new DbRegisterBook(bookPrismaRepository, userPrismaRepository)
+  return registerBook
 }
 
 const makeBookCodeGenerator = (): BookCodeGenerator => {

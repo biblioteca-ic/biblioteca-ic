@@ -13,6 +13,7 @@ import deleteBookCopyRoute from './routes/delete-book-copy-route'
 import listUsersRoute from './routes/list-users-route'
 import deleteUserRoute from './routes/delete-user-route'
 import deleteBookRoute from './routes/delete-book-route'
+import updateBookRoute from './routes/update-book-route'
 
 const app = express()
 
@@ -40,6 +41,7 @@ changePasswordRoute(router)
 changeAdminRoute(router)
 
 registerBookRoute(router)
+updateBookRoute(router)
 listBooksRoute(router)
 deleteBookRoute(router)
 
