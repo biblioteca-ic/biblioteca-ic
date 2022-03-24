@@ -3,9 +3,11 @@ import { LoadBookCopyByIdRepository } from '@/data/protocols/book_copies/load-bo
 import { CreateBookCopyRepository } from '../../data/protocols/book_copies/create-book-copy.repository'
 import { BookCopyCode, FindLastBookCopyCodeInsertedRepository } from '../../data/protocols/book_copies/find-last-book-copy-code-inserted.repository'
 import { BookCopyModel } from '../../domain/models/book_copy'
+import { RentedCopy } from '../../domain/models/rented-copy'
 import { PrismaHelper } from './prisma-helper'
+import { LoadRentedCopiesByUserIdRepository } from '../../data/protocols/book_copies/load-rented-copies-by-user-id.repository'
 
-export class BookCopyPrismaRepository implements CreateBookCopyRepository, FindLastBookCopyCodeInsertedRepository, LoadBookCopyByIdRepository, DeleteBookCopyRepository {
+export class BookCopyPrismaRepository implements CreateBookCopyRepository, FindLastBookCopyCodeInsertedRepository, LoadBookCopyByIdRepository, DeleteBookCopyRepository, LoadRentedCopiesByUserIdRepository {
   async create (data: any): Promise<BookCopyModel> {
     const mappedBook = PrismaHelper.bookCopyDbMapper(data)
     const book = await PrismaHelper.client.book_Copy.create({
@@ -30,5 +32,14 @@ export class BookCopyPrismaRepository implements CreateBookCopyRepository, FindL
   async loadById (id: string): Promise<BookCopyModel> {
     const bookCopy = await PrismaHelper.client.book_Copy.findFirst({ where: { id } })
     return bookCopy && PrismaHelper.bookCopyMapper(bookCopy)
+  }
+
+  async load (id: string): Promise<RentedCopy[]> {
+    const copies = await PrismaHelper.client.viewRentedCopies.findMany({
+      where: {
+        user_id: id
+      }
+    })
+    return copies && PrismaHelper.rentedCopiesMapper(copies)
   }
 }

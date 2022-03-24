@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client'
 import { BookModel, BookModelDto } from '../../domain/models/book'
 import { BookCopyModel } from '../../domain/models/book_copy'
+import { RentedCopy } from '../../domain/models/rented-copy'
 import { UserModel, UserModelDto } from '../../domain/models/user'
 
 export const PrismaHelper = {
@@ -47,5 +48,13 @@ export const PrismaHelper = {
   booksDtoMapper: (prismaBooks: any[]): BookModelDto[] => {
     const books = prismaBooks.map((book) => PrismaHelper.bookDtoMapper(book))
     return books
+  },
+  rentedCopyMapper: (rentedCopy: any) => {
+    const { user_id, book_id, ...rest } = rentedCopy
+    return Object.assign({}, rest, { bookId: book_id, userId: user_id })
+  },
+  rentedCopiesMapper: (prismaRentedCopies: any[]): RentedCopy[] => {
+    const copies = prismaRentedCopies.map((copy) => PrismaHelper.rentedCopyMapper(copy))
+    return copies
   }
 }

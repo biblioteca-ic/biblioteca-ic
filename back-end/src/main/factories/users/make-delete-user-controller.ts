@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import { DbDeleteUser } from '../../../data/usecases/users/db-delete-user'
 import { DeleteUser } from '../../../domain/usecases/users/delete-user'
+import { BookCopyPrismaRepository } from '../../../infra/db/book-copy-prisma-repository'
 import { UserPrismaRepository } from '../../../infra/db/user-prisma-repository'
 import { DeleteUserController } from '../../../presentation/controller/user/delete-user.controller'
 import { Validation } from '../../../presentation/validation/protocols/validation'
@@ -9,7 +10,8 @@ import { ValidationComposite } from '../../../presentation/validation/validators
 
 const makeDeleteUser = (): DeleteUser => {
   const userPrismaRepository = new UserPrismaRepository()
-  const editUserData = new DbDeleteUser(userPrismaRepository, userPrismaRepository, userPrismaRepository)
+  const bookCopyPrismaRepository = new BookCopyPrismaRepository()
+  const editUserData = new DbDeleteUser(userPrismaRepository, userPrismaRepository, userPrismaRepository, bookCopyPrismaRepository)
   return editUserData
 }
 

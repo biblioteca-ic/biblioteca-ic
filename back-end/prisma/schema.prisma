@@ -90,3 +90,11 @@ model ViewBooks {
 
   @@map("view_books")
 }
+
+model ViewRentedCopies {
+  user_id String
+  email   String
+  book_id String @unique()
+
+  @@map("view_rented_copies")
+}
