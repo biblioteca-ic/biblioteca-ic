@@ -19,6 +19,7 @@ export type BookModelDto = {
   createdBy: string
   code: string
   publishedIn: Date
+  status: string
   createdAt: Date
   copies: Number
   borrowed_copies: Number

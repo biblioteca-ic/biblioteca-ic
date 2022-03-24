@@ -107,6 +107,9 @@ export const listBooksResponseSchema = {
     createdAt: {
       type: 'string'
     },
+    status: {
+      type: 'string'
+    },
     copies: {
       type: 'number'
     },

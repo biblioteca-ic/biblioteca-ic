@@ -11,9 +11,9 @@ export class ListBooksController implements Controller {
   async handle (request: ListBooksRequest): Promise<HttpResponse> {
     try {
       let { admin, ...params } = request
-      const { categories, authors, title, ...rest } = params
+      const { categories, authors, title, status, ...rest } = params
       if (!admin) {
-        params = Object.assign({}, rest, { available_copies: { gt: 0 } })
+        params = Object.assign({}, rest, { status: 'AVAILABLE' })
       }
       for (const key in params) {
         if (key === 'categories') {
@@ -44,6 +44,7 @@ export type ListBooksRequest = {
   created_by?: string
   code?: string
   published_in?: string
+  status?: string
   created_at?: Date
   admin: boolean
 }

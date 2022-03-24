@@ -35,9 +35,7 @@ export class BookPrismaRepository implements CreateBookRepository, FindLastBookC
   }
 
   async listAll (params: any): Promise<BookModelDto[]> {
-    const books = await PrismaHelper.client.viewBooks.findMany({
-      where: params
-    })
+    const books = await PrismaHelper.client.viewBooks.findMany({ where: params })
     return books && PrismaHelper.booksDtoMapper(books)
   }
 }

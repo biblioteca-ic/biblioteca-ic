@@ -123,6 +123,13 @@ export const listBooksPath = {
       description: 'Ano da publicação do livro',
       required: false,
       type: 'string'
+    },
+    {
+      name: 'status',
+      in: 'query',
+      description: 'Status do livro - O valor pode ser AVAILABLE ou LOST',
+      required: false,
+      type: 'string'
     }
   ],
   responses: {

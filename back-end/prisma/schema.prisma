@@ -28,6 +28,11 @@ model User {
   @@map("users")
 }
 
+enum BookStatus {
+  AVAILABLE
+  LOST
+}
+
 model Book {
   id               String      @id @default(uuid())
   title            String
@@ -36,6 +41,7 @@ model Book {
   publishing_house String
   authors          String[]
   categories       String[]
+  status           BookStatus  @default(AVAILABLE)
   created_by       String
   created_at       DateTime    @default(now())
   user             User        @relation(fields: [created_by], references: [id])
@@ -44,7 +50,7 @@ model Book {
   @@map("books")
 }
 
-enum BookStatus {
+enum CopyStatus {
   AVAILABLE
   RENTED
   LOST
@@ -55,7 +61,7 @@ model Book_Copy {
   code        String
   book_id     String
   created_at  DateTime   @default(now())
-  status      BookStatus @default(AVAILABLE)
+  status      CopyStatus @default(AVAILABLE)
   lease_date  DateTime?
   located_by  String?
   created_by  String
@@ -67,13 +73,14 @@ model Book_Copy {
 }
 
 model ViewBooks {
-  id               String   @unique()
+  id               String     @unique()
   title            String
-  code             String   @unique()
+  code             String     @unique()
   published_in     String
   publishing_house String
   authors          String[]
   categories       String[]
+  status           BookStatus
   created_by       String
   created_at       DateTime
   copies           Int
