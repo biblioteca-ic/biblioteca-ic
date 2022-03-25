@@ -116,6 +116,9 @@ export const BookItem = ({ bookData, isAdmin }: { bookData: BookType; isAdmin: b
 
             <AlertDialogBody>
               Tem certeza que deseja remover o livro <strong>&quot;{bookData.title}&quot;</strong>?
+              <br />
+              <br />
+              <b>Lembrando que TODAS as cópias do livro também serão deletadas.</b>
             </AlertDialogBody>
 
             <AlertDialogFooter>
