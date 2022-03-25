@@ -1,5 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import { Box, Heading, Text, Button, useMediaQuery, Center, Spinner, IconButton } from '@chakra-ui/react';
+import React, { useEffect, useRef, useState } from 'react';
+import {
+  Box,
+  Heading,
+  Text,
+  Button,
+  useMediaQuery,
+  Center,
+  Spinner,
+  IconButton,
+  AlertDialog,
+  AlertDialogOverlay,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogBody,
+  useToast,
+  AlertDialogFooter,
+} from '@chakra-ui/react';
 import { useHistory, useParams } from 'react-router-dom';
 import { useAuth } from '../../../providers/AuthProvider';
 import { booksMock } from '../../../services/mocks';
@@ -10,6 +26,7 @@ import { UserType } from '../../../types/User';
 import { BookDetails } from '../../../components/BookDetails';
 import { BsPencil, BsTrashFill } from 'react-icons/bs';
 import { CopiesList } from '../../../modules/Copies';
+import { AxiosError } from 'axios';
 
 type ItemParams = {
   id: string;
@@ -17,7 +34,46 @@ type ItemParams = {
 
 export const BookItem = ({ bookData, isAdmin }: { bookData: BookType; isAdmin: boolean | undefined }) => {
   const history = useHistory();
-  // const toast = useToast();
+  const toast = useToast();
+
+  const [isOpenToRemove, setIsOpenToRemove] = useState(false);
+  const onCloseToRemove = () => setIsOpenToRemove(false);
+  const cancelRefToRemove = useRef<HTMLButtonElement>(null);
+
+  const clickToRemove = () => {
+    setIsOpenToRemove(true);
+  };
+
+  const checkIfCanRemoveBook = () => {
+    // Não permitir deletar caso uma das cópias do livro não esteja disponível.
+    return true;
+  };
+
+  const removeBook = async () => {
+    try {
+      // await api.delete(`api//users/${id}`, { data: { userId: user.id } });
+
+      toast({
+        title: 'Livro removido com sucesso',
+        status: 'success',
+        position: 'top-right',
+        isClosable: true,
+      });
+
+      onCloseToRemove();
+
+      history.push('books');
+    } catch (error) {
+      const err = error as AxiosError;
+      toast({
+        title: 'Ocorreu um erro ao tentar apagar o livro',
+        description: err?.message ? err?.message : 'Tente novamente mais tarde',
+        status: 'error',
+        position: 'top-right',
+        isClosable: true,
+      });
+    }
+  };
 
   return (
     <>
@@ -35,19 +91,44 @@ export const BookItem = ({ bookData, isAdmin }: { bookData: BookType; isAdmin: b
                   onClick={() => history.push(`/books/edit/${bookData.id}`)}
                   icon={<BsPencil />}
                 />
-                <IconButton
-                  variant="outline"
-                  colorScheme="red"
-                  aria-label="Remover livro"
-                  // onClick={clickToRemove}
-                  icon={<BsTrashFill />}
-                />
+                {checkIfCanRemoveBook() && (
+                  <IconButton
+                    variant="outline"
+                    colorScheme="red"
+                    aria-label="Remover livro"
+                    onClick={clickToRemove}
+                    icon={<BsTrashFill />}
+                  />
+                )}
               </>
             ) : null}
           </Box>
         </Box>
         <BookDetails book={bookData} />
       </Box>
+
+      <AlertDialog isOpen={isOpenToRemove} leastDestructiveRef={cancelRefToRemove} onClose={onCloseToRemove}>
+        <AlertDialogOverlay>
+          <AlertDialogContent>
+            <AlertDialogHeader fontSize="lg" fontWeight="bold">
+              Remover livro
+            </AlertDialogHeader>
+
+            <AlertDialogBody>
+              Tem certeza que deseja remover o livro <strong>&quot;{bookData.title}&quot;</strong>?
+            </AlertDialogBody>
+
+            <AlertDialogFooter>
+              <Button colorScheme="red" onClick={removeBook}>
+                Remover
+              </Button>
+              <Button ref={cancelRefToRemove} onClick={onCloseToRemove} ml={3}>
+                Cancelar
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
     </>
   );
 };
