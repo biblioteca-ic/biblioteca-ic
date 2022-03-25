@@ -24,15 +24,16 @@ import { useAuth } from '../../../providers/AuthProvider';
 // import { api } from '../../../services/api';
 import { copiesMock } from '../../../services/mocks';
 import { BookType, CopyBookType } from '../../../types/Book';
+import { CopiesBookItem } from '..';
 
-interface UserTypeSearch extends CopyBookType {
+interface CopyTypeSearch extends CopyBookType {
   statusToString?: string;
 }
 
 const CopiesList = ({ book }: { book: BookType }) => {
   const history = useHistory();
-  const [copies, setCopies] = React.useState<UserTypeSearch[]>([]);
-  const [copiesSearch, setCopiesSearch] = React.useState<UserTypeSearch[]>([]);
+  const [copies, setCopies] = React.useState<CopyTypeSearch[]>([]);
+  const [copiesSearch, setCopiesSearch] = React.useState<CopyTypeSearch[]>([]);
 
   const { user } = useAuth();
 
@@ -40,7 +41,9 @@ const CopiesList = ({ book }: { book: BookType }) => {
     try {
       // const { data: response } = await api.get('/users');
 
-      const data = copiesMock.map(copyData => (copyData.status === 'avaliable' ? { ...copyData, statusToString: 'avaliable' } : copyData));
+      const data = copiesMock.map(copyData =>
+        copyData.status === 'avaliable' ? { ...copyData, statusToString: 'avaliable' } : copyData,
+      );
       setCopies(data);
       setCopiesSearch(data);
     } catch (err) {
@@ -108,39 +111,8 @@ const CopiesList = ({ book }: { book: BookType }) => {
             </Tr>
           </Thead>
           <Tbody>
-            {copiesSearch.map(copyFilter => {
-              return (
-                <Tr key={copyFilter.id}>
-                  <Td>
-                    <Link display="block" href={`users/show/${copyFilter.id}`}>
-                      {copyFilter.code}
-                    </Link>
-                  </Td>
-                  <Td>
-                    <Link display="block" href={`users/show/${copyFilter.id}`}>
-                      {copyFilter.status}
-                    </Link>
-                  </Td>
-                  <Td>
-                    <>
-                      <IconButton
-                        variant="outline"
-                        colorScheme="blue"
-                        mr={2}
-                        aria-label="Editar livro"
-                        icon={<BsInfoCircle />}
-                      />
-                      <IconButton
-                        variant="outline"
-                        colorScheme="red"
-                        aria-label="Remover cópia"
-                        // onClick={clickToRemove}
-                        icon={<BsTrashFill />}
-                      />
-                    </>
-                  </Td>
-                </Tr>
-              );
+            {copiesSearch.map((copyFilter: CopyBookType) => {
+              return <CopiesBookItem key={copyFilter.id} copyBook={copyFilter} />;
             })}
           </Tbody>
         </Table>

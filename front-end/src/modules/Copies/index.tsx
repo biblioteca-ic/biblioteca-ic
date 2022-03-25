@@ -1,4 +1,4 @@
 import CopiesList from './List';
-// import CopiesItemPage from './Item';
+import CopiesBookItem from './Item';
 
-export { CopiesList };
+export { CopiesList, CopiesBookItem };
