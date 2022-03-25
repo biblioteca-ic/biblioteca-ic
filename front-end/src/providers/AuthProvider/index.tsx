@@ -2,20 +2,11 @@ import React, { createContext, useCallback, useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { api } from '../../services/api';
 import { getUser, login, logout, USER_KEY } from '../../services/auth';
+import { UserType } from '../../types/User';
 // import { usersMock } from '../../services/mocks';
 
-interface User {
-  id: string;
-  name: string;
-  email: string;
-  cpf: string;
-  registrationNumber: string;
-  admin: boolean;
-  role: string;
-}
-
 interface AuthState {
-  user: User;
+  user: UserType;
 }
 
 interface SignInCredentials {
@@ -24,10 +15,10 @@ interface SignInCredentials {
 }
 
 interface AuthContextData {
-  user: User;
+  user: UserType;
   signIn(credentials: SignInCredentials): Promise<void>;
   signOut(): void;
-  updateUser(user: User): void;
+  updateUser(user: UserType): void;
 }
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
@@ -68,7 +59,7 @@ const AuthProvider: React.FC = ({ children }) => {
   }, [history]);
 
   const updateUser = useCallback(
-    (user: User) => {
+    (user: UserType) => {
       localStorage.setItem(USER_KEY, JSON.stringify(user));
 
       setData({

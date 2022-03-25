@@ -5,4 +5,6 @@ export interface UserType {
   cpf: string;
   registrationNumber: string;
   admin: boolean;
+  role: string;
+  accessToken?: string;
 }

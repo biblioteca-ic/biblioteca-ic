@@ -1,13 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-  Box,
-  Heading,
-  Text,
-  Button,
-  useMediaQuery,
-  Center,
-  Spinner
-} from '@chakra-ui/react';
+import { Box, Heading, Text, Button, useMediaQuery, Center, Spinner, IconButton } from '@chakra-ui/react';
 import { useHistory, useParams } from 'react-router-dom';
 import { useAuth } from '../../../providers/AuthProvider';
 import { booksMock } from '../../../services/mocks';
@@ -16,19 +8,16 @@ import { Page } from '../../../components/Page';
 import { BookType } from '../../../types/Book';
 import { UserType } from '../../../types/User';
 import { BookDetails } from '../../../components/BookDetails';
+import { BsPencil, BsTrashFill } from 'react-icons/bs';
+import { CopiesList } from '../../../modules/Copies';
 
 type ItemParams = {
   id: string;
 };
 
-export const BookItem = ({ bookData, userData }: { bookData: BookType, userData: UserType | undefined }) => {
+export const BookItem = ({ bookData, isAdmin }: { bookData: BookType; isAdmin: boolean | undefined }) => {
   const history = useHistory();
   // const toast = useToast();
-
-  const checkIfCanEdit = () => {
-    if (userData) return userData.admin;
-    return false
-  };
 
   return (
     <>
@@ -36,10 +25,24 @@ export const BookItem = ({ bookData, userData }: { bookData: BookType, userData:
         <Box mb={3} display="flex" alignItems="center" justifyContent="space-between">
           <Heading>{bookData.title}</Heading>
           <Box>
-            {checkIfCanEdit() ? (
-              <Button variant="outline" colorScheme="blue" mr={2} onClick={() => history.push(`/books/edit/${bookData.id}`)}>
-                Editar livro
-              </Button>
+            {isAdmin ? (
+              <>
+                <IconButton
+                  variant="outline"
+                  colorScheme="blue"
+                  mr={2}
+                  aria-label="Editar livro"
+                  onClick={() => history.push(`/books/edit/${bookData.id}`)}
+                  icon={<BsPencil />}
+                />
+                <IconButton
+                  variant="outline"
+                  colorScheme="red"
+                  aria-label="Remover livro"
+                  // onClick={clickToRemove}
+                  icon={<BsTrashFill />}
+                />
+              </>
             ) : null}
           </Box>
         </Box>
@@ -55,7 +58,9 @@ const BookItemPage = () => {
   const [userData, setUserData] = useState<UserType>();
   const [isLoading, setIsLoading] = useState(true);
   const { id } = useParams<ItemParams>();
-  const { user } = useAuth() as any;
+  const { user } = useAuth();
+
+  const checkIsAdmin = () => userData?.admin;
 
   const getBookData = async () => {
     try {
@@ -72,7 +77,7 @@ const BookItemPage = () => {
   const getUserData = async () => {
     try {
       // const { data } = await api.get(`/users/${id}`);
-      const data = user.body;
+      const data = user;
       delete data.accessToken;
 
       setUserData(data);
@@ -81,7 +86,7 @@ const BookItemPage = () => {
     } finally {
       setIsLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
     getBookData();
@@ -116,8 +121,13 @@ const BookItemPage = () => {
               </Box>
             </Box>
             <Box maxW="80vh" margin="auto">
-              <BookItem bookData={bookData} userData={userData} />
+              <BookItem bookData={bookData} isAdmin={checkIsAdmin()} />
             </Box>
+            {checkIsAdmin() ? (
+              <>
+                <CopiesList book={bookData} />
+              </>
+            ) : null}
           </>
         )}
       </Box>
