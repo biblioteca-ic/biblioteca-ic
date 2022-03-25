@@ -18,12 +18,12 @@ import {
 } from '@chakra-ui/react';
 import { useHistory, useParams } from 'react-router-dom';
 import { BsTrashFill } from 'react-icons/bs';
+import { AxiosError } from 'axios';
 import { useAuth } from '../../../providers/AuthProvider';
 import { usersMock } from '../../../services/mocks';
 import { Page } from '../../../components/Page';
 // import { api } from '../../../services/api';
 import { UserType } from '../../../types/User';
-import { formatCpf } from '../../../helpers/formatCpf';
 import { UserDetails } from '../../../components/UserDetails';
 
 type ItemParams = {
@@ -62,35 +62,57 @@ export const UserItem = ({ userData }: { userData: UserType }) => {
   };
 
   const removeUser = async () => {
-    // await api.delete(`api//users/${id}`, { data: { userId: user.id } });
+    try {
+      // await api.delete(`api//users/${id}`, { data: { userId: user.id } });
 
-    toast({
-      title: 'Usuário removido com sucesso',
-      status: 'success',
-      position: 'top-right',
-      isClosable: true,
-    });
+      toast({
+        title: 'Usuário removido com sucesso',
+        status: 'success',
+        position: 'top-right',
+        isClosable: true,
+      });
 
-    history.push('/users');
+      history.push('/users');
 
-    onCloseToRemove();
+      onCloseToRemove();
+    } catch (error) {
+      const err = error as AxiosError;
+      toast({
+        title: 'Ocorreu um erro ao remover o usuário',
+        description: err?.message ? err?.message : 'Tente novamente mais tarde',
+        status: 'error',
+        position: 'top-right',
+        isClosable: true,
+      });
+    }
   };
 
   const turnAdmin = async () => {
-    // await api.patch(`api//users/${id}/admin`, { admin: true });
+    try {
+      // await api.patch(`api//users/${id}/admin`, { admin: true });
 
-    toast({
-      title: 'Usuário colocado como admin com sucesso',
-      status: 'success',
-      position: 'top-right',
-      isClosable: true,
-    });
+      toast({
+        title: 'Usuário colocado como admin com sucesso',
+        status: 'success',
+        position: 'top-right',
+        isClosable: true,
+      });
 
-    onCloseToTurnAdmin();
+      onCloseToTurnAdmin();
 
-    setTimeout(() => {
-      window.location.reload();
-    }, 1400);
+      setTimeout(() => {
+        window.location.reload();
+      }, 1400);
+    } catch (error) {
+      const err = error as AxiosError;
+      toast({
+        title: 'Ocorreu um erro ao tentar colocar o usuário como admin',
+        description: err?.message ? err?.message : 'Tente novamente mais tarde',
+        status: 'error',
+        position: 'top-right',
+        isClosable: true,
+      });
+    }
   };
 
   return (
