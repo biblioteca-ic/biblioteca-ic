@@ -42,6 +42,7 @@ const BooksList = () => {
       // const { data: response } = await api.get('/books');
 
       const data = booksMock;
+      console.log(data)
       setBooks(data);
       setBooksSearch(data);
     } catch (err) {
@@ -60,11 +61,10 @@ const BooksList = () => {
         const newBooks = books.filter(bookFilter => {
           return (
             bookFilter?.title?.toLowerCase().includes(value.toLowerCase()) ||
-            bookFilter?.publishingHouse?.toLowerCase().includes(value.toLowerCase()) ||
-            bookFilter?.authors?.map((item) => item.toLowerCase().includes(value.toLowerCase())) ||
-            bookFilter?.authors?.includes(value.toLowerCase()) ||
-            bookFilter?.categories?.map((item) => item.toLowerCase().includes(value.toLowerCase())) ||
-            bookFilter?.categories?.includes(value.toLowerCase())
+            // bookFilter?.authors?.map((item) => item.toLowerCase().includes(value.toLowerCase())) ||
+            bookFilter?.authors[0]?.toLowerCase().includes(value.toLowerCase()) ||
+            // bookFilter?.categories?.map((item) => item.toLowerCase().includes(value.toLowerCase())) ||
+            bookFilter?.categories[0]?.toLowerCase().includes(value.toLowerCase())
           );
         });
         setBooksSearch(newBooks);
