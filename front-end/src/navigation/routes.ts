@@ -7,7 +7,7 @@ import ChangePassword from '../pages/ChangePassword';
 import { UsersItemPage, UsersList } from '../pages/Users';
 import RegisterBook from '../pages/RegisterBook';
 import EditBook from '../pages/EditBook';
-import { BooksItemPage } from '../pages/Books';
+import { BooksItemPage, BooksList } from '../pages/Books';
 
 export const routes = [
   {
@@ -54,6 +54,12 @@ export const routes = [
     onlyAdmin: false,
   },
   {
+    path: '/books',
+    component: BooksList,
+    private: false,
+    onlyAdmin: false,
+  },
+  {
     path: '/books/register',
     component: RegisterBook,
     private: false,
@@ -70,5 +76,5 @@ export const routes = [
     component: EditBook,
     private: false,
     onlyAdmin: false,
-  },
+  },  
 ];

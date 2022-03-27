@@ -130,7 +130,7 @@ const EditBook = () => {
     resolver: yupResolver(schema),
     defaultValues: {
       bookName: bookData?.title,
-      authors: formAuthors // [{ name: "" }],
+      authors: formAuthors //[{ name: "" }],
 
     }
   });

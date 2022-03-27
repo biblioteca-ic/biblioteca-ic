@@ -214,7 +214,7 @@ const Register = () => {
 
             <FormControl my={2} isInvalid={!!(errors?.categories as any)?.message}>
               <CreatableSelect
-                // {...register('categories')} // fix the bug to uncomment this line
+                {...register('categories')} // fix the bug to uncomment this line
                 isMulti
                 options={categoriesOptions}
                 placeholder="Adicione uma ou mais categorias"
