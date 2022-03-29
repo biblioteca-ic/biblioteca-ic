@@ -15,7 +15,7 @@ const Dashboard = () => {
             Funcionalidades:
           </Heading>
           <Link color="teal" href="/books" _focus={{ boxShadow: 'none' }}>
-            <Box border="1px" p={4} display="flex" alignItems="center" justifyContent="center" mb={2}>
+            <Box border="1px" p={5} display="flex" alignItems="center" justifyContent="center" mb={4}>
               <Icon as={ImBooks} fontSize="2rem" mr={2} />
               <Heading fontSize="md" textTransform="uppercase">
                 Livros
@@ -25,7 +25,7 @@ const Dashboard = () => {
           {user && (
             <>
               <Link color="teal" href="/profile" _focus={{ boxShadow: 'none' }}>
-                <Box border="1px" p={4} display="flex" alignItems="center" justifyContent="center" mb={2}>
+                <Box border="1px" p={5} display="flex" alignItems="center" justifyContent="center" mb={4}>
                   <Icon as={ImProfile} fontSize="2rem" mr={2} />
                   <Heading fontSize="md" textTransform="uppercase">
                     Meu Perfil
@@ -35,7 +35,7 @@ const Dashboard = () => {
               {user.admin && (
                 <>
                   <Link color="teal" href="/users" _focus={{ boxShadow: 'none' }}>
-                    <Box border="1px" p={4} display="flex" alignItems="center" justifyContent="center" mb={2}>
+                    <Box border="1px" p={5} display="flex" alignItems="center" justifyContent="center" mb={4}>
                       <Icon as={ImUsers} fontSize="2rem" mr={2} />
                       <Heading fontSize="md" textTransform="uppercase">
                         Usuários
