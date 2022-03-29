@@ -1,3 +1,5 @@
+import { COPY_BOOK } from "../constants";
+
 export const usersMock = [
   {
     id: '1',
@@ -66,6 +68,6 @@ export const copiesMock = [
     createdAt: '2022',
     rentedBy: usersMock[0],
     rentedAt: '01-03-2022',
-    status: 'AVALIABLE',
+    status: COPY_BOOK.AVALIABLE.value,
   },
 ];

@@ -2,6 +2,7 @@ import React from 'react';
 import { Box, Heading, Text } from '@chakra-ui/react';
 import { CopyBookType } from '../../types/Book';
 import { formatCpf } from '../../helpers/formatCpf';
+import { COPY_BOOK } from '../../constants';
 
 export const CopyBookDetails = ({ copyBook }: { copyBook: CopyBookType }) => (
   <>
@@ -51,7 +52,7 @@ export const CopyBookDetails = ({ copyBook }: { copyBook: CopyBookType }) => (
         </Box>
       </>
     )}
-    {copyBook.status === 'avaliable' && (
+    {copyBook.status === COPY_BOOK.AVALIABLE.value && (
       <>
         <Box mt={2} textAlign="left">
           <Text fontSize="18px">A cópia está disponível para aluguel.</Text>

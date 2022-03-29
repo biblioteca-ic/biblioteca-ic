@@ -26,6 +26,7 @@ import { BsInfoCircle, BsTrashFill } from 'react-icons/bs';
 // import { api } from '../../../services/api';
 import { CopyBookType } from '../../../types/Book';
 import { CopyBookDetails } from '../../../components/CopyBookDetails';
+import { COPY_BOOK } from '../../../constants';
 
 export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
   // const history = useHistory();
@@ -48,7 +49,7 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
 
   const checkIfCanRemoveCopy = () => {
     // Usuário só pode deletar uma cópia disponível.
-    return copyBook.status === 'AVALIABLE';
+    return copyBook.status === COPY_BOOK.AVALIABLE.value;
   };
 
   const removeCopy = async () => {
@@ -89,7 +90,7 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
         </Td>
         <Td>
           <Link display="block" href={`users/show/${copyBook.id}`}>
-            {copyBook.status}
+            {copyBook.statusToString}
           </Link>
         </Td>
         <Td>

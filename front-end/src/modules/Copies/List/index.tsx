@@ -28,6 +28,7 @@ import { api } from '../../../services/api';
 import { copiesMock } from '../../../services/mocks';
 import { BookType, CopyBookType } from '../../../types/Book';
 import { CopiesBookItem } from '..';
+import { COPY_BOOK } from '../../../constants';
 
 interface CopyTypeSearch extends CopyBookType {
   statusToString?: string;
@@ -52,9 +53,7 @@ const CopiesList = ({ book }: { book: BookType }) => {
     try {
       // const { data: response } = await api.get('/users');
 
-      const data = copiesMock.map(copyData =>
-        copyData.status === 'avaliable' ? { ...copyData, statusToString: 'avaliable' } : copyData,
-      );
+      const data = copiesMock.map(copyData => ({ ...copyData, statusToString: COPY_BOOK[copyData.status].label }));
       setCopies(data);
       setCopiesSearch(data);
     } catch (err) {
