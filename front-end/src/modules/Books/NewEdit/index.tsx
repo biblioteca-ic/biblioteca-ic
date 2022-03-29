@@ -27,11 +27,12 @@ import { BookType } from '../../../types/Book';
 
 const schema = yup.object().shape({
   bookName: yup.string().required('O nome do livro é obrigatório'),
-  authors: yup.array().of(
-    yup.object().shape({
-      name: yup.string().required('O nome do autor é obrigatório').min(3, 'Autor inválido'),
-    }),
-  ),
+  authors: yup.array().min(2, 'Adicione pelo menos um autor'),
+  // .of(
+  //   yup.object().shape({
+  //     // name: yup.string().required('O nome do autor é obrigatório').min(3, 'Autor inválido'),
+  //   }),
+  // ),
   year: yup
     .number()
     .required('O ano de publicação é obrigatório')
@@ -165,6 +166,8 @@ const Register = () => {
     }
   }, [id]);
 
+  console.log(getValues())
+
   const { user } = useAuth();
 
   const {
@@ -187,6 +190,7 @@ const Register = () => {
         categories: categoriesData.map(category => category.label),
         createdBy: id ? currentBook?.createdBy : user.id,
       };
+      console.log(formattedData)
       if (id) {
         const { data: responseSuccess } = await api.patch(`api/books/${id}`, { id, ...formattedData });
         toast({
@@ -256,7 +260,7 @@ const Register = () => {
               {!!errors.bookName?.message && <FormErrorMessage>{errors.bookName.message}</FormErrorMessage>}
             </FormControl>
 
-            <FormControl my={2} isInvalid={!!errors.authors?.length}>
+            <FormControl my={2} isInvalid={!!(errors.authors as any)?.message}>
               <FormLabel htmlFor="authors">Autores</FormLabel>
 
               <Stack>
@@ -306,8 +310,8 @@ const Register = () => {
                           )}
                         </InputRightElement>
                       </InputGroup>
-                      {!!errors?.authors?.[index]?.name?.message && (
-                        <FormErrorMessage>{errors?.authors?.[index]?.name?.message}</FormErrorMessage>
+                      {!!(errors.authors as any)?.message && (
+                        <FormErrorMessage>{(errors.authors as any)?.message}</FormErrorMessage>
                       )}
                     </Stack>
                   );
