@@ -18,11 +18,11 @@ const makeLoginValidation = (): Validation => {
 }
 
 export const makeLoginController = async (req: Request, res: Response): Promise<any> => {
-  const loadUserByCpfRepository = new UserPrismaRepository()
+  const userPrismaRepository = new UserPrismaRepository()
   const bcryptAdapter = new BcryptAdapter()
   const secretKey = process.env.SECRET_KEY
   const jwtAdapter = new JwtAdapter(secretKey)
-  const authentication = new DbAuthentication(loadUserByCpfRepository, bcryptAdapter, jwtAdapter)
+  const authentication = new DbAuthentication(userPrismaRepository, userPrismaRepository, bcryptAdapter, jwtAdapter)
   const controller = new LoginController(authentication, makeLoginValidation())
   const result = await controller.handle(req.body)
   return res.status(result.statusCode).json(result)

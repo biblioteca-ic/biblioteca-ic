@@ -1,10 +1,11 @@
 import { DbAuthentication } from '../../src/data/usecases/users/db-authentication'
-import { UserModel } from '../../src/domain/models/user'
+import { UserModel, UserModelDto } from '../../src/domain/models/user'
 import { Authentication } from '../../src/domain/usecases/users/authentication'
 import { Encrypter } from '../../src/data/protocols/encrypter'
 import { HashComparer } from '../../src/data/protocols/hash-comparer'
 import { Hasher } from '../../src/data/protocols/hasher'
 import { LoadUserByCpfRepository } from '../../src/data/protocols/users/load-user-by-cpf.repository'
+import { LoadUserByAdminRepository } from './protocols/users/load-users-by-admin.repository'
 
 type SutTypes = {
   sut: Authentication
@@ -23,9 +24,25 @@ const mockUser = (): UserModel => ({
   admin: false
 })
 
+const mockUserDto = (): UserModelDto[] => ([{
+  id: 'string',
+  name: 'string',
+  email: 'string',
+  cpf: 'string',
+  registrationNumber: 'string',
+  admin: true,
+  active: true
+}])
+
 class LoadAccountByCpfRepositoryStub implements LoadUserByCpfRepository {
   async loadByCpf (cpf: string): Promise<UserModel> {
     return Promise.resolve(mockUser())
+  }
+}
+
+class LoadUserByAdminRepositoryStub implements LoadUserByAdminRepository {
+  async loadByAdmin (admin: boolean): Promise<UserModelDto[]> {
+    return Promise.resolve(mockUserDto())
   }
 }
 
@@ -47,9 +64,10 @@ class EncrypterStub implements Encrypter {
 
 const makeSut = (): SutTypes => {
   const loadUserByCpfRepositoryStub = new LoadAccountByCpfRepositoryStub()
+  const loadUserByAdminRepositoryStub = new LoadUserByAdminRepositoryStub()
   const hashComparerStub = new HashComparerStub()
   const encrypterStub = new EncrypterStub()
-  const sut = new DbAuthentication(loadUserByCpfRepositoryStub, hashComparerStub, encrypterStub)
+  const sut = new DbAuthentication(loadUserByCpfRepositoryStub, loadUserByAdminRepositoryStub, hashComparerStub, encrypterStub)
   return {
     sut,
     loadUserByCpfRepositoryStub,
@@ -106,7 +124,8 @@ describe('DbAuthentication', () => {
       cpf: '11122233345',
       registrationNumber: '123456',
       admin: false,
-      accessToken: 'any_string'
+      accessToken: 'any_string',
+      isOnlyAdmin: false
     })
   })
 })
