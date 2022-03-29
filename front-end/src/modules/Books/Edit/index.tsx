@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Select,
   FormLabel,
   Box,
   Text,
@@ -12,49 +11,34 @@ import {
   IconButton,
   FormControl,
   FormErrorMessage,
-  useToast
+  useToast,
 } from '@chakra-ui/react';
-import {
-  AsyncCreatableSelect,
-  AsyncSelect,
-  CreatableSelect,
-} from "chakra-react-select";
+import { CreatableSelect } from 'chakra-react-select';
 import { useHistory, useParams } from 'react-router-dom';
 import { AiOutlinePlus, AiOutlineMinus } from 'react-icons/ai';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { AxiosError } from 'axios';
 import * as yup from 'yup';
-import { Page } from '../../components/Page';
-import { api } from '../../services/api';
-import { booksMock } from '../../services/mocks';
-import { BookType } from '../../types/Book';
+import { Page } from '../../../components/Page';
+import { api } from '../../../services/api';
+import { booksMock } from '../../../services/mocks';
+import { BookType } from '../../../types/Book';
 
 const schema = yup.object().shape({
-  bookName: yup
-    .string()
-    .required('O nome do livro é obrigatório'),
-  authors: yup
-    .array()
-    .of(
-      yup.object().shape({
-        name: yup
-          .string()
-          .required('O nome do autor é obrigatório')
-          .min(3, 'Autor inválido')
-      })
-    ),
+  bookName: yup.string().required('O nome do livro é obrigatório'),
+  authors: yup.array().of(
+    yup.object().shape({
+      name: yup.string().required('O nome do autor é obrigatório').min(3, 'Autor inválido'),
+    }),
+  ),
   year: yup
     .number()
     .typeError('O ano precisa ser um número')
     .max(2022, 'O ano não pode ser maior que o atual')
     .required('O ano de publicação é obrigatório'),
-  publishingCompany: yup
-    .string()
-    .required('A editora é obrigatória'),
-  categories: yup
-    .array()
-    .required('Selecione pelo menos uma categoria'),
+  publishingCompany: yup.string().required('A editora é obrigatória'),
+  categories: yup.array().required('Selecione pelo menos uma categoria'),
 });
 
 type Author = {
@@ -66,12 +50,12 @@ type RegisterFormInputs = {
   authors: Array<Author>;
   year: number;
   publishingCompany: string;
-  categories: Array<string>
+  categories: Array<string>;
 };
 
 interface CategoriesOptions {
-  value: string,
-  label: string,
+  value: string;
+  label: string;
 }
 
 type ItemParams = {
@@ -79,37 +63,35 @@ type ItemParams = {
 };
 
 const categoriesOptions: CategoriesOptions[] = [
-  { value: "Computer Science and Engineering", label: "Ciência da Computação e Engenharia" },
-  { value: "Physics and Math", label: "Matemática e Física" },
-  { value: "Biology", label: "Biologia" },
-  { value: "Sci-Fi", label: "Ficção Científica" },
-  { value: "Fantasy", label: "Fantasia" },
-  { value: "Romance", label: "Romance" }
+  { value: 'Computer Science and Engineering', label: 'Ciência da Computação e Engenharia' },
+  { value: 'Physics and Math', label: 'Matemática e Física' },
+  { value: 'Biology', label: 'Biologia' },
+  { value: 'Sci-Fi', label: 'Ficção Científica' },
+  { value: 'Fantasy', label: 'Fantasia' },
+  { value: 'Romance', label: 'Romance' },
 ];
 
 const EditBook = () => {
   const { id } = useParams<ItemParams>();
   const [bookData, setBookData] = useState<BookType>();
-  const [formAuthors, setFormAuthors] = useState<Array<Author>>([{ name: "" }]);
+  const [formAuthors, setFormAuthors] = useState<Array<Author>>([{ name: '' }]);
 
   const getBookData = async () => {
     try {
       // const { data } = await api.get(`/users/${id}`);
-      console.log("aa", formAuthors)
+      console.log('aa', formAuthors);
       const data = booksMock;
       setBookData(data[Number(id) - 1]);
       const { authors } = data[Number(id) - 1];
-      console.log(authors)
+      console.log(authors);
       const authorsConverted = [];
       for (let i = 0; i < authors.length; i += 1) {
-        const author = { "name": authors[i] };
+        const author = { name: authors[i] };
         authorsConverted.push(author);
       }
 
       setFormAuthors(authorsConverted);
-      console.log("authors", authorsConverted)
-
-
+      console.log('authors', authorsConverted);
     } catch (err) {
       console.error(err);
     }
@@ -117,7 +99,6 @@ const EditBook = () => {
 
   useEffect(() => {
     getBookData();
-
   }, [id]);
 
   const {
@@ -130,14 +111,17 @@ const EditBook = () => {
     resolver: yupResolver(schema),
     defaultValues: {
       bookName: bookData?.title,
-      authors: formAuthors //[{ name: "" }],
-
-    }
+      authors: formAuthors, //[{ name: "" }],
+    },
   });
 
-  const { fields: authorsFields, append: authorsAppend, remove: authorsRemove } = useFieldArray({
+  const {
+    fields: authorsFields,
+    append: authorsAppend,
+    remove: authorsRemove,
+  } = useFieldArray({
     control,
-    name: "authors"
+    name: 'authors',
   });
 
   const toast = useToast();
@@ -147,7 +131,7 @@ const EditBook = () => {
     console.log({ data });
     try {
       const { bookName, authors, year, publishingCompany } = data;
-      console.log(data)
+      console.log(data);
       // fazer chamada a api
       await api.post('/books', {
         bookName,
@@ -165,7 +149,6 @@ const EditBook = () => {
       });
 
       history.push('/dashboard');
-
     } catch (error) {
       const err = error as AxiosError;
       toast({
@@ -186,45 +169,82 @@ const EditBook = () => {
 
           <form style={{ width: '100%' }} onSubmit={handleSubmit(onSubmitRegister)}>
             <FormControl my={2} isInvalid={!!errors.bookName?.message}>
-              <FormLabel htmlFor='bookName'>Nome do livro</FormLabel>
-              <Input id="bookName" {...register('bookName')} placeholder="Ex.: O alienista" defaultValue={bookData?.title}/>
+              <FormLabel htmlFor="bookName">Nome do livro</FormLabel>
+              <Input
+                id="bookName"
+                {...register('bookName')}
+                placeholder="Ex.: O alienista"
+                defaultValue={bookData?.title}
+              />
               {!!errors.bookName?.message && <FormErrorMessage>{errors.bookName.message}</FormErrorMessage>}
             </FormControl>
             <FormLabel htmlFor="authors">Autores</FormLabel>
 
             {authorsFields.map((field, index) => {
-              const qt = getValues("authors").length;
+              const qt = getValues('authors').length;
               const multiples = qt > 1;
 
               return (
                 <FormControl my={2} isInvalid={!!errors?.authors?.[index]?.name?.message}>
                   <InputGroup size="md" maxW={380}>
-                    <Input key={field.id} id={`authors-${index}`} {...register(`authors.${index}.name`)}
-                      placeholder="Ex.: Machado de Assis" pr={multiples ? "6rem" : "4.5rem"} />
-                    <InputRightElement width={multiples ? "6rem" : "4.5rem"} justifyContent="space-around" >
-                      <IconButton aria-label="Adicionar autor" icon={<AiOutlinePlus />} size="sm" onClick={() => { if (getValues("authors").length < 4) authorsAppend({ name: "" }) }} />
+                    <Input
+                      key={field.id}
+                      id={`authors-${index}`}
+                      {...register(`authors.${index}.name`)}
+                      placeholder="Ex.: Machado de Assis"
+                      pr={multiples ? '6rem' : '4.5rem'}
+                    />
+                    <InputRightElement width={multiples ? '6rem' : '4.5rem'} justifyContent="space-around">
+                      <IconButton
+                        aria-label="Adicionar autor"
+                        icon={<AiOutlinePlus />}
+                        size="sm"
+                        onClick={() => {
+                          if (getValues('authors').length < 4) authorsAppend({ name: '' });
+                        }}
+                      />
                       {multiples ? (
-                        <IconButton aria-label="Remover autor" icon={<AiOutlineMinus />} size="sm" onClick={() => authorsRemove(index)} />
-                      ) : (<>
-                      </>)}
-
+                        <IconButton
+                          aria-label="Remover autor"
+                          icon={<AiOutlineMinus />}
+                          size="sm"
+                          onClick={() => authorsRemove(index)}
+                        />
+                      ) : (
+                        <></>
+                      )}
                     </InputRightElement>
                   </InputGroup>
-                  {!!errors?.authors?.[index]?.name?.message && <FormErrorMessage>{errors?.authors?.[index]?.name?.message}</FormErrorMessage>}
+                  {!!errors?.authors?.[index]?.name?.message && (
+                    <FormErrorMessage>{errors?.authors?.[index]?.name?.message}</FormErrorMessage>
+                  )}
                 </FormControl>
-              )
+              );
             })}
 
             <FormControl my={2} isInvalid={!!errors.year?.message}>
-              <FormLabel htmlFor='year'>Ano de publicação</FormLabel>
-              <Input id="year" {...register('year')} type="number" placeholder="Ex.: 1882" defaultValue={bookData?.publishedIn} />
+              <FormLabel htmlFor="year">Ano de publicação</FormLabel>
+              <Input
+                id="year"
+                {...register('year')}
+                type="number"
+                placeholder="Ex.: 1882"
+                defaultValue={bookData?.publishedIn}
+              />
               {!!errors.year?.message && <FormErrorMessage>{errors.year.message}</FormErrorMessage>}
             </FormControl>
 
             <FormControl my={2} isInvalid={!!errors.publishingCompany?.message}>
-              <FormLabel htmlFor='publishingCompany'>Editora</FormLabel>
-              <Input id="publishingCompany" {...register('publishingCompany')} placeholder="Ex.: Editora Ática" defaultValue={bookData?.publishingHouse} />
-              {!!errors.publishingCompany?.message && <FormErrorMessage>{errors.publishingCompany.message}</FormErrorMessage>}
+              <FormLabel htmlFor="publishingCompany">Editora</FormLabel>
+              <Input
+                id="publishingCompany"
+                {...register('publishingCompany')}
+                placeholder="Ex.: Editora Ática"
+                defaultValue={bookData?.publishingHouse}
+              />
+              {!!errors.publishingCompany?.message && (
+                <FormErrorMessage>{errors.publishingCompany.message}</FormErrorMessage>
+              )}
             </FormControl>
 
             <FormLabel htmlFor="categories">Categorias</FormLabel>
@@ -259,9 +279,11 @@ const EditBook = () => {
                 options={categoriesOptions}
                 placeholder="Adicione uma ou mais categorias"
                 formatCreateLabel={() => `Criar nova categoria`}
-                noOptionsMessage={() => "Sem mais categorias"}
+                noOptionsMessage={() => 'Sem mais categorias'}
               />
-              {!!(errors?.categories as any)?.message && <FormErrorMessage>{(errors?.categories as any)?.message}</FormErrorMessage>}
+              {!!(errors?.categories as any)?.message && (
+                <FormErrorMessage>{(errors?.categories as any)?.message}</FormErrorMessage>
+              )}
             </FormControl>
 
             <Button colorScheme="teal" size="md" w="100%" type="submit">

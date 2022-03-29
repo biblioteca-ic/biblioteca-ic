@@ -17,6 +17,8 @@ import {
   AlertDialogFooter,
 } from '@chakra-ui/react';
 import { useHistory, useParams } from 'react-router-dom';
+import { BsPencil, BsTrashFill } from 'react-icons/bs';
+import { AxiosError } from 'axios';
 import { useAuth } from '../../../providers/AuthProvider';
 import { booksMock } from '../../../services/mocks';
 import { Page } from '../../../components/Page';
@@ -24,9 +26,7 @@ import { Page } from '../../../components/Page';
 import { BookType } from '../../../types/Book';
 import { UserType } from '../../../types/User';
 import { BookDetails } from '../../../components/BookDetails';
-import { BsPencil, BsTrashFill } from 'react-icons/bs';
-import { CopiesList } from '../../../modules/Copies';
-import { AxiosError } from 'axios';
+import { CopiesList } from '../../Copies';
 
 type ItemParams = {
   id: string;

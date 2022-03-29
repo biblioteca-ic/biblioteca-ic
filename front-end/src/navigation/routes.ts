@@ -1,13 +1,9 @@
 import Dashboard from '../pages/Dashboard';
 import Login from '../pages/Login';
 import Register from '../pages/Register';
-import EditProfile from '../pages/EditProfile';
-import Profile from '../pages/Profile';
-import ChangePassword from '../pages/ChangePassword';
-import { UsersItemPage, UsersList } from '../pages/Users';
-import RegisterBook from '../pages/RegisterBook';
-import EditBook from '../pages/EditBook';
-import { BooksItemPage, BooksList } from '../pages/Books';
+import { ShowProfile, EditProfile, ChangePassword } from '../modules/Profile';
+import { UsersItemPage, UsersList } from '../modules/Users';
+import { BooksItemPage, BooksList, EditBook, NewBook } from '../modules/Books';
 
 export const routes = [
   {
@@ -28,7 +24,7 @@ export const routes = [
   },
   {
     path: '/profile',
-    component: Profile,
+    component: ShowProfile,
     private: false,
   },
   {
@@ -60,8 +56,8 @@ export const routes = [
     onlyAdmin: false,
   },
   {
-    path: '/books/register',
-    component: RegisterBook,
+    path: '/books/new',
+    component: NewBook,
     private: false,
     onlyAdmin: false,
   },
@@ -76,5 +72,5 @@ export const routes = [
     component: EditBook,
     private: false,
     onlyAdmin: false,
-  },  
+  },
 ];

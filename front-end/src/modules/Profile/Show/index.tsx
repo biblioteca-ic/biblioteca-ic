@@ -1,10 +1,9 @@
 import * as React from 'react';
-import { Box, Button, Container, Grid, GridItem, Heading, Link, Text } from '@chakra-ui/react';
+import { Box, Button, Container, Heading, Link, Text } from '@chakra-ui/react';
 import { FaUserEdit, FaUserPlus, FaLock, FaUserFriends } from 'react-icons/fa';
-import { Page } from '../../components/Page';
-import { useAuth } from '../../providers/AuthProvider';
-import { formatCpf } from '../../helpers/formatCpf';
-import { UserDetails } from '../../components/UserDetails';
+import { Page } from '../../../components/Page';
+import { useAuth } from '../../../providers/AuthProvider';
+import { UserDetails } from '../../../components/UserDetails';
 
 const Profile = () => {
   const { user } = useAuth();

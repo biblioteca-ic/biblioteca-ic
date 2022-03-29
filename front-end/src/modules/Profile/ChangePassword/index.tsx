@@ -18,9 +18,9 @@ import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { Page } from '../../components/Page';
-import { api } from '../../services/api';
-import { useAuth } from '../../providers/AuthProvider';
+import { Page } from '../../../components/Page';
+import { api } from '../../../services/api';
+import { useAuth } from '../../../providers/AuthProvider';
 
 const schema = yup.object().shape({
   oldPassword: yup.string().required('Senha antiga é obrigatória'),
