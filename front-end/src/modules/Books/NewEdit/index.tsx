@@ -22,6 +22,8 @@ import { AxiosError } from 'axios';
 import * as yup from 'yup';
 import { Page } from '../../../components/Page';
 import { api } from '../../../services/api';
+import { useAuth } from '../../../providers/AuthProvider';
+import { BookType } from '../../../types/Book';
 
 const schema = yup.object().shape({
   bookName: yup.string().required('O nome do livro é obrigatório'),
@@ -45,10 +47,12 @@ type Author = {
 
 type FormInputs = {
   bookName: string;
-  // authors: Array<Author>;
+  authors: Array<Author>;
   year: number;
   publishingCompany: string;
   categories: SelectOptionsType[];
+  id?: string;
+  createdBy?: string;
 };
 
 interface SelectOptionsType {
@@ -71,55 +75,16 @@ const createOption = (label: string) => ({
 });
 
 const Register = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    control,
-    getValues,
-    reset,
-    setValue,
-  } = useForm<FormInputs>({
-    resolver: yupResolver(schema),
-    // defaultValues: {
-    //   authors: [{ name: '' }],
-    // },
-  });
-
-  console.log('getvalues', getValues());
-
-  // const {
-  //   fields: authorsFields,
-  //   append: authorsAppend,
-  //   remove: authorsRemove,
-  // } = useFieldArray({
-  //   control,
-  //   name: 'authors',
-  // });
-
   const toast = useToast();
   const history = useHistory();
 
-  console.log(errors, 'erros');
-
   const { id } = useParams<{ id?: string }>();
-  const [isLoading, setIsLoading] = React.useState(false);
+  // const [isLoading, setIsLoading] = React.useState(false);
+  const [currentBook, setCurrentBook] = React.useState<BookType>();
   const [categories, setCategories] = React.useState<SelectOptionsType[]>([]);
   const [inputValueCategory, setInputValueCategory] = React.useState<string>('');
   const [valuesCategories, setValuesCategories] = React.useState<ReadonlyArray<SelectOptionsType>>([]);
   // const [authors, setAuthors] = React.useState<SelectOptionsType[]>([]);
-
-  const getCurrentBook = async () => {
-    setIsLoading(true);
-    try {
-      const { data } = await api.get(`/books/${id}`);
-      reset(data);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const getCategories = async () => {
     try {
@@ -153,32 +118,102 @@ const Register = () => {
     }
   }, [id]);
 
-  const onSubmitRegister = async (data: FormInputs) => {
-    console.log({ data }, 'submit');
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    control,
+    getValues,
+    reset,
+    setValue,
+  } = useForm<FormInputs>({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      authors: [{ name: '' }],
+    },
+    // defaultValues: currentBook
+    //   ? {
+    //       bookName: currentBook.title,
+    //       publishingCompany: currentBook.publishingHouse,
+    //       year: Number(currentBook.publishedIn),
+    //       categories: currentBook.categories.map(category => ({ label: category, value: category })),
+    //       authors: currentBook.authors.map(author => ({ name: author })),
+    //     }
+    //   : {
+    //       authors: [{ name: '' }],
+    //     },
+  });
+
+  const getCurrentBook = async () => {
+    // setIsLoading(true);
     try {
-      console.log(data, 't');
-      const { bookName, year, publishingCompany } = data;
-      // fazer chamada a api
-      // await api.post('/books', {
-      //   bookName,
-      //   authors,
-      //   year,
-      //   publishingCompany,
-      // });
-
-      toast({
-        title: 'Livro cadastrado com sucesso',
-        description: 'Agora é possível criar cópias desse livro',
-        status: 'success',
-        position: 'top-right',
-        isClosable: true,
+      const { data } = await api.get(`api/books?id=${id}`);
+      reset({
+        bookName: data.body[0]?.title,
+        publishingCompany: data.body[0]?.publishingHouse,
+        year: Number(data.body[0]?.publishedIn),
+        categories: data.body[0]?.categories.map((category: string) => ({ label: category, value: category })),
+        authors: data.body[0]?.authors.map((author: string) => ({ name: author })),
       });
+      setCurrentBook(data.body[0]);
 
-      // history.push('/books');
+      setValuesCategories(data.body[0]?.categories.map((category: string) => ({ label: category, value: category })));
+    } catch (err) {
+      console.error(err);
+    } finally {
+      // setIsLoading(false);
+    }
+  };
+
+  const { user } = useAuth();
+
+  const {
+    fields: authorsFields,
+    append: authorsAppend,
+    remove: authorsRemove,
+  } = useFieldArray({
+    control,
+    name: 'authors',
+  });
+
+  const onSubmitRegister = async (data: FormInputs) => {
+    try {
+      const { bookName, year, publishingCompany, authors, categories: categoriesData } = data;
+      const formattedData = {
+        title: bookName,
+        authors: authors.filter(author => author.name).map(author => author.name),
+        publishedIn: String(year),
+        publishingHouse: publishingCompany,
+        categories: categoriesData.map(category => category.label),
+        createdBy: id ? currentBook?.createdBy : user.id,
+      };
+      if (id) {
+        const { data: responseSuccess } = await api.patch(`api/books/${id}`, { id, ...formattedData });
+        toast({
+          title: 'Livro editado com sucesso',
+          // description: 'Agora é possível criar cópias desse livro',
+          status: 'success',
+          position: 'top-right',
+          isClosable: true,
+        });
+
+        history.push(`/books/${responseSuccess.body.id}`);
+      } else {
+        const { data: responseSuccess } = await api.post('api/books', formattedData);
+        toast({
+          title: 'Livro cadastrado com sucesso',
+          description: 'Agora é possível criar cópias desse livro',
+          status: 'success',
+          position: 'top-right',
+          isClosable: true,
+        });
+
+        history.push(`/books/${responseSuccess.body.id}`);
+      }
     } catch (error) {
       const err = error as AxiosError;
       toast({
-        title: 'Ocorreu um erro ao cadastrar o livro na plataforma',
+        title: `Ocorreu um erro ao ${id ? 'editar' : 'cadastrar'} o livro na plataforma`,
         description: err?.message ? err?.message : 'Tente novamente mais tarde',
         status: 'error',
         position: 'top-right',
@@ -187,28 +222,20 @@ const Register = () => {
     }
   };
 
-  const handleChange = (
-    value: ReadonlyArray<SelectOptionsType>,
-    // meta: ActionMeta<MyOption>
-  ) => {
-    console.log('value', value);
+  const handleChange = (value: ReadonlyArray<SelectOptionsType>) => {
     setValuesCategories(value);
   };
   const handleInputChange = (inputValue: string) => {
     setInputValueCategory(inputValue);
   };
   const handleKeyDown = (event: React.KeyboardEvent<HTMLElement>) => {
-    if (!inputValueCategory) {
-      console.log('heree');
-      return;
-    }
+    if (!inputValueCategory) return;
     switch (event.key) {
       case 'Enter':
       case 'Tab':
-        console.log(valuesCategories, 'here');
         setValuesCategories([...valuesCategories, createOption(inputValueCategory)]);
-        // setValue('categories', [...valuesCategories, createOption(inputValueCategory)]);
         setInputValueCategory('');
+        setValue('categories', [...valuesCategories, createOption(inputValueCategory)]);
         event.preventDefault();
         break;
       default:
@@ -220,7 +247,7 @@ const Register = () => {
     <Page>
       <Box textAlign="center" fontSize="xl" p={8} display="flex" justifyContent="center">
         <Stack spacing={3} display="flex" alignItems="center" w="80%" maxW={380} minW={320}>
-          <Text>Cadastrar Livro</Text>
+          <Text>{id ? 'Editar livro' : 'Cadastrar Livro'}</Text>
 
           <form style={{ width: '100%' }} onSubmit={handleSubmit(onSubmitRegister)}>
             <FormControl my={2} isInvalid={!!errors.bookName?.message}>
@@ -228,49 +255,75 @@ const Register = () => {
               <Input id="bookName" {...register('bookName')} placeholder="Ex.: O alienista" />
               {!!errors.bookName?.message && <FormErrorMessage>{errors.bookName.message}</FormErrorMessage>}
             </FormControl>
-            {/* <FormLabel htmlFor="authors">Autores</FormLabel>
 
-            {authorsFields.map((field, index) => {
-              const qt = getValues('authors').length;
-              const multiples = qt > 1;
+            <FormControl my={2} isInvalid={!!errors.authors?.length}>
+              <FormLabel htmlFor="authors">Autores</FormLabel>
 
-              return (
-                <FormControl my={2} isInvalid={!!errors?.authors?.[index]?.name?.message}>
-                  <InputGroup size="md" maxW={380}>
-                    <Input
-                      key={field.id}
-                      id={`authors-${index}`}
-                      {...register(`authors.${index}.name`)}
-                      placeholder="Ex.: Machado de Assis"
-                      pr={multiples ? '6rem' : '4.5rem'}
-                    />
-                    <InputRightElement width={multiples ? '6rem' : '4.5rem'} justifyContent="space-around">
-                      <IconButton
-                        aria-label="Adicionar autor"
-                        icon={<AiOutlinePlus />}
-                        size="sm"
-                        onClick={() => {
-                          if (getValues('authors').length < 4) authorsAppend({ name: '' });
-                        }}
-                      />
-                      {multiples ? (
-                        <IconButton
-                          aria-label="Remover autor"
-                          icon={<AiOutlineMinus />}
-                          size="sm"
-                          onClick={() => authorsRemove(index)}
+              <Stack>
+                {authorsFields.map((field, index) => {
+                  const qt = getValues('authors').length;
+                  const multiples = qt > 1;
+
+                  return (
+                    <Stack key={field.id}>
+                      <InputGroup size="md" maxW={380}>
+                        <Input
+                          key={field.id}
+                          id={`authors-${index}`}
+                          {...register(`authors.${index}.name`)}
+                          placeholder="Ex.: Machado de Assis"
+                          onKeyDown={(event: React.KeyboardEvent<HTMLElement>) => {
+                            switch (event.key) {
+                              case 'Enter':
+                              case 'Tab':
+                                authorsAppend({ name: '' });
+                                event.preventDefault();
+                                break;
+                              default:
+                                break;
+                            }
+                          }}
+                          // pr={multiples ? '6rem' : '4.5rem'}
                         />
-                      ) : (
-                        <></>
+                        <InputRightElement width={multiples ? '6rem' : '4.5rem'} justifyContent="space-around">
+                          {/* {index === authorsFields.length - 1 && ( */}
+                          <IconButton
+                            aria-label="Adicionar autor"
+                            icon={<AiOutlinePlus />}
+                            size="sm"
+                            onClick={() => {
+                              if (getValues('authors').length < 4) authorsAppend({ name: '' });
+                            }}
+                          />
+                          {/* )} */}
+                          {multiples && index !== 0 && (
+                            <IconButton
+                              aria-label="Remover autor"
+                              icon={<AiOutlineMinus />}
+                              size="sm"
+                              onClick={() => authorsRemove(index)}
+                            />
+                          )}
+                        </InputRightElement>
+                      </InputGroup>
+                      {!!errors?.authors?.[index]?.name?.message && (
+                        <FormErrorMessage>{errors?.authors?.[index]?.name?.message}</FormErrorMessage>
                       )}
-                    </InputRightElement>
-                  </InputGroup>
-                  {!!errors?.authors?.[index]?.name?.message && (
-                    <FormErrorMessage>{errors?.authors?.[index]?.name?.message}</FormErrorMessage>
-                  )}
-                </FormControl>
-              );
-            })} */}
+                    </Stack>
+                  );
+                })}
+              </Stack>
+              {/* <Button
+                aria-label="Adicionar autor"
+                leftIcon={<AiOutlinePlus />}
+                size="sm"
+                onClick={() => {
+                  if (getValues('authors').length < 4) authorsAppend({ name: '' });
+                }}
+              >
+                Adicionar autor
+              </Button> */}
+            </FormControl>
 
             <FormControl my={2} isInvalid={!!errors.year?.message}>
               <FormLabel htmlFor="year">Ano de publicação</FormLabel>
@@ -286,62 +339,15 @@ const Register = () => {
               )}
             </FormControl>
 
-            {/* <FormLabel htmlFor="categories">Categorias</FormLabel> */}
-
-            {/*
-            {categoriesFields.map((field, index) => (
-              <FormControl my={2} isInvalid={!!errors?.categories?.[index]?.name?.message}>
-                <InputGroup size="md" maxW={380}>
-                  <Select key={field.id} id="categories" {...register(`categories.${index}.name`)}
-                    placeholder="Selecionar categoria" width={getValues("categories").length > 1 ? "70%" : "80%"}>
-                    {categoriesOptions.map((category) => {
-                      return <option value={category.value}>{category.label}</option>
-                    })}
-                  </Select>
-                  <InputRightElement width={getValues("categories").length > 1 ? "6rem" : "4.5rem"} justifyContent="space-around" >
-                    <IconButton aria-label="Adicionar categoria" icon={<AiOutlinePlus />} size="sm" onClick={() => { if (getValues("categories").length < 4) categoriesAppend({ name: "" }) }} />
-                    {getValues("categories").length > 1 ? (
-                      <IconButton aria-label="Remover categoria" icon={<AiOutlineMinus />} size="sm" onClick={() => categoriesRemove(index)} />
-                    ) : (<>
-                    </>)}
-
-                  </InputRightElement>
-                </InputGroup>
-                {!!errors?.authors?.[index]?.name?.message && <FormErrorMessage>{errors?.authors?.[index]?.name?.message}</FormErrorMessage>}
-              </FormControl>
-            ))} */}
-
-            {/* <FormControl my={2} isInvalid={!!(errors?.categories as any)?.message}>
-              <CreatableSelect
-                // {...register('categories')} // fix the bug to uncomment this line
-                isMulti
-                options={categoriesOptions}
-                placeholder="Adicione uma ou mais categorias"
-                formatCreateLabel={() => `Criar nova categoria`}
-                noOptionsMessage={() => 'Sem mais categorias'}
-              />
-              {!!(errors?.categories as any)?.message && (
-                <FormErrorMessage>{(errors?.categories as any)?.message}</FormErrorMessage>
-              )}
-            </FormControl> */}
-
             <Controller
               name="categories"
               control={control}
               render={({ field }) => (
-                <FormControl isInvalid={!!errors?.categories?.length} errortext={errors?.categories?.length}>
+                <FormControl mb={4} isInvalid={!!errors?.categories?.length} errortext={errors?.categories?.length}>
                   <FormLabel htmlFor="categories">Categorias</FormLabel>
-                  {console.log(field)}
                   <CreatableSelect<SelectOptionsType, true, GroupBase<SelectOptionsType>>
-                    // {...register('categories')} // fix the bug to uncomment this line
-                    // {...field}
                     isMulti
-                    // options={[
-                    //   { label: 'A root option', options: ['teste3'] },
-                    //   { label: 'Another root option', options: ['teste4'] },
-                    // ]}
                     options={categories}
-                    // name={field.name}
                     value={valuesCategories}
                     inputValue={inputValueCategory}
                     onInputChange={handleInputChange}
@@ -350,7 +356,6 @@ const Register = () => {
                     formatCreateLabel={() => `Criar nova categoria`}
                     noOptionsMessage={() => 'Sem mais categorias'}
                     onChange={newValues => {
-                      console.log('newvalues', newValues)
                       handleChange(newValues);
                       field.onChange(newValues);
                     }}
@@ -358,11 +363,10 @@ const Register = () => {
                   {errors?.categories?.length && <FormErrorMessage>erro</FormErrorMessage>}
                 </FormControl>
               )}
-              // defaultValue={oldResearchGroup?.name}
             />
 
             <Button colorScheme="teal" size="md" w="100%" type="submit">
-              Cadastrar Livro
+              {id ? 'Editar livro' : 'Cadastrar Livro'}
             </Button>
           </form>
         </Stack>

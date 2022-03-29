@@ -3,7 +3,7 @@ import Login from '../pages/Login';
 import Register from '../pages/Register';
 import { ShowProfile, EditProfile, ChangePassword } from '../modules/Profile';
 import { UsersItemPage, UsersList } from '../modules/Users';
-import { BooksItemPage, BooksList, EditBook, NewBook, NewEditBook } from '../modules/Books';
+import { BooksItemPage, BooksList, NewEditBook } from '../modules/Books';
 
 export const routes = [
   {
@@ -55,14 +55,20 @@ export const routes = [
     private: false,
     onlyAdmin: false,
   },
+  // {
+  //   path: '/books/new',
+  //   component: NewBook,
+  //   private: false,
+  //   onlyAdmin: false,
+  // },
   {
     path: '/books/new',
-    component: NewBook,
+    component: NewEditBook,
     private: false,
     onlyAdmin: false,
   },
   {
-    path: '/books/newedit',
+    path: '/books/edit/:id',
     component: NewEditBook,
     private: false,
     onlyAdmin: false,
@@ -73,10 +79,10 @@ export const routes = [
     private: false,
     onlyAdmin: false,
   },
-  {
-    path: '/books/edit/:id',
-    component: EditBook,
-    private: false,
-    onlyAdmin: false,
-  },
+  // {
+  //   path: '/books/edit/:id',
+  //   component: EditBook,
+  //   private: false,
+  //   onlyAdmin: false,
+  // },
 ];
