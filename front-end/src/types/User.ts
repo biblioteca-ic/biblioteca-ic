@@ -7,4 +7,5 @@ export interface UserType {
   admin: boolean;
   role: string;
   accessToken?: string;
+  isOnlyAdmin?: boolean;
 }

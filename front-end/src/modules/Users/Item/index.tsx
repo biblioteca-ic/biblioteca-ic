@@ -20,7 +20,6 @@ import { useHistory, useParams } from 'react-router-dom';
 import { BsTrashFill } from 'react-icons/bs';
 import { AxiosError } from 'axios';
 import { useAuth } from '../../../providers/AuthProvider';
-import { usersMock } from '../../../services/mocks';
 import { Page } from '../../../components/Page';
 import { api } from '../../../services/api';
 import { UserType } from '../../../types/User';
@@ -58,7 +57,7 @@ export const UserItem = ({ userData }: { userData: UserType }) => {
   const checkIfCanRemoveUser = () => {
     // 3.1 Caso o usuário ainda tenha livros emprestados, não permitir a ação.
     // 3.2 Caso o usuário seja o único ADM, não permitir a ação.
-    return true;
+    return !user.isOnlyAdmin;
   };
 
   const removeUser = async () => {
@@ -192,14 +191,22 @@ const UserItemPage = () => {
   const [userData, setUserData] = useState<UserType | undefined>();
   const [isLoading, setIsLoading] = useState(true);
   const { id } = useParams<ItemParams>();
+  const history = useHistory();
+  const { user } = useAuth();
 
   const getUserData = async () => {
+    setIsLoading(true);
     try {
       const { data: response } = await api.get('/api/users');
 
-      const userResponse = response.body?.find((user: UserType) => user.id === id);
+      const userResponse: UserType = response.body?.find((currentUser: UserType) => currentUser.id === id);
+
       if (userResponse) {
-        setUserData(userResponse);
+        if (userResponse.id === user.id) {
+          history.push('/profile');
+        } else {
+          setUserData(userResponse);
+        }
       }
     } catch (err) {
       console.error(err);
