@@ -128,7 +128,7 @@ const CopiesList = ({ book }: { book: BookType }) => {
             )}
           </Box>
 
-          <Box minW="20%" w="25%" mb={user ? 6 : 0}>
+          <Box minW="30%" mb={user ? 6 : 0}>
             <InputGroup color="teal">
               <Input placeholder="Buscar" bg="white" onChange={handleChange} />
               <InputRightElement>

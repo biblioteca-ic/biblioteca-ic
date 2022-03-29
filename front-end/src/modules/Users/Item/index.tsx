@@ -22,7 +22,7 @@ import { AxiosError } from 'axios';
 import { useAuth } from '../../../providers/AuthProvider';
 import { usersMock } from '../../../services/mocks';
 import { Page } from '../../../components/Page';
-// import { api } from '../../../services/api';
+import { api } from '../../../services/api';
 import { UserType } from '../../../types/User';
 import { UserDetails } from '../../../components/UserDetails';
 
@@ -63,7 +63,7 @@ export const UserItem = ({ userData }: { userData: UserType }) => {
 
   const removeUser = async () => {
     try {
-      // await api.delete(`api//users/${id}`, { data: { userId: user.id } });
+      await api.delete(`api/users/${userData.id}`);
 
       toast({
         title: 'Usuário removido com sucesso',
@@ -89,7 +89,7 @@ export const UserItem = ({ userData }: { userData: UserType }) => {
 
   const turnAdmin = async () => {
     try {
-      // await api.patch(`api//users/${id}/admin`, { admin: true });
+      await api.patch(`api/users/${userData.id}/admin`, { admin: true });
 
       toast({
         title: 'Usuário colocado como admin com sucesso',
@@ -195,10 +195,12 @@ const UserItemPage = () => {
 
   const getUserData = async () => {
     try {
-      // const { data } = await api.get(`/users/${id}`);
+      const { data: response } = await api.get('/api/users');
 
-      const data = usersMock;
-      setUserData(data[Number(id) - 1]);
+      const userResponse = response.body?.find((user: UserType) => user.id === id);
+      if (userResponse) {
+        setUserData(userResponse);
+      }
     } catch (err) {
       console.error(err);
     } finally {

@@ -9,10 +9,11 @@ import { api } from '../../../services/api';
 import { useAuth } from '../../../providers/AuthProvider';
 
 const schema = yup.object().shape({
-  email: yup.string()
-  .email('Precisa ser um e-mail válido.')
-  .required('E-mail é obrigatório')
-  .matches(/[^@\s]*?(?=@ic\.ufal\.br)/, 'O email precisa pertencer ao domínio do IC.')  ,
+  email: yup
+    .string()
+    .email('Precisa ser um e-mail válido.')
+    .required('E-mail é obrigatório')
+    .matches(/[^@\s]*?(?=@ic\.ufal\.br)/, 'O email precisa pertencer ao domínio do IC.'),
   registrationNumber: yup
     .string()
     .required('Matrícula é obrigatória')
@@ -52,7 +53,7 @@ const EditProfile = () => {
         registrationNumber,
       });
 
-      updateUser(updatedUser);
+      updateUser(updatedUser.body);
 
       toast({
         title: 'Edição realizada com sucesso',
