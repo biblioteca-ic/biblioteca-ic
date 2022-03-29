@@ -10,8 +10,8 @@ const Dashboard = () => {
   return (
     <Page>
       <Box textAlign="center" fontSize="xl" p={8}>
-        <Box w="70%" margin="auto">
-          <Heading color="teal" textAlign="center" mb={6}>
+        <Box w="90%" maxW="500px" margin="auto">
+          <Heading size="lg" color="teal" textAlign="center" mb={6}>
             Funcionalidades:
           </Heading>
           <Link color="teal" href="/books" _focus={{ boxShadow: 'none' }}>
