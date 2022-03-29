@@ -97,27 +97,6 @@ const Register = () => {
     }
   };
 
-  // const getAuthors = async () => {
-  //   try {
-  //     // const { data: authorsResponse } = await api.get('authors');
-  //     // setauthors(authorsResponse);
-  //     // setauthors(authorsOptions);
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  // };
-
-  React.useEffect(() => {
-    getCategories();
-    // getAuthors();
-  }, []);
-
-  React.useEffect(() => {
-    if (id) {
-      getCurrentBook();
-    }
-  }, [id]);
-
   const {
     register,
     handleSubmit,
@@ -164,6 +143,27 @@ const Register = () => {
       // setIsLoading(false);
     }
   };
+
+  // const getAuthors = async () => {
+  //   try {
+  //     // const { data: authorsResponse } = await api.get('authors');
+  //     // setauthors(authorsResponse);
+  //     // setauthors(authorsOptions);
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // };
+
+  React.useEffect(() => {
+    getCategories();
+    // getAuthors();
+  }, []);
+
+  React.useEffect(() => {
+    if (id) {
+      getCurrentBook();
+    }
+  }, [id]);
 
   const { user } = useAuth();
 

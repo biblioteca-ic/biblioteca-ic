@@ -15,7 +15,7 @@ export const BookDetails = ({ book }: { book: BookType }) => (
       <Text fontSize="18px">
         <b>Autores: </b>
         {book.authors.map((item, i) => {
-         return (i ? ', ': '') + item
+          return (i ? ', ' : '') + item;
         })}
       </Text>
     </Box>
@@ -31,7 +31,7 @@ export const BookDetails = ({ book }: { book: BookType }) => (
       <Text fontSize="18px">
         <b>Categorias: </b>
         {book.categories.map((item, i) => {
-         return (i ? ', ': '') + item
+          return (i ? ', ' : '') + item;
         })}
       </Text>
     </Box>

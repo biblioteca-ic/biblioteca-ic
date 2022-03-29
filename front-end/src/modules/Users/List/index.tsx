@@ -19,7 +19,6 @@ import {
 } from '@chakra-ui/react';
 import { useHistory } from 'react-router-dom';
 import { BsSearch } from 'react-icons/bs';
-import { FaUserPlus } from 'react-icons/fa';
 import { AddIcon } from '@chakra-ui/icons';
 import { Page } from '../../../components/Page';
 import { useAuth } from '../../../providers/AuthProvider';

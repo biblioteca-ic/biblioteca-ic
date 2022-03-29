@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from 'react';
 import {
   FormLabel,
@@ -144,7 +145,7 @@ const Register = () => {
               const multiples = qt > 1;
 
               return (
-                <FormControl my={2} isInvalid={!!errors?.authors?.[index]?.name?.message}>
+                <FormControl key={`authors-${field}`} my={2} isInvalid={!!errors?.authors?.[index]?.name?.message}>
                   <InputGroup size="md" maxW={380}>
                     <Input
                       key={field.id}

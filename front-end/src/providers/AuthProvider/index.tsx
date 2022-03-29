@@ -25,7 +25,7 @@ const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
 const AuthProvider: React.FC = ({ children }) => {
   const history = useHistory();
-  
+
   const [data, setData] = useState<AuthState>(() => {
     const user = getUser();
     // const user = JSON.stringify(usersMock[0]); //remove after
@@ -38,14 +38,14 @@ const AuthProvider: React.FC = ({ children }) => {
   });
 
   const signIn = useCallback(async ({ cpf, password }) => {
-    const { data } = await api.post('/api/login', {
+    const { data: responseLogin } = await api.post('/api/login', {
       cpf,
       password,
     });
 
-    login(JSON.stringify(data.body), data.body.accessToken);
+    login(JSON.stringify(responseLogin.body), responseLogin.body.accessToken);
 
-    setData({ user: data.body });
+    setData({ user: responseLogin.body });
   }, []);
 
   const signOut = useCallback(() => {

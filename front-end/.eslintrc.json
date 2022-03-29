@@ -35,6 +35,7 @@
     "import/prefer-default-export": "off",
     "import/no-default-export": "off",
     "no-use-before-define": "off",
+    "no-console": "off",
     "class-methods-use-this": "off",
     "react/require-default-props": "off",
     "react/jsx-props-no-spreading": "off",

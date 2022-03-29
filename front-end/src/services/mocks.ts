@@ -1,4 +1,4 @@
-import { COPY_BOOK } from "../constants";
+import { COPY_BOOK } from '../constants';
 
 export const usersMock = [
   {

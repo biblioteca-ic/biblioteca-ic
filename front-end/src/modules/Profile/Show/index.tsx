@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Box, Button, Container, Heading, Link, Text } from '@chakra-ui/react';
+import { Box, Button, Container, Heading, Link } from '@chakra-ui/react';
 import { FaUserEdit, FaUserPlus, FaLock, FaUserFriends } from 'react-icons/fa';
 import { Page } from '../../../components/Page';
 import { useAuth } from '../../../providers/AuthProvider';
