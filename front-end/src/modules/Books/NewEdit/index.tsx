@@ -27,18 +27,18 @@ import { BookType } from '../../../types/Book';
 
 const schema = yup.object().shape({
   bookName: yup.string().required('O nome do livro é obrigatório'),
-  // authors: yup.array().of(
-  //   yup.object().shape({
-  //     name: yup.string().required('O nome do autor é obrigatório').min(3, 'Autor inválido'),
-  //   }),
-  // ),
+  authors: yup.array().of(
+    yup.object().shape({
+      name: yup.string().required('O nome do autor é obrigatório').min(3, 'Autor inválido'),
+    }),
+  ),
   year: yup
     .number()
+    .required('O ano de publicação é obrigatório')
     .typeError('O ano precisa ser um número')
-    .max(2022, 'O ano não pode ser maior que o atual')
-    .required('O ano de publicação é obrigatório'),
-  publishingCompany: yup.string().required('A editora é obrigatória'),
-  // categories: yup.array().required('Selecione pelo menos uma categoria'),
+    .max(2022, 'O ano não pode ser maior que o atual'),
+  publishingCompany: yup.string().required('O nome da editora é obrigatório'),
+  categories: yup.array().required('Selecione pelo menos uma categoria'),
 });
 
 type Author = {
@@ -50,7 +50,7 @@ type FormInputs = {
   authors: Array<Author>;
   year: number;
   publishingCompany: string;
-  categories: SelectOptionsType[];
+  categories: Array<SelectOptionsType>;
   id?: string;
   createdBy?: string;
 };
@@ -343,7 +343,11 @@ const Register = () => {
               name="categories"
               control={control}
               render={({ field }) => (
-                <FormControl mb={4} isInvalid={!!errors?.categories?.length} errortext={errors?.categories?.length}>
+                <FormControl
+                  mb={4}
+                  isInvalid={!!(errors.categories as any)?.message}
+                  errortext={errors?.categories?.length}
+                >
                   <FormLabel htmlFor="categories">Categorias</FormLabel>
                   <CreatableSelect<SelectOptionsType, true, GroupBase<SelectOptionsType>>
                     isMulti
@@ -360,7 +364,9 @@ const Register = () => {
                       field.onChange(newValues);
                     }}
                   />
-                  {errors?.categories?.length && <FormErrorMessage>erro</FormErrorMessage>}
+                  {!!(errors.categories as any)?.message && (
+                    <FormErrorMessage>{(errors.categories as any)?.message}</FormErrorMessage>
+                  )}
                 </FormControl>
               )}
             />

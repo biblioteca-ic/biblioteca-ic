@@ -45,7 +45,7 @@ export const BookItem = ({ bookData, isAdmin }: { bookData: BookType; isAdmin: b
 
   const checkIfCanRemoveBook = () => {
     // Não permitir deletar caso uma das cópias do livro não esteja disponível.
-    return true;
+    return !bookData.borrowedCopies;
   };
 
   const removeBook = async () => {

@@ -20,12 +20,12 @@ import {
   ModalFooter,
   ModalHeader,
 } from '@chakra-ui/react';
+import { AxiosError } from 'axios';
 import { useHistory } from 'react-router-dom';
 import { BsInfoCircle, BsTrashFill } from 'react-icons/bs';
 // import { api } from '../../../services/api';
 import { CopyBookType } from '../../../types/Book';
 import { CopyBookDetails } from '../../../components/CopyBookDetails';
-import { AxiosError } from 'axios';
 
 export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
   // const history = useHistory();
@@ -48,7 +48,7 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
 
   const checkIfCanRemoveCopy = () => {
     // Usuário só pode deletar uma cópia disponível.
-    return copyBook.status === 'avaliable';
+    return copyBook.status === 'AVALIABLE';
   };
 
   const removeCopy = async () => {
