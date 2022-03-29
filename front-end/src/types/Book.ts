@@ -10,6 +10,10 @@ export interface BookType {
   code: string;
   publishedIn: string;
   createdAt: string;
+  availableCopies: number;
+  borrowedCopies: number;
+  lostCopies: number;
+  copies: number;
 }
 
 export interface CopyBookType {

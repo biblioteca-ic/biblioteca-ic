@@ -24,7 +24,7 @@ import { BsSearch } from 'react-icons/bs';
 import { AddIcon } from '@chakra-ui/icons';
 import { AxiosError } from 'axios';
 import { useAuth } from '../../../providers/AuthProvider';
-// import { api } from '../../../services/api';
+import { api } from '../../../services/api';
 import { copiesMock } from '../../../services/mocks';
 import { BookType, CopyBookType } from '../../../types/Book';
 import { CopiesBookItem } from '..';
@@ -86,7 +86,10 @@ const CopiesList = ({ book }: { book: BookType }) => {
 
   const addNewCopy = async () => {
     try {
-      // await api.post();
+      await api.post('api/book-copy', {
+        book_code: book.code,
+        created_by: user.id,
+      });
       toast({
         title: 'Nova cópia criada com sucesso',
         status: 'success',

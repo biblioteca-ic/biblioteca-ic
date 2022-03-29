@@ -21,10 +21,9 @@ import { FaUserPlus } from 'react-icons/fa';
 import { AddIcon } from '@chakra-ui/icons';
 import { Page } from '../../../components/Page';
 import { useAuth } from '../../../providers/AuthProvider';
-// import { api } from '../../../services/api';
+import { api } from '../../../services/api';
 import { BookType } from '../../../types/Book';
-import { booksMock } from '../../../services/mocks';
-import { formatCpf } from '../../../helpers/formatCpf';
+import { getToken } from '../../../services/auth';
 
 interface BookTypeSearch extends BookType {
   adminToString?: string;
@@ -37,14 +36,18 @@ const BooksList = () => {
 
   const { user } = useAuth();
 
+  const token = getToken();
+
+  console.log('token', token);
+
   const getAllBooks = async () => {
     try {
-      // const { data: response } = await api.get('/books');
+      const { data } = await api.get('api/books');
 
-      const data = booksMock;
-      console.log(data)
-      setBooks(data);
-      setBooksSearch(data);
+      // const data = booksMock;
+      console.log(data.body);
+      setBooks(data.body);
+      setBooksSearch(data.body);
     } catch (err) {
       console.error(err);
     }
@@ -110,34 +113,33 @@ const BooksList = () => {
                 <Th>Título</Th>
                 <Th>Autor</Th>
                 <Th>Categoria</Th>
-                <Th>Cópias/Alugados</Th>
-              </Tr> 
+                <Th>Cópias disponíveis/Total</Th>
+              </Tr>
             </Thead>
             <Tbody>
               {booksSearch.map(bookFilter => {
                 return (
                   <Tr key={bookFilter.id}>
                     <Td>
-                      <Link display="block" href={`books/show/${bookFilter.id}`}>
+                      <Link display="block" href={`/books/show/${bookFilter.id}`}>
                         {bookFilter.title}
                       </Link>
                     </Td>
                     <Td>
-                      <Link display="block" href={`books/show/${bookFilter.id}`}>
+                      <Link display="block" href={`/books/show/${bookFilter.id}`}>
                         {bookFilter.authors[0]}
                       </Link>
                     </Td>
                     <Td>
-                      <Link display="block" href={`books/show/${bookFilter.id}`}>
+                      <Link display="block" href={`/books/show/${bookFilter.id}`}>
                         {bookFilter.categories[0]}
                       </Link>
                     </Td>
                     <Td>
-                      <Link display="block" href={`books/show/${bookFilter.id}`}>
-                       {/* GET RENTED/COPIES */}
-                        12/27
+                      <Link display="block" href={`/books/show/${bookFilter.id}`}>
+                        {`${bookFilter.availableCopies}/${bookFilter.copies}`}
                       </Link>
-                    </Td>                    
+                    </Td>
                   </Tr>
                 );
               })}

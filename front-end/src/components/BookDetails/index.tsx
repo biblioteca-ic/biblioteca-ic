@@ -49,5 +49,29 @@ export const BookDetails = ({ book }: { book: BookType }) => (
         {book.code}
       </Text>
     </Box>
+    <Box mt={3} textAlign="left">
+      <Text fontSize="18px">
+        <b>Número total de cópias: </b>
+        {book.copies}
+      </Text>
+    </Box>
+    <Box mt={3} textAlign="left">
+      <Text fontSize="18px">
+        <b>Número de cópias disponíveis: </b>
+        {book.availableCopies}
+      </Text>
+    </Box>
+    <Box mt={3} textAlign="left">
+      <Text fontSize="18px">
+        <b>Número de cópias emprestadas: </b>
+        {book.borrowedCopies}
+      </Text>
+    </Box>
+    <Box mt={3} textAlign="left">
+      <Text fontSize="18px">
+        <b>Número de cópias extraviadas: </b>
+        {book.lostCopies}
+      </Text>
+    </Box>
   </>
 );

@@ -20,9 +20,8 @@ import { useHistory, useParams } from 'react-router-dom';
 import { BsPencil, BsTrashFill } from 'react-icons/bs';
 import { AxiosError } from 'axios';
 import { useAuth } from '../../../providers/AuthProvider';
-import { booksMock } from '../../../services/mocks';
 import { Page } from '../../../components/Page';
-// import { api } from '../../../services/api';
+import { api } from '../../../services/api';
 import { BookType } from '../../../types/Book';
 import { UserType } from '../../../types/User';
 import { BookDetails } from '../../../components/BookDetails';
@@ -51,7 +50,7 @@ export const BookItem = ({ bookData, isAdmin }: { bookData: BookType; isAdmin: b
 
   const removeBook = async () => {
     try {
-      // await api.delete(`api//users/${id}`, { data: { userId: user.id } });
+      await api.delete(`api/books/${bookData.id}`);
 
       toast({
         title: 'Livro removido com sucesso',
@@ -62,7 +61,7 @@ export const BookItem = ({ bookData, isAdmin }: { bookData: BookType; isAdmin: b
 
       onCloseToRemove();
 
-      history.push('books');
+      history.push('/books');
     } catch (error) {
       const err = error as AxiosError;
       toast({
@@ -148,9 +147,8 @@ const BookItemPage = () => {
 
   const getBookData = async () => {
     try {
-      // const { data } = await api.get(`/users/${id}`);
-      const data = booksMock;
-      setBookData(data[Number(id) - 1]);
+      const { data } = await api.get(`api/books?id=${id}`);
+      setBookData(data.body[0]);
     } catch (err) {
       console.error(err);
     } finally {
