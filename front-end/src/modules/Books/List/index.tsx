@@ -85,7 +85,7 @@ const BooksList = () => {
             {user && (
               <Button
                 leftIcon={<AddIcon />}
-                onClick={() => history.push('register')}
+                onClick={() => history.push('/books/new')}
                 colorScheme="teal"
                 variant="outline"
               >

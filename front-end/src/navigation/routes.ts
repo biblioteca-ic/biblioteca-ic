@@ -3,7 +3,7 @@ import Login from '../pages/Login';
 import Register from '../pages/Register';
 import { ShowProfile, EditProfile, ChangePassword } from '../modules/Profile';
 import { UsersItemPage, UsersList } from '../modules/Users';
-import { BooksItemPage, BooksList, EditBook, NewBook } from '../modules/Books';
+import { BooksItemPage, BooksList, EditBook, NewBook, NewEditBook } from '../modules/Books';
 
 export const routes = [
   {
@@ -58,6 +58,12 @@ export const routes = [
   {
     path: '/books/new',
     component: NewBook,
+    private: false,
+    onlyAdmin: false,
+  },
+  {
+    path: '/books/newedit',
+    component: NewEditBook,
     private: false,
     onlyAdmin: false,
   },
