@@ -1,7 +1,6 @@
 import * as React from 'react';
 import {
   Checkbox,
-  Link,
   Box,
   Text,
   Input,
@@ -18,6 +17,7 @@ import { useHistory } from 'react-router-dom';
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { AxiosError } from 'axios';
 import * as yup from 'yup';
 import { Page } from '../../components/Page';
 import { api } from '../../services/api';
@@ -28,7 +28,11 @@ const schema = yup.object().shape({
     .string()
     // .matches(/(^\d{3}\x2E\d{3}\x2E\d{3}\x2D\d{2}$)$/, 'Precisa estar no formato de CPF') // regex para cpf
     .required('CPF é obrigatório'),
-  email: yup.string().required('E-mail é obrigatório').email('Precisa ser um e-mail válido.'),
+  email: yup
+    .string()
+    .required('E-mail é obrigatório')
+    .email('Precisa ser um e-mail válido.')
+    .matches(/[^@\s]*?(?=@ic\.ufal\.br)/, 'O email precisa pertencer ao domínio do IC.'),
   registrationNumber: yup
     .string()
     .required('Matrícula é obrigatória')
@@ -41,7 +45,7 @@ const schema = yup.object().shape({
     .string()
     .required('Senha é obrigatória')
     .matches(
-      /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[$*.,&@#\W_-])[0-9a-zA-Z$*&@#.,-_]{6,}$/,
+      /^(?=.*)(?=.*[a-z])(?=.*[A-Z])(?=.*[$*.,&@#\W_-])[a-zA-Z$*&@#.,-_]{6,}$/,
       'A senha precisa ter no mínimo 6 caracteres, deve incluir letras maiúsculas e minúsculas e deve incluir pelo menos um caractere especial',
     ),
   confirmPassword: yup
@@ -107,10 +111,11 @@ const Register = () => {
         email,
         password,
       });
-    } catch {
+    } catch (error) {
+      const err = error as AxiosError;
       toast({
         title: 'Ocorreu um erro ao fazer o cadastro na plataforma',
-        description: 'Tente novamente mais tarde',
+        description: err?.message ? err?.message : 'Tente novamente mais tarde',
         status: 'error',
         position: 'top-right',
         isClosable: true,

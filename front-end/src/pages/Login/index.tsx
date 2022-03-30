@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {
-  Link,
   Box,
   Text,
   Input,
@@ -16,12 +15,12 @@ import {
 import { useHistory } from 'react-router-dom';
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import { useForm } from 'react-hook-form';
+import { AxiosError } from 'axios';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { useAuth } from '../../providers/AuthProvider';
 import { Page } from '../../components/Page';
 import InputWithMask from '../../components/InputWithMask';
-import { AxiosError } from 'axios';
 
 const schema = yup.object().shape({
   cpf: yup
@@ -115,15 +114,6 @@ const Login = () => {
               Entrar
             </Button>
           </form>
-
-          <Box width="100%" display="flex">
-            <Text fontSize="md" mr={2}>
-              Ainda não tem conta?
-            </Text>
-            <Link href="/register" color="teal">
-              <Text fontSize="md">Cadastre-se</Text>
-            </Link>
-          </Box>
         </Stack>
       </Box>
     </Page>
