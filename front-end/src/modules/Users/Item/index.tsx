@@ -50,15 +50,11 @@ export const UserItem = ({ userData }: { userData: UserType }) => {
     setIsOpenToTurnAdmin(true);
   };
 
-  const checkIfCanTurnAdmin = () => {
-    return user.admin && !userData.admin;
-  };
+  const checkIfCanTurnAdmin = () => user.admin && !userData.admin;
 
-  const checkIfCanRemoveUser = () => {
     // 3.1 Caso o usuário ainda tenha livros emprestados, não permitir a ação.
     // 3.2 Caso o usuário seja o único ADM, não permitir a ação.
-    return !user.isOnlyAdmin;
-  };
+  const checkIfCanRemoveUser = () => !(userData.isOnlyAdmin && userData.admin);
 
   const removeUser = async () => {
     try {
