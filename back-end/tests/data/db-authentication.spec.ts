@@ -1,9 +1,11 @@
-import { DbAuthentication } from '../../src/data/usecases/db-authentication'
-import { UserModel } from '../domain/models/user'
-import { Authentication } from '../domain/usecases/authentication'
-import { Encrypter } from './protocols/encrypter'
-import { HashComparer } from './protocols/hash-comparer'
-import { LoadUserByCpfRepository } from './protocols/load-user-by-cpf.repository'
+import { DbAuthentication } from '../../src/data/usecases/users/db-authentication'
+import { UserModel, UserModelDto } from '../../src/domain/models/user'
+import { Authentication } from '../../src/domain/usecases/users/authentication'
+import { Encrypter } from '../../src/data/protocols/encrypter'
+import { HashComparer } from '../../src/data/protocols/hash-comparer'
+import { Hasher } from '../../src/data/protocols/hasher'
+import { LoadUserByCpfRepository } from '../../src/data/protocols/users/load-user-by-cpf.repository'
+import { LoadUserByAdminRepository } from './protocols/users/load-users-by-admin.repository'
 
 type SutTypes = {
   sut: Authentication
@@ -17,10 +19,20 @@ const mockUser = (): UserModel => ({
   name: 'any_name',
   email: 'any_email@email.com',
   cpf: '11122233345',
-  registrationNumber: 123456,
+  registrationNumber: '123456',
   password: 'hashed_password',
   admin: false
 })
+
+const mockUserDto = (): UserModelDto[] => ([{
+  id: 'string',
+  name: 'string',
+  email: 'string',
+  cpf: 'string',
+  registrationNumber: 'string',
+  admin: true,
+  active: true
+}])
 
 class LoadAccountByCpfRepositoryStub implements LoadUserByCpfRepository {
   async loadByCpf (cpf: string): Promise<UserModel> {
@@ -28,23 +40,34 @@ class LoadAccountByCpfRepositoryStub implements LoadUserByCpfRepository {
   }
 }
 
-class HashComparerStub implements HashComparer {
+class LoadUserByAdminRepositoryStub implements LoadUserByAdminRepository {
+  async loadByAdmin (admin: boolean): Promise<UserModelDto[]> {
+    return Promise.resolve(mockUserDto())
+  }
+}
+
+class HashComparerStub implements HashComparer, Hasher {
   async compare (value: string, hash: string): Promise<boolean> {
     return Promise.resolve(true)
+  }
+
+  async hash (value: string): Promise<string> {
+    return Promise.resolve('any_hash')
   }
 }
 
 class EncrypterStub implements Encrypter {
-  async encrypt (data: { email: string, admin: boolean }): Promise<string> {
+  async encrypt (data: { id: string, admin: boolean }): Promise<string> {
     return Promise.resolve('any_string')
   }
 }
 
 const makeSut = (): SutTypes => {
   const loadUserByCpfRepositoryStub = new LoadAccountByCpfRepositoryStub()
+  const loadUserByAdminRepositoryStub = new LoadUserByAdminRepositoryStub()
   const hashComparerStub = new HashComparerStub()
   const encrypterStub = new EncrypterStub()
-  const sut = new DbAuthentication(loadUserByCpfRepositoryStub, hashComparerStub, encrypterStub)
+  const sut = new DbAuthentication(loadUserByCpfRepositoryStub, loadUserByAdminRepositoryStub, hashComparerStub, encrypterStub)
   return {
     sut,
     loadUserByCpfRepositoryStub,
@@ -87,12 +110,22 @@ describe('DbAuthentication', () => {
     const encryptSpy = jest.spyOn(encrypterStub, 'encrypt')
     await sut.auth({ cpf: '00000000000', password: '123456' })
     const user = mockUser()
-    expect(encryptSpy).toHaveBeenCalledWith({ admin: user.admin, email: user.email })
+    expect(encryptSpy).toHaveBeenCalledWith({ admin: user.admin, id: user.id })
   })
 
   test('should return a valid accessToken', async () => {
-    const { sut } = makeSut()
+    const { sut, loadUserByCpfRepositoryStub } = makeSut()
+    jest.spyOn(loadUserByCpfRepositoryStub, 'loadByCpf').mockReturnValueOnce(Promise.resolve(mockUser()))
     const token = await sut.auth({ cpf: '00000000000', password: '123456' })
-    expect(token).toEqual({ accessToken: 'any_string' })
+    expect(token).toEqual({
+      id: 'uuid',
+      name: 'any_name',
+      email: 'any_email@email.com',
+      cpf: '11122233345',
+      registrationNumber: '123456',
+      admin: false,
+      accessToken: 'any_string',
+      isOnlyAdmin: false
+    })
   })
 })

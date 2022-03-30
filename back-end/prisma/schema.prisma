@@ -1,0 +1,100 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                  String  @id @default(uuid())
+  name                String
+  email               String  @unique()
+  cpf                 String  @unique()
+  registration_number String  @unique()
+  password            String
+  admin               Boolean
+  active              Boolean @default(true)
+
+  Book Book[]
+
+  UserWhoRented      Book_Copy[] @relation("ReferenceToWhoRented")
+  UserWhoCreatedBook Book_Copy[] @relation("ReferenceToBookUserCreated")
+
+  @@map("users")
+}
+
+enum BookStatus {
+  AVAILABLE
+  LOST
+}
+
+model Book {
+  id               String      @id @default(uuid())
+  title            String
+  code             String      @unique()
+  published_in     DateTime    @db.Date
+  publishing_house String
+  authors          String[]
+  categories       String[]
+  status           BookStatus  @default(AVAILABLE)
+  created_by       String
+  created_at       DateTime    @default(now())
+  user             User        @relation(fields: [created_by], references: [id])
+  Book_Copy        Book_Copy[] @relation("ReferenceToOriginalBook")
+
+  @@map("books")
+}
+
+enum CopyStatus {
+  AVAILABLE
+  RENTED
+  LOST
+}
+
+model Book_Copy {
+  id          String     @id @default(uuid())
+  code        String
+  book_id     String
+  created_at  DateTime   @default(now())
+  status      CopyStatus @default(AVAILABLE)
+  lease_date  DateTime?
+  located_by  String?
+  created_by  String
+  user_rented User?      @relation("ReferenceToWhoRented", fields: [located_by], references: [id])
+  user        User       @relation("ReferenceToBookUserCreated", fields: [created_by], references: [id])
+  book        Book       @relation("ReferenceToOriginalBook", fields: [book_id], references: [id])
+
+  @@map("book_copies")
+}
+
+model ViewBooks {
+  id               String     @unique()
+  title            String
+  code             String     @unique()
+  published_in     String
+  publishing_house String
+  authors          String[]
+  categories       String[]
+  status           BookStatus
+  created_by       String
+  created_at       DateTime
+  copies           Int
+  borrowed_copies  Int
+  lost_copies      Int
+  available_copies Int
+
+  @@map("view_books")
+}
+
+model ViewRentedCopies {
+  user_id String
+  email   String
+  book_id String @unique()
+
+  @@map("view_rented_copies")
+}

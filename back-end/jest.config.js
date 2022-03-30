@@ -4,9 +4,15 @@
  */
 
 module.exports = {
-  roots: ['<rootDir>/tests'],
-  clearMocks: true,
-  collectCoverageFrom: ['<rootDir>/src/**/*.ts'],
+  roots: ['tests/'],
+  collectCoverageFrom: [
+    'src/**/*.ts',
+    '!<rootDir>/src/main/**',
+    '!<rootDir>/src/presentation/errors/**',
+    '!<rootDir>/src/**/*-protocols.ts',
+    '!**/protocols/**',
+    '!**/*-helper.ts'
+  ],
   coverageDirectory: 'coverage',
   coverageProvider: 'v8',
   testEnvironment: 'node',
