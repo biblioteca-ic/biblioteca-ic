@@ -3,13 +3,18 @@ import { Box, Text, Input, Button, Stack, FormControl, FormErrorMessage, useToas
 import { useHistory } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { AxiosError } from 'axios';
 import * as yup from 'yup';
-import { Page } from '../../components/Page';
-import { api } from '../../services/api';
-import { useAuth } from '../../providers/AuthProvider';
+import { Page } from '../../../components/Page';
+import { api } from '../../../services/api';
+import { useAuth } from '../../../providers/AuthProvider';
 
 const schema = yup.object().shape({
-  email: yup.string().email('Precisa ser um e-mail válido.').required('E-mail é obrigatório'),
+  email: yup
+    .string()
+    .email('Precisa ser um e-mail válido.')
+    .required('E-mail é obrigatório')
+    .matches(/[^@\s]*?(?=@ic\.ufal\.br)/, 'O email precisa pertencer ao domínio do IC.'),
   registrationNumber: yup
     .string()
     .required('Matrícula é obrigatória')
@@ -49,7 +54,7 @@ const EditProfile = () => {
         registrationNumber,
       });
 
-      updateUser(updatedUser);
+      updateUser(updatedUser.body);
 
       toast({
         title: 'Edição realizada com sucesso',
@@ -59,10 +64,11 @@ const EditProfile = () => {
       });
 
       history.push('/profile');
-    } catch {
+    } catch (error) {
+      const err = error as AxiosError;
       toast({
-        title: 'Ocorreu um erro ao editar o usuário na plataforma',
-        description: 'Tente novamente mais tarde',
+        title: 'Ocorreu um erro ao alterar a senha',
+        description: err?.message ? err?.message : 'Tente novamente mais tarde',
         status: 'error',
         position: 'top-right',
         isClosable: true,
