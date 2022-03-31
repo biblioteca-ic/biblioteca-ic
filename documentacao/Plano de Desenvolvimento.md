@@ -7,7 +7,7 @@
 -  Desenvolver lógica de admin
 -  Desenvolver alteração de senha
 
-## Sprint 2 (15/Fev - 22/Mar) Módulo de Livros
+## Sprint 2 (15/Fev - 29/Mar) Módulo de Livros
 - Desenvolver listagem de usuários, desativar usuário e marcar como ADM.
 -  Desenvolver CRUD de livros, com nome do livro, autor(es), editora, ano e categorias.
 -  Desenvolver lógica de cópias, que não são exatamente livros, apenas cópias podem ser alugadas.
@@ -16,7 +16,7 @@
 - Criar lógica de código de livros, que deve ser único. 
 - O livro que não tem cópia não pode ser emprestado.
 
-## Sprint 3 (23/Mar - 06/Abr) Módulo de Empréstimo
+## Sprint 3 (30/Mar - 19/Abr) Módulo de Empréstimo
 - Criar relacionamento entre alunos e livros
 - Desenvolver lógica de empréstimos: apenas adms podem criar um empréstimo para um aluno, limite de 3 livros por aluno.
 - Desenvolver lógica de renovação, por parte do aluno
