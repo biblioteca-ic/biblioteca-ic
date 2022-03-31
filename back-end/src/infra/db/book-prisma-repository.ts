@@ -18,7 +18,12 @@ export class BookPrismaRepository implements CreateBookRepository, FindLastBookC
   }
 
   async find (): Promise<BookCode[]> {
-    const bookCode = await PrismaHelper.client.$queryRaw<BookCode[]>`SELECT code FROM books ORDER BY created_at DESC FETCH FIRST 1 ROWS ONLY;`
+    const bookCode = await PrismaHelper.client.book.findMany({
+      orderBy: {
+        created_at: 'desc'
+      },
+      take: 1
+    })
     return bookCode
   }
 
