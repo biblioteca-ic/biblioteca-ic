@@ -1,11 +1,11 @@
-import { bookModelMock } from '../../domain/mocks/book.mock'
-import { BookModel } from '../../../src/domain/models/book'
-import { RegisterBook } from '../../../src/domain/usecases/books/register-book'
-import { RegisterBookController } from '../../../src/presentation/controller/books/register-book.controller'
-import { Controller } from '../../../src/presentation/protocols/controller'
-import { Validation } from '../../../src/presentation/validation/protocols/validation'
-import { badRequest } from '../../../src/presentation/helpers/http-helper'
-import { BookCodeGenerator } from '../../domain/usecases/books/book-code-generator'
+import { bookModelMock } from '../../../domain/mocks/book.mock'
+import { BookModel } from '../../../domain/models/book'
+import { RegisterBook } from '../../../../src/domain/usecases/books/register-book'
+import { RegisterBookController } from '../../../../src/presentation/controller/books/register-book.controller'
+import { Controller } from '../../../../src/presentation/protocols/controller'
+import { Validation } from '../../../../src/presentation/validation/protocols/validation'
+import { badRequest } from '../../../../src/presentation/helpers/http-helper'
+import { BookCodeGenerator } from '../../../../src/domain/usecases/books/book-code-generator'
 
 type SutTypes = {
   sut: Controller

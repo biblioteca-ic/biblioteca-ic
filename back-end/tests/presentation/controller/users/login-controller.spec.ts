@@ -1,9 +1,9 @@
-import { Authentication } from '../../../src/domain/usecases/users/authentication'
-import { LoginController } from '../../../src/presentation/controller/user/login-controller'
-import { Controller } from '../../../src/presentation/protocols/controller'
-import { AuthenticationModel } from '../../../src/domain/models/authentication'
-import { badRequest } from '../../../src/presentation/helpers/http-helper'
-import { Validation } from '../../../src/presentation/validation/protocols/validation'
+import { Authentication } from '../../../../src/domain/usecases/users/authentication'
+import { LoginController } from '../../../../src/presentation/controller/user/login-controller'
+import { Controller } from '../../../../src/presentation/protocols/controller'
+import { AuthenticationModel } from '../../../../src/domain/models/authentication'
+import { badRequest } from '../../../../src/presentation/helpers/http-helper'
+import { Validation } from '../../../../src/presentation/validation/protocols/validation'
 
 type SutTypes = {
   sut: Controller

@@ -24,21 +24,21 @@ const makeSut = (): SutTypes => {
 }
 
 describe('DbEditUserData', () => {
-  it('should call UpdateUserByIdRepository with correct values', async () => {
+  test('should call UpdateUserByIdRepository with correct values', async () => {
     const { sut, updateUserByIdRepositoryStub } = makeSut()
     const updateSpy = jest.spyOn(updateUserByIdRepositoryStub, 'update')
     await sut.edit({ id: 'any_id', name: 'any_name' })
     expect(updateSpy).toHaveBeenCalledWith('any_id', { name: 'any_name' })
   })
 
-  it('should return null if UpdateUserByIdRepository returns null', async () => {
+  test('should return null if UpdateUserByIdRepository returns null', async () => {
     const { sut, updateUserByIdRepositoryStub } = makeSut()
     jest.spyOn(updateUserByIdRepositoryStub, 'update').mockReturnValue(Promise.resolve(null))
     const result = await sut.edit({ id: 'any_id', name: 'any_name' })
     expect(result).toBeNull()
   })
 
-  it('should return UserModelDto on success', async () => {
+  test('should return UserModelDto on success', async () => {
     const { sut } = makeSut()
     const result = await sut.edit({ id: 'any_id', name: 'any_name' })
     expect(result).toEqual(mockUserModelDto)

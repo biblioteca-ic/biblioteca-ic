@@ -55,49 +55,49 @@ const makeSut = (): SutTypes => {
 }
 
 describe('DbChangePassword', () => {
-  it('should call LoadUserByIdRepository with correct values', async () => {
+  test('should call LoadUserByIdRepository with correct values', async () => {
     const { sut, loadUserByIdRepositoryStub } = makeSut()
     const loadByIdSpy = jest.spyOn(loadUserByIdRepositoryStub, 'loadById')
     await sut.change({ id: 'any_id', oldPassword: 'any_password', newPassword: 'any_new_password' })
     expect(loadByIdSpy).toHaveBeenCalledWith('any_id')
   })
 
-  it('should return null if LoadUserByIdRepository fails', async () => {
+  test('should return null if LoadUserByIdRepository fails', async () => {
     const { sut, loadUserByIdRepositoryStub } = makeSut()
     jest.spyOn(loadUserByIdRepositoryStub, 'loadById').mockReturnValueOnce(Promise.resolve(null))
     const result = await sut.change({ id: 'any_id', oldPassword: 'any_password', newPassword: 'any_new_password' })
     expect(result).toBeNull()
   })
 
-  it('should call HashComparer with correct values', async () => {
+  test('should call HashComparer with correct values', async () => {
     const { sut, hashComparerStub } = makeSut()
     const compareSpy = jest.spyOn(hashComparerStub, 'compare')
     await sut.change({ id: 'any_id', oldPassword: 'any_password', newPassword: 'any_new_password' })
     expect(compareSpy).toHaveBeenCalledWith('any_password', mockUserModel.password)
   })
 
-  it('should return null if HashComparer returns false', async () => {
+  test('should return null if HashComparer returns false', async () => {
     const { sut, hashComparerStub } = makeSut()
     jest.spyOn(hashComparerStub, 'compare').mockReturnValueOnce(Promise.resolve(false))
     const result = await sut.change({ id: 'any_id', oldPassword: 'any_password', newPassword: 'any_new_password' })
     expect(result).toBeNull()
   })
 
-  it('should call Hasher with correct values', async () => {
+  test('should call Hasher with correct values', async () => {
     const { sut, hasherStub } = makeSut()
     const hashSpy = jest.spyOn(hasherStub, 'hash')
     await sut.change({ id: 'any_id', oldPassword: 'any_password', newPassword: 'any_new_password' })
     expect(hashSpy).toHaveBeenCalledWith('any_new_password')
   })
 
-  it('should return null if UpdateUserByIdRepository returns null', async () => {
+  test('should return null if UpdateUserByIdRepository returns null', async () => {
     const { sut, updateUserByIdRepositoryStub } = makeSut()
     jest.spyOn(updateUserByIdRepositoryStub, 'update').mockReturnValueOnce(Promise.resolve(null))
     const result = await sut.change({ id: 'any_id', oldPassword: 'any_password', newPassword: 'any_new_password' })
     expect(result).toBeNull()
   })
 
-  it('should return a UserModelDto on success', async () => {
+  test('should return a UserModelDto on success', async () => {
     const { sut } = makeSut()
     const result = await sut.change({ id: 'any_id', oldPassword: 'any_password', newPassword: 'any_new_password' })
     expect(result).toEqual(mockUserModelDto)

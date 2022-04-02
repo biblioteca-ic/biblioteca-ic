@@ -1,10 +1,10 @@
-import { ChangeAdmin } from '../../../src/domain/usecases/users/make-admin'
-import { Controller } from '../../../src/presentation/protocols/controller'
-import { Validation } from '../../../src/presentation/validation/protocols/validation'
-import { mockUserModelDto } from '../../domain/mocks/user.mock'
-import { UserModelDto } from '../../../src/domain/models/user'
-import { ChangeAdminController } from '../../../src/presentation/controller/user/change-admin.controller'
-import { badRequest, ok, serverError } from '../../../src/presentation/helpers/http-helper'
+import { ChangeAdmin } from '../../../../src/domain/usecases/users/make-admin'
+import { Controller } from '../../../../src/presentation/protocols/controller'
+import { Validation } from '../../../../src/presentation/validation/protocols/validation'
+import { mockUserModelDto } from '../../../domain/mocks/user.mock'
+import { UserModelDto } from '../../../../src/domain/models/user'
+import { ChangeAdminController } from '../../../../src/presentation/controller/user/change-admin.controller'
+import { badRequest, ok, serverError } from '../../../../src/presentation/helpers/http-helper'
 
 type SutTypes = {
   sut: Controller
@@ -37,14 +37,14 @@ const makeSut = (): SutTypes => {
 }
 
 describe('ChangeAdminController', () => {
-  it('should call Validation with correct values', async () => {
+  test('should call Validation with correct values', async () => {
     const { sut, validationStub } = makeSut()
     const validateSpy = jest.spyOn(validationStub, 'validate')
     await sut.handle({ id: 'any_id', admin: true })
     expect(validateSpy).toHaveBeenCalledWith({ id: 'any_id', admin: true })
   })
 
-  it('should return badRequest if validation fails', async () => {
+  test('should return badRequest if validation fails', async () => {
     const { sut, validationStub } = makeSut()
     const error = new Error()
     jest.spyOn(validationStub, 'validate').mockReturnValueOnce(error)
@@ -53,14 +53,14 @@ describe('ChangeAdminController', () => {
     expect(result.statusCode).toBe(400)
   })
 
-  it('should call ChangeAdmin with correct values', async () => {
+  test('should call ChangeAdmin with correct values', async () => {
     const { sut, changeAdminStub } = makeSut()
     const changeSpy = jest.spyOn(changeAdminStub, 'change')
     await sut.handle({ id: 'any_id', admin: true })
     expect(changeSpy).toHaveBeenCalledWith({ id: 'any_id', admin: true })
   })
 
-  it('should return serverError if throws', async () => {
+  test('should return serverError if throws', async () => {
     const { sut, validationStub } = makeSut()
     jest.spyOn(validationStub, 'validate').mockImplementationOnce(() => {
       throw new Error()
@@ -70,7 +70,7 @@ describe('ChangeAdminController', () => {
     expect(result.statusCode).toBe(500)
   })
 
-  it('should return ok on success', async () => {
+  test('should return ok on success', async () => {
     const { sut } = makeSut()
     const result = await sut.handle({ id: 'any_id', admin: true })
     expect(result).toEqual(ok(mockUserModelDto))

@@ -35,28 +35,28 @@ const makeSut = (): SutTypes => {
 }
 
 describe('DbChangeAdmin', () => {
-  it('should call LoadUserByIdRepository with correct values', async () => {
+  test('should call LoadUserByIdRepository with correct values', async () => {
     const { sut, loadUserByIdRepositoryStub } = makeSut()
     const loadByIdSpy = jest.spyOn(loadUserByIdRepositoryStub, 'loadById')
     await sut.change({ id: 'any_id', admin: true })
     expect(loadByIdSpy).toHaveBeenCalledWith('any_id')
   })
 
-  it('should return null if LoadUserByIdReposiroty fails', async () => {
+  test('should return null if LoadUserByIdReposiroty fails', async () => {
     const { sut, loadUserByIdRepositoryStub } = makeSut()
     jest.spyOn(loadUserByIdRepositoryStub, 'loadById').mockReturnValueOnce(Promise.resolve(null))
     const result = await sut.change({ id: 'any_id', admin: true })
     expect(result).toBeNull()
   })
 
-  it('should call UpdateUserByIdRepository with correct values', async () => {
+  test('should call UpdateUserByIdRepository with correct values', async () => {
     const { sut, updateUserByIdRepositoryStub } = makeSut()
     const updateSpy = jest.spyOn(updateUserByIdRepositoryStub, 'update')
     await sut.change({ id: 'any_id', admin: true })
     expect(updateSpy).toHaveBeenCalledWith('any_id', { admin: true })
   })
 
-  it('should return a UserModelDto on success', async () => {
+  test('should return a UserModelDto on success', async () => {
     const { sut } = makeSut()
     const result = await sut.change({ id: 'any_id', admin: true })
     expect(result).toEqual(mockUserModelDto)

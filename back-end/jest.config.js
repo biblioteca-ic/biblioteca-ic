@@ -4,10 +4,11 @@
  */
 
 module.exports = {
-  roots: ['tests/'],
+  roots: ['src/', 'tests/'],
   collectCoverageFrom: [
-    'src/**/*.ts',
+    '<rootDir>/src/**/*.ts',
     '!<rootDir>/src/main/**',
+    '!<rootDir>/src/domain/**',
     '!<rootDir>/src/presentation/errors/**',
     '!<rootDir>/src/**/*-protocols.ts',
     '!**/protocols/**',

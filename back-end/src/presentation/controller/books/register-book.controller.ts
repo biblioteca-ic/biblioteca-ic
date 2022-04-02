@@ -4,7 +4,6 @@ import { Controller } from '../../protocols/controller'
 import { HttpResponse } from '../../protocols/http-response'
 import { Validation } from '../../validation/protocols/validation'
 import { BookCodeGenerator } from '../../../domain/usecases/books/book-code-generator'
-
 export class RegisterBookController implements Controller {
   constructor (
     private readonly _validation: Validation,
