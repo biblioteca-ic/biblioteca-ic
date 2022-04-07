@@ -148,7 +148,7 @@ const BooksList = () => {
         ) : (
           <>
             <Text>Não há livros cadastrados</Text>
-            <Link href="/books/register" textDecoration="none">
+            <Link href="/books/new" textDecoration="none">
               <Button colorScheme="teal" leftIcon={<FaUserPlus />}>
                 Cadastrar livro
               </Button>
