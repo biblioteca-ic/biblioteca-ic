@@ -39,3 +39,80 @@ export const registerBookCopyResponseSchema = {
     }
   }
 }
+
+export const listBookCopiesRequestSchema = {
+
+}
+
+export const listBookCopiesResponseSchema = {
+  type: 'object',
+  properties: {
+    id: {
+      type: 'string'
+    },
+    code: {
+      type: 'string'
+    },
+    book_id: {
+      type: 'string'
+    },
+    lease_date: {
+      type: 'string',
+    },
+    createdBy: {
+      type: 'string'
+    },
+    createdAt: {
+      type: 'string'
+    },
+    status: {
+      type: 'string'
+    },
+    located_by: {
+      type: 'string'
+    }
+  }
+}
+
+export const listBookCopyDetailsRequestSchema = {
+
+}
+
+export const listBookCopyDetailsResponseSchema = {
+  type: 'object',
+  properties: {
+    id: {
+      type: 'string'
+    },
+    code: {
+      type: 'string'
+    },
+    book_id: {
+      type: 'string'
+    },
+    lease_date: {
+      type: 'string',
+    },
+    createdBy: {
+      type: 'string'
+    },
+    createdAt: {
+      type: 'string'
+    },
+    status: {
+      type: 'string'
+    },
+    located_by: {
+      type: 'string'
+    },
+    user_rented: {
+      id: 'string',
+      name: 'string',
+      email: 'string',
+      cpf: 'number',
+      registration_number: 'number',
+      admin: 'boolean',
+      active: 'boolean'
+    }
+  }
+}

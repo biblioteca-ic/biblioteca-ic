@@ -14,6 +14,7 @@ import listUsersRoute from './routes/list-users-route'
 import deleteUserRoute from './routes/delete-user-route'
 import deleteBookRoute from './routes/delete-book-route'
 import updateBookRoute from './routes/update-book-route'
+import listBookCopiesRoute from './routes/list-book-copies-route'
 
 const app = express()
 
@@ -47,6 +48,8 @@ deleteBookRoute(router)
 
 deleteBookCopyRoute(router)
 registerBookCopyRoute(router)
+
+listBookCopiesRoute(router)
 
 app.listen(3333, () => {
   console.log('listening at http://localhost:3333')

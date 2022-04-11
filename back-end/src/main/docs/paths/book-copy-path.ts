@@ -71,3 +71,79 @@ export const deleteBookCopyPath = {
     }
   }
 }
+
+export const listBookCopiesPath = {
+  get: {
+    tags: ['BookCopy'],
+    summary: 'Listagem de cópias',
+    security: [{ apiKeyAuth: [] }],
+    parameters: [{
+      in: 'path',
+      name: 'book_code',
+      description: 'Código do livro original',
+      schema: {
+        type: 'string'
+      },
+      required: true
+    }],
+    responses: {
+      200: {
+        description: 'Sucesso',
+        content: {
+          'application/json': {
+            schema: {
+              $ref: '#/schemas/listBookCopiesResponseSchema'
+            }
+          }
+        }
+      },
+      401: {
+        description: 'Unauthorized'
+      },
+      403: {
+        description: 'Forbidden'
+      },
+      500: {
+        description: 'ServerError'
+      }
+    }
+  }
+}
+
+export const listBookCopyDetailsPath = {
+  get: {
+    tags: ['BookCopy'],
+    summary: 'Listagem de detalhes de uma cópia',
+    security: [{ apiKeyAuth: [] }],
+    parameters: [{
+      in: 'path',
+      name: 'book_copy_id',
+      description: 'ID da cópia do livro',
+      schema: {
+        type: 'string'
+      },
+      required: true
+    }],
+    responses: {
+      200: {
+        description: 'Sucesso',
+        content: {
+          'application/json': {
+            schema: {
+              $ref: '#/schemas/listBookCopyDetailsResponseSchema'
+            }
+          }
+        }
+      },
+      401: {
+        description: 'Unauthorized'
+      },
+      403: {
+        description: 'Forbidden'
+      },
+      500: {
+        description: 'ServerError'
+      }
+    }
+  }
+}
