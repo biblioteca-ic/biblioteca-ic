@@ -27,8 +27,6 @@ fi
 
 # Define environment variables...
 export REPOSITORY=${REPOSITORY:-"biblioteca-ic"}
-export WWWUSER=${WWWUSER:-$UID}
-export WWWGROUP=${WWWGROUP:-$(id -g)}
 
 # Function that outputs Eco is not running...
 function eco_is_not_running {
@@ -73,13 +71,15 @@ else
 fi
 
 if [ $# -gt 0 ]; then
-    if [ "$1" == 'backend' ]; then
+    if [ "$1" == 'backend' ] || [ "$1" == 'frontend' ]; then
+        INSTANCE=$1
+
         # Proxy vendor binary commands on the application container...
         if [ "$2" == "bin" ]; then
             shift 2
 
             if [ "$EXEC" == "yes" ]; then
-                docker-compose exec backend ./vendor/bin/"$@"
+                docker-compose exec "$INSTANCE" ./vendor/bin/"$@"
             else
                 eco_is_not_running
             fi
@@ -89,7 +89,7 @@ if [ $# -gt 0 ]; then
             shift 2
 
             if [ "$EXEC" == "yes" ]; then
-                docker-compose exec backend npm run test
+                docker-compose exec -w /app "$INSTANCE" npm run test
             else
                 eco_is_not_running
             fi
@@ -99,7 +99,7 @@ if [ $# -gt 0 ]; then
             shift 2
 
             if [ "$EXEC" == "yes" ]; then
-                docker-compose exec backend npm "$@"
+                docker-compose exec -w /app "$INSTANCE" npm "$@"
             else
                 eco_is_not_running
             fi
@@ -109,14 +109,13 @@ if [ $# -gt 0 ]; then
             shift 2
 
             if [ "$EXEC" == "yes" ]; then
-                docker-compose exec backend npx "$@"
+                docker-compose exec -w /app "$INSTANCE" npx "$@"
             else
                 eco_is_not_running
             fi
 
         # Initiate a Bash shell within the application container...
         elif [ "$2" == "shell" ] || [ "$2" == "bash" ]; then
-            INSTANCE=$1
             shift 2
 
             if [ "$EXEC" == "yes" ]; then

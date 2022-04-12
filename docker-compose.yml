@@ -1,13 +1,28 @@
+version: "3.9"
 services:
-  backend:
-    build:
-      context: .
-      dockerfile: ./docker/back-end/Dockerfile
-      args:
-        WWWGROUP: '${WWWGROUP}'
-    command: npm start
+  frontend:
+    image: node:16-alpine
+    command: yarn --cwd /app start
+    ports:
+      - '${FRONTEND_PORT:-3000}:3000'
+    environment:
+      - NODE_ENV=development
     volumes:
-      - ./back-end:/usr/app
+      - ./front-end:/app
+    networks:
+      - eco
+    depends_on:
+      - backend
+  backend:
+    image: node:17-alpine
+    command: yarn --cwd /app start
+    ports:
+      - '${BACKEND_PORT:-3333}:3333'
+      - '${BACKEND_DEBUG_PORT:-9229}:9229'
+    environment:
+      - NODE_ENV=development
+    volumes:
+      - ./back-end:/app
     networks:
       - eco
     depends_on:
