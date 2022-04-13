@@ -57,17 +57,18 @@ enum CopyStatus {
 }
 
 model Book_Copy {
-  id          String     @id @default(uuid())
-  code        String
-  book_id     String
-  created_at  DateTime   @default(now())
-  status      CopyStatus @default(AVAILABLE)
-  lease_date  DateTime?
-  located_by  String?
-  created_by  String
-  user_rented User?      @relation("ReferenceToWhoRented", fields: [located_by], references: [id])
-  user        User       @relation("ReferenceToBookUserCreated", fields: [created_by], references: [id])
-  book        Book       @relation("ReferenceToOriginalBook", fields: [book_id], references: [id])
+  id              String     @id @default(uuid())
+  code            String
+  book_id         String
+  created_at      DateTime   @default(now())
+  status          CopyStatus @default(AVAILABLE)
+  lease_date      DateTime?
+  devolution_date DateTime?
+  located_by      String?
+  created_by      String
+  user_rented     User?      @relation("ReferenceToWhoRented", fields: [located_by], references: [id])
+  user            User       @relation("ReferenceToBookUserCreated", fields: [created_by], references: [id])
+  book            Book       @relation("ReferenceToOriginalBook", fields: [book_id], references: [id])
 
   @@map("book_copies")
 }
