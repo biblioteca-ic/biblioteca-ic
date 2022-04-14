@@ -19,5 +19,6 @@ module.exports = {
   testEnvironment: 'node',
   transform: {
     '.+\\.ts$': 'ts-jest'
-  }
+  },
+  modulePaths: ['<rootDir>/src/']
 }
