@@ -12,5 +12,6 @@ export type BookCopyModel = {
   created_by: string
   located_by: string
   lease_date: Date
+  devolution_date: Date
   createdAt: Date
 }

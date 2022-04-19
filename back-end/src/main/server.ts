@@ -8,13 +8,14 @@ import createUserRoute from './routes/create-user-route'
 import listBooksRoute from './routes/list-books-route'
 import loginRoute from './routes/login-route'
 import registerBookRoute from './routes/register-book-route'
-import registerBookCopyRoute from './routes/register-book-copy-route'
-import deleteBookCopyRoute from './routes/delete-book-copy-route'
+import registerBookCopyRoute from './routes/book-copy/register-book-copy-route'
+import deleteBookCopyRoute from './routes/book-copy/delete-book-copy-route'
 import listUsersRoute from './routes/list-users-route'
 import deleteUserRoute from './routes/delete-user-route'
 import deleteBookRoute from './routes/delete-book-route'
 import updateBookRoute from './routes/update-book-route'
-import listBookCopiesRoute from './routes/list-book-copies-route'
+import listBookCopiesRoute from './routes/book-copy/list-book-copies-route'
+import borrowBookCopyRoute from './routes/book-copy/borrow-book-copy-route'
 
 const app = express()
 
@@ -48,8 +49,8 @@ deleteBookRoute(router)
 
 deleteBookCopyRoute(router)
 registerBookCopyRoute(router)
-
 listBookCopiesRoute(router)
+borrowBookCopyRoute(router)
 
 app.listen(3333, () => {
   console.log('listening at http://localhost:3333')

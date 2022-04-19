@@ -1,10 +1,9 @@
 import { BookCopyModel } from '../../../domain/models/book_copy'
 import { RegisterBookCopy } from '../../../domain/usecases/book_copies/register-book-copy'
 import { CreateBookCopyRepository } from '../../protocols/book_copies/create-book-copy.repository'
-
 import { LoadUserByIdRepository } from '../../protocols/users/load-user-by-id.repository'
 import { LoadBookByCodeRepository } from '../../protocols/books/load-book-by-code.repository'
-import { BookCopyCodeGenerator } from '@/domain/usecases/book_copies/book-copy-code-generator'
+import { BookCopyCodeGenerator } from '../../../domain/usecases/book_copies/book-copy-code-generator'
 
 export class DbRegisterBookCopy implements RegisterBookCopy {
   constructor (
@@ -19,6 +18,8 @@ export class DbRegisterBookCopy implements RegisterBookCopy {
     const bookExists = await this._loadBookByCodeRepository.loadByCode(book_code)
     const userExists = await this._loadUserByIdRepository.loadById(created_by)
 
+    console.log(bookExists)
+    console.log(userExists)
     if (bookExists && userExists && userExists.admin) {
       const prefix = bookExists.code.split('-')[0]
       const copyCode = await this._bookCopyCodeGenerator.generate(prefix)

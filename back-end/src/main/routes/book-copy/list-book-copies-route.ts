@@ -1,7 +1,7 @@
 import { Router } from 'express'
-import { auth } from '../../infra/middlewares/auth'
-import { makeListBookCopiesController } from '../factories/book_copies/make-list-book-copies-controller'
-import { makeListBookCopyDetailsController } from '../factories/book_copies/make-list-book-copies-details-controller'
+import { auth } from '../../../infra/middlewares/auth'
+import { makeListBookCopiesController } from '../../factories/book_copies/make-list-book-copies-controller'
+import { makeListBookCopyDetailsController } from '../../factories/book_copies/make-list-book-copies-details-controller'
 
 export default (router: Router): void => {
   router.get('/book-copy/:book_code', auth, async (req, res) => makeListBookCopiesController(req, res))
