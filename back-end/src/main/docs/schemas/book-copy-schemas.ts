@@ -116,3 +116,22 @@ export const listBookCopyDetailsResponseSchema = {
     }
   }
 }
+
+export const borrowBookCopyRequestSchema = {
+  type: 'object',
+  properties: {
+    bookId: {
+      type: 'string'
+    },
+    copyId: {
+      type: 'string'
+    },
+    userId: {
+      type: 'string'
+    }
+  }
+}
+
+export const borrowBookCopyResponseSchema = {
+  type: 'object'
+}

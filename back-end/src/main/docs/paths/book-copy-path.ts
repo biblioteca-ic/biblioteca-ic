@@ -147,3 +147,42 @@ export const listBookCopyDetailsPath = {
     }
   }
 }
+
+export const borrowBookCopyPath = {
+  post: {
+    tags: ['BookCopy'],
+    summary: 'Empréstimo de uma cópia de um livro',
+    security: [{ apiKeyAuth: [] }],
+    requestBody: {
+      content: {
+        'application/json': {
+          schema: {
+            $ref: '#/schemas/borrowBookCopyRequest'
+          }
+        }
+      },
+      required: true
+    },
+    responses: {
+      204: {
+        description: 'Sucesso',
+        content: {
+          'application/json': {
+            schema: {
+              $ref: '#/schemas/borrowBookCopyResponse'
+            }
+          }
+        }
+      },
+      401: {
+        description: 'Unauthorized'
+      },
+      403: {
+        description: 'Forbidden'
+      },
+      500: {
+        description: 'ServerError'
+      }
+    }
+  }
+}
