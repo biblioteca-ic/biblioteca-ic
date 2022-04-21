@@ -1,4 +1,4 @@
-enum BookStatus {
+export enum BookStatus {
   AVAILABLE,
   RENTED,
   LOST
