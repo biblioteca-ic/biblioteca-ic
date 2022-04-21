@@ -135,3 +135,17 @@ export const borrowBookCopyRequestSchema = {
 export const borrowBookCopyResponseSchema = {
   type: 'object'
 }
+
+
+export const giveBackBookCopyRequestSchema = {
+  type: 'object',
+  properties: {
+    copyId: {
+      type: 'string'
+    }
+  }
+}
+
+export const giveBackBookCopyResponseSchema = {
+  type: 'object'
+}

@@ -11,8 +11,9 @@ import { ListBookCopiesRepository } from '../../data/protocols/book_copies/load-
 import { LoadCopiesByUserIdRepository } from '@/data/protocols/book_copies/load-copies-by-user-id.repository'
 import { BorrowCopyRepository } from '@/data/protocols/book_copies/borrow-copy.repository'
 import { CopyStatus } from '@prisma/client'
+import { GiveBackCopyRepository } from '../../data/protocols/book_copies/give-back-copy.repository'
 
-export class BookCopyPrismaRepository implements CreateBookCopyRepository, FindLastBookCopyCodeInsertedRepository, LoadBookCopyByIdRepository, DeleteBookCopyRepository, LoadRentedCopiesByUserIdRepository, LoadRentedCopiesByBookIdRepository, ListBookCopiesRepository, LoadCopiesByUserIdRepository, BorrowCopyRepository {
+export class BookCopyPrismaRepository implements CreateBookCopyRepository, FindLastBookCopyCodeInsertedRepository, LoadBookCopyByIdRepository, DeleteBookCopyRepository, LoadRentedCopiesByUserIdRepository, LoadRentedCopiesByBookIdRepository, ListBookCopiesRepository, LoadCopiesByUserIdRepository, BorrowCopyRepository, GiveBackCopyRepository {
   async load (id: string): Promise<BookCopyModel[]> {
     const copies = await PrismaHelper.client.book_Copy.findMany({
       where: {
@@ -103,6 +104,20 @@ export class BookCopyPrismaRepository implements CreateBookCopyRepository, FindL
         located_by: data.locatedBy,
         devolution_date: data.devolutionDate,
         status: CopyStatus.RENTED
+      }
+    })
+  }
+
+  async giveBackCopy (copyId: string): Promise<void> {
+    await PrismaHelper.client.book_Copy.update({
+      where: {
+        id: copyId
+      },
+      data: {
+        status: CopyStatus.AVAILABLE,
+        located_by: null,
+        lease_date: null,
+        devolution_date: null
       }
     })
   }
