@@ -1,7 +1,7 @@
-import { deleteBookCopyPath, registerBookCopyPath, listBookCopiesPath, listBookCopyDetailsPath } from './paths/book-copy-path'
+import { deleteBookCopyPath, registerBookCopyPath, listBookCopiesPath, listBookCopyDetailsPath, borrowBookCopyPath } from './paths/book-copy-path'
 import { deleteBookPath, listBooksPath, registerBookPath, updateBookPath } from './paths/book-path'
 import { changeAdminPath, changePasswordPath, createUserPath, deleteUserPath, editUserPath, listUsersPath, loginPath } from './paths/user-paths'
-import { registerBookCopyRequestSchema, registerBookCopyResponseSchema, listBookCopyDetailsResponseSchema, listBookCopiesResponseSchema } from './schemas/book-copy-schemas'
+import { registerBookCopyRequestSchema, registerBookCopyResponseSchema, listBookCopyDetailsResponseSchema, listBookCopiesResponseSchema, borrowBookCopyRequestSchema, borrowBookCopyResponseSchema } from './schemas/book-copy-schemas'
 import { listBooksResponseSchema, registerBookRequestSchema, registerBookResponseSchema, updateBookRequestSchema, updateBookResponseSchema } from './schemas/book-schemas'
 import { changeAdminRequestSchema, changeAdminResponseSchema, changePasswordRequestSchema, changePasswordResponseSchema, createUserRequestSchema, createUserResponseSchema, deleteUserResponseSchema, editUserRequestSchema, editUserResponseSchema, listUsersResponseSchema, loginRequestSchema, loginResponseSchema } from './schemas/user-schemas'
 
@@ -45,7 +45,8 @@ export default {
     '/book-copy': registerBookCopyPath,
     '/book-copy/{book_id}': deleteBookCopyPath,
     'book-copy/{book_code}': listBookCopiesPath,
-    'book-copy/details/{book_copy_id}': listBookCopyDetailsPath
+    'book-copy/details/{book_copy_id}': listBookCopyDetailsPath,
+    'book-copy/borrow': borrowBookCopyPath
   },
   schemas: {
     loginRequest: loginRequestSchema,
@@ -68,7 +69,9 @@ export default {
     registerBookCopyRequest: registerBookCopyRequestSchema,
     registerBookCopyResponse: registerBookCopyResponseSchema,
     listBookCopiesResponseSchema: listBookCopiesResponseSchema,
-    listBookCopyDetailsResponseSchema: listBookCopyDetailsResponseSchema
+    listBookCopyDetailsResponseSchema: listBookCopyDetailsResponseSchema,
+    borrowBookCopyRequestSchema: borrowBookCopyRequestSchema,
+    borrowBookCopyResponseSchema: borrowBookCopyResponseSchema
   },
   components: {
     securitySchemes: {
