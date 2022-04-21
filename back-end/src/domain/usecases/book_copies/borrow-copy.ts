@@ -9,9 +9,3 @@ export namespace BorrowCopy {
 		bookId: string
 	}
 }
-
-
-/**
- * Buscar historico do usuario (verificar se tem pendencias)
- * 
- */

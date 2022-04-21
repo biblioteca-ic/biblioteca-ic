@@ -16,6 +16,7 @@ import deleteBookRoute from './routes/delete-book-route'
 import updateBookRoute from './routes/update-book-route'
 import listBookCopiesRoute from './routes/book-copy/list-book-copies-route'
 import borrowBookCopyRoute from './routes/book-copy/borrow-book-copy-route'
+import giveBackBookCopyRoute from './routes/book-copy/give-back-book-copy-route'
 
 const app = express()
 
@@ -51,6 +52,7 @@ deleteBookCopyRoute(router)
 registerBookCopyRoute(router)
 listBookCopiesRoute(router)
 borrowBookCopyRoute(router)
+giveBackBookCopyRoute(router)
 
 app.listen(3333, () => {
   console.log('listening at http://localhost:3333')

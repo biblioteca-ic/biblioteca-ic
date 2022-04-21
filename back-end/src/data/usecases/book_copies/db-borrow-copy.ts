@@ -13,7 +13,6 @@ export class DbBorrowCopy implements BorrowCopy {
     const { userId, copyId, bookId } = params
     const copies = await this._loadCopiesByUserIdRepository.load(userId)
     const error = CheckUserPendencies.check(copies, bookId)
-    console.error(error)
     if (!error) {
       const devolutionDate = new Date()
       devolutionDate.setDate(devolutionDate.getDate() + 7)

@@ -92,7 +92,7 @@ export const listBookCopiesPath = {
         content: {
           'application/json': {
             schema: {
-              $ref: '#/schemas/listBookCopiesResponseSchema'
+              $ref: '#/schemas/listBookCopiesResponse'
             }
           }
         }
@@ -130,7 +130,7 @@ export const listBookCopyDetailsPath = {
         content: {
           'application/json': {
             schema: {
-              $ref: '#/schemas/listBookCopyDetailsResponseSchema'
+              $ref: '#/schemas/listBookCopyDetailsResponse'
             }
           }
         }
@@ -170,6 +170,46 @@ export const borrowBookCopyPath = {
           'application/json': {
             schema: {
               $ref: '#/schemas/borrowBookCopyResponse'
+            }
+          }
+        }
+      },
+      401: {
+        description: 'Unauthorized'
+      },
+      403: {
+        description: 'Forbidden'
+      },
+      500: {
+        description: 'ServerError'
+      }
+    }
+  }
+}
+
+
+export const giveBackBookCopyPath = {
+  post: {
+    tags: ['BookCopy'],
+    summary: 'Devolução de uma cópia de um livro',
+    security: [{ apiKeyAuth: [] }],
+    requestBody: {
+      content: {
+        'application/json': {
+          schema: {
+            $ref: '#/schemas/giveBackBookCopyRequest'
+          }
+        }
+      },
+      required: true
+    },
+    responses: {
+      204: {
+        description: 'Sucesso',
+        content: {
+          'application/json': {
+            schema: {
+              $ref: '#/schemas/giveBackBookCopyResponse'
             }
           }
         }
