@@ -3,6 +3,7 @@ import {
   IconButton,
   Tr,
   Link,
+  Box,
   Td,
   AlertDialogBody,
   AlertDialog,
@@ -27,6 +28,8 @@ import { BsInfoCircle, BsTrashFill } from 'react-icons/bs';
 import { CopyBookType } from '../../../types/Book';
 import { CopyBookDetails } from '../../../components/CopyBookDetails';
 import { COPY_BOOK } from '../../../constants';
+import { UsersList } from '../../Users';
+
 
 export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
   // const history = useHistory();
@@ -39,17 +42,19 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
   const [isOpenToViewInfo, setIsOpenToViewInfo] = useState(false);
   const onCloseToViewInfo = () => setIsOpenToViewInfo(false);
 
-  const clickToRemove = () => {
-    setIsOpenToRemove(true);
-  };
+  const [isOpenToRentCopy, setIsOpenToRentCopy] = useState(false);
+  const onCloseToRentCopy = () => setIsOpenToRentCopy(false);
 
-  const clickToViewInfo = () => {
-    setIsOpenToViewInfo(true);
-  };
+  const clickToRemove = () => setIsOpenToRemove(true);
 
-  const checkIfCanRemoveCopy = () => {
-    // Usuário só pode deletar uma cópia disponível.
-    return copyBook.status === COPY_BOOK.AVALIABLE.value;
+  const clickToViewInfo = () => setIsOpenToViewInfo(true);
+
+  const clickToRentCopy = () => setIsOpenToRentCopy(true);
+
+  const checkIfCanRemoveOrRentCopy = () => {
+    // Usuário só pode deletar ou emprestar uma cópia disponível.
+   
+    return copyBook.status === COPY_BOOK.AVAILABLE.value;
   };
 
   const removeCopy = async () => {
@@ -90,11 +95,12 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
         </Td>
         <Td>
           <Link display="block" href={`users/show/${copyBook.id}`}>
-            {copyBook.statusToString}
+          {COPY_BOOK[copyBook.status].label}
           </Link>
         </Td>
         <Td>
-          <>
+          <Box display="flex" justifyContent="space-between">
+          <Box>
             <IconButton
               variant="outline"
               colorScheme="blue"
@@ -103,17 +109,25 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
               onClick={clickToViewInfo}
               icon={<BsInfoCircle />}
             />
-            {checkIfCanRemoveCopy() && (
+            {checkIfCanRemoveOrRentCopy() && (
               <IconButton
                 variant="outline"
                 colorScheme="red"
+                mr={2}
                 aria-label="Remover cópia"
                 onClick={clickToRemove}
                 icon={<BsTrashFill />}
               />
             )}
-          </>
+            </Box>
+            {checkIfCanRemoveOrRentCopy() && (
+            <Button colorScheme="teal" variant="outline" onClick={clickToRentCopy}>
+                Emprestar
+            </Button>         
+            )}
+          </Box>          
         </Td>
+    
       </Tr>
 
       <AlertDialog isOpen={isOpenToRemove} leastDestructiveRef={cancelRefToRemove} onClose={onCloseToRemove}>
@@ -138,13 +152,31 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
           </AlertDialogContent>
         </AlertDialogOverlay>
       </AlertDialog>
-      <Modal isOpen={isOpenToViewInfo} onClose={onCloseToViewInfo}>
+      
+      <Modal isOpen={isOpenToViewInfo} onClose={onCloseToViewInfo} >
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Informações da cópia {copyBook.code}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <CopyBookDetails copyBook={copyBook} />
+          </ModalBody>
+
+          <ModalFooter>
+            <Button onClick={onCloseToViewInfo}>Fechar</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+      
+      <Modal isOpen={isOpenToRentCopy} onClose={onCloseToRentCopy} >
+        <ModalOverlay />
+        <ModalContent  >
+          <ModalHeader>Emprestar cópia {copyBook.code}</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody >
+            <Box h={540} maxH='90%' background=''>
+              <UsersList />
+            </Box>
           </ModalBody>
 
           <ModalFooter>
