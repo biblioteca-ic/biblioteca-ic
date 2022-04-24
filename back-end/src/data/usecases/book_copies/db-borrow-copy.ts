@@ -15,7 +15,7 @@ export class DbBorrowCopy implements BorrowCopy {
     const error = CheckUserPendencies.check(copies, bookId)
     if (!error) {
       const devolutionDate = new Date()
-      devolutionDate.setDate(devolutionDate.getDate() + 7)
+      devolutionDate.setDate(devolutionDate.getDate() + 7) // HACK: Use GenerateNewDevolutionDate to create new date
       await this._borrowCopyRepository
         .borrow(copyId, { locatedBy: userId, devolutionDate })
       return null
