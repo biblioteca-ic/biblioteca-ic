@@ -2,7 +2,7 @@ import { BookCopyModel } from '../../../domain/models/book_copy'
 import { BadRequestError } from '../../../presentation/errors/bad-request-error'
 
 export class CheckUserPendencies {
-  static check (copies: BookCopyModel[], bookId: string): Error {
+  static check (copies: BookCopyModel[], bookId: string): Error|void {
     if (copies.length > 0) {
       try {
         if (copies.length > 2) throw new BadRequestError('You cannot borrow more than 3 books')
@@ -19,7 +19,7 @@ export class CheckUserPendencies {
           }
         })
       } catch (error) {
-        return error
+        return error as Error
       }
     }
   }
