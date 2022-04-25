@@ -89,7 +89,7 @@ if [ $# -gt 0 ]; then
             shift 2
 
             if [ "$EXEC" == "yes" ]; then
-                docker-compose exec -w /app "$INSTANCE" npm run test
+                docker-compose exec -w /app "$INSTANCE" npm run test "$@"
             else
                 eco_is_not_running
             fi
