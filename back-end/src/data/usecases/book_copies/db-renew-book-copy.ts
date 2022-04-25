@@ -6,8 +6,6 @@ import { CheckRenewBookCopyPermission } from "./check-renew-book-copy-permission
 import { GenerateNewDevolutionDate } from "./generate-new-devolution-date";
 
 export class DbRenewBookCopy implements RenewBookCopy {
-  public readonly return_period = 21
-
   constructor (
     private readonly _findBookCopyById: FindBookCopyById,
     private readonly _renewCopyRepository: RenewCopyRepository

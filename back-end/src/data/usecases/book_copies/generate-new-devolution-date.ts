@@ -1,5 +1,5 @@
 export class GenerateNewDevolutionDate {
-  async generate(current: Date, lease?: Date): Promise<Date> {
+  async generate(current: Date = new Date(), lease: Date = new Date()): Promise<Date> {
     // TODO: Calculate new devolution date picking new_devolution value and adding to current date
     // TODO: Calculate devolution limit date adding devolution_limit value to lease date
     // TODO: If new devolution date is higher than devolution limit, return devolution limit
