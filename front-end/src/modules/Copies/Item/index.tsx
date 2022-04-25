@@ -28,7 +28,9 @@ import { BsInfoCircle, BsTrashFill } from 'react-icons/bs';
 import { CopyBookType } from '../../../types/Book';
 import { CopyBookDetails } from '../../../components/CopyBookDetails';
 import { COPY_BOOK } from '../../../constants';
-import { UsersList } from '../../Users';
+import UserList from '../../../components/UserList';
+import { useHistory } from 'react-router-dom';
+import { api } from '../../../services/api';
 
 
 export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
@@ -84,6 +86,18 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
       });
     }
   };
+
+  const history = useHistory();
+
+  const handleSelectUser = async (userId: string) => {
+    const data = {
+      bookId: copyBook.book_id,
+      copyId: copyBook.id,
+      userId: userId,
+    }
+    console.log("Data:",data)
+    await api.post("/api/book-copy/borrow", data)
+  }
 
   return (
     <>
@@ -175,7 +189,7 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
           <ModalCloseButton />
           <ModalBody >
             <Box h={540} maxH='90%' background=''>
-              <UsersList />
+              <UserList onUserSelected={handleSelectUser}/>
             </Box>
           </ModalBody>
 

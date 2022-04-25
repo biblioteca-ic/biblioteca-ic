@@ -75,6 +75,7 @@ const CopiesList = ({ book }: { book: BookType }) => {
         const newCopie = copies.filter(copyFilter => {
           return (
             copyFilter?.id?.toLowerCase().includes(value.toLowerCase()) ||
+            copyFilter?.book_id.toLowerCase().includes(value.toLocaleLowerCase()) || 
             copyFilter?.statusToString?.toLowerCase().includes(value.toLowerCase()) ||
             copyFilter?.code?.toLowerCase().includes(value.toLowerCase())
           );
