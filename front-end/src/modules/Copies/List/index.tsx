@@ -31,7 +31,7 @@ import { CopiesBookItem } from '..';
 import { COPY_BOOK } from '../../../constants';
 
 interface CopyTypeSearch extends CopyBookType {
-  statusToString?: string;
+  statusToString?: string;  
 }
 
 const CopiesList = ({ book }: { book: BookType }) => {
@@ -55,8 +55,10 @@ const CopiesList = ({ book }: { book: BookType }) => {
       const { data: response } = await api.get(`/api/book-copy/${book.code}`);
 
       // const data = copiesMock.map(copyData => ({ ...copyData, statusToString: COPY_BOOK[copyData.status].label }));
-      const booksCopyResponse = response.body;
-      console.log('Cópias:',booksCopyResponse)
+      const booksCopyResponse = response.body.map(function (item: any) {
+        return ({...item, bookTitle: book.title})
+      });
+      console.log('Cópias:', booksCopyResponse)
       setCopies(booksCopyResponse);
       setCopiesSearch(booksCopyResponse);
     } catch (err) {

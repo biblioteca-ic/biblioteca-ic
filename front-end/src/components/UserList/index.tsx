@@ -128,7 +128,7 @@ const UserList: React.FC<UserListProps> = (props) => {
               <Tbody>
                 {usersSearch.map(userFilter => {
                   return (
-                    <Tr key={userFilter.id} onClick={() => onUserSelected(userFilter.id)} cursor="pointer" _hover={{background: "#ebebeb"}}>
+                    <Tr key={userFilter.id} onClick={() => onUserSelected({userId: userFilter.id, name: userFilter.name})} cursor="pointer" _hover={{background: "#ebebeb"}}>
                       <Td>
                         <p>
                           {userFilter.name}

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   IconButton,
   Tr,
@@ -26,6 +26,8 @@ import { AxiosError } from 'axios';
 import { BsInfoCircle, BsTrashFill } from 'react-icons/bs';
 // import { api } from '../../../services/api';
 import { CopyBookType } from '../../../types/Book';
+import { UserType } from '../../../types/User';
+import { UserListReturn } from '../../../types/UserListReturn';
 import { CopyBookDetails } from '../../../components/CopyBookDetails';
 import { COPY_BOOK } from '../../../constants';
 import UserList from '../../../components/UserList';
@@ -37,6 +39,8 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
   // const history = useHistory();
   const toast = useToast();
 
+  const [user, setUser] = useState<UserListReturn>();
+
   const [isOpenToRemove, setIsOpenToRemove] = useState(false);
   const onCloseToRemove = () => setIsOpenToRemove(false);
   const cancelRefToRemove = useRef<HTMLButtonElement>(null);
@@ -46,6 +50,10 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
 
   const [isOpenToRentCopy, setIsOpenToRentCopy] = useState(false);
   const onCloseToRentCopy = () => setIsOpenToRentCopy(false);
+
+  const [isOpenToConfirmRent, setIsOpenToConfirmRent] = useState(false);
+  const onCloseToConfirmRent = () => setIsOpenToConfirmRent(false);
+  const cancelRefToRent = useRef<HTMLButtonElement>(null);
 
   const clickToRemove = () => setIsOpenToRemove(true);
 
@@ -58,6 +66,8 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
    
     return copyBook.status === COPY_BOOK.AVAILABLE.value;
   };
+
+  useEffect(() => {console.log("o nome do livro recebido foi", copyBook)}, [])
 
   const removeCopy = async () => {
     try {
@@ -89,14 +99,26 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
 
   const history = useHistory();
 
-  const handleSelectUser = async (userId: string) => {
+  const handleSelectUser = async (userReturn: UserListReturn) => {
+    setIsOpenToConfirmRent(true);   
+
+    /* await api.get(`/api/users/${userId}`).then((res) => {
+      console.log("Attemp to rent to user:", res.data);
+      setUser(res.data);
+    }) */
+
+    console.log('user return', userReturn)
+    setUser(userReturn);    
+  }
+
+  const rentCopy = async () => {
     const data = {
       bookId: copyBook.book_id,
       copyId: copyBook.id,
-      userId: userId,
+      userId: user?.userId,
     }
     console.log("Data:",data)
-    await api.post("/api/book-copy/borrow", data)
+    // await api.post("/api/book-copy/borrow", data)
   }
 
   return (
@@ -190,11 +212,34 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
           <ModalBody >
             <Box h={540} maxH='90%' background=''>
               <UserList onUserSelected={handleSelectUser}/>
+
+              <AlertDialog isOpen={isOpenToConfirmRent} leastDestructiveRef={cancelRefToRent} onClose={onCloseToConfirmRent}>
+              <AlertDialogOverlay>
+                <AlertDialogContent>
+                  <AlertDialogHeader fontSize="lg" fontWeight="bold">
+                    Confirmar Empréstimo de Cópia
+                  </AlertDialogHeader>
+
+                  <AlertDialogBody>
+                    Confirmar empréstimo de cópia <strong>&quot;{copyBook.code}&quot;</strong> do livro <strong>&quot;{copyBook.bookTitle}&quot;</strong> ao aluno <strong>&quot;{user?.name}&quot;</strong>? 
+                  </AlertDialogBody>
+
+                  <AlertDialogFooter>
+                    <Button colorScheme="green" onClick={rentCopy}>
+                      Confirmar
+                    </Button>
+                    <Button ref={cancelRefToRent} onClick={onCloseToConfirmRent} ml={3}>
+                      Cancelar
+                    </Button>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialogOverlay>
+            </AlertDialog>
             </Box>
           </ModalBody>
 
           <ModalFooter>
-            <Button onClick={onCloseToViewInfo}>Fechar</Button>
+            <Button onClick={onCloseToRentCopy}>Fechar</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
