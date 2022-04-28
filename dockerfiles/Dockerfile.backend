@@ -4,6 +4,6 @@ WORKDIR /app
 
 ADD back-end .
 
-RUN sudo npm install -g yarn && yarn
+RUN npm install -g yarn && yarn
 
 CMD ["yarn", "start"]
