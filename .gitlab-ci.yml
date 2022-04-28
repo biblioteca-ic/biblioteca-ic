@@ -12,7 +12,7 @@ build_backend:
     - docker build -t $IMAGE_TAG . -f dockerfiles/Dockerfile.api
     - docker push $IMAGE_TAG
   tags:
-    - ci-backend
+    - ci
   only:
     - dev
 
@@ -25,7 +25,7 @@ build_frontend:
     - docker build -t $IMAGE_TAG . -f dockerfiles/Dockerfile.api
     - docker push $IMAGE_TAG
   tags:
-    - ci-frontend
+    - ci
   only:
     - dev
   
@@ -39,6 +39,6 @@ delivery:
       - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
       - docker-compose -f docker-compose.yml -f docker.production.yml up -d
   tags:
-    - service
+    - ci
   only:
     - dev
