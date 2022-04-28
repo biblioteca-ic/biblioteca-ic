@@ -33,11 +33,11 @@ delivery:
   stage: delivery
   variables:
     IMAGE_TAG: $CI_COMMIT_SHORT_RSA
-    script:
-      - cd /app
-      - envsubst < "docker.production.template.yml" > "docker.production.yml"
-      - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-      - docker-compose -f docker-compose.yml -f docker.production.yml up -d
+  script:
+    - cd /app
+    - envsubst < "docker.production.template.yml" > "docker.production.yml"
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker-compose -f docker-compose.yml -f docker.production.yml up -d
   tags:
     - ci
   only:
