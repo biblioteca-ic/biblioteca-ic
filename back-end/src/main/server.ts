@@ -17,20 +17,22 @@ import updateBookRoute from './routes/update-book-route'
 import listBookCopiesRoute from './routes/book-copy/list-book-copies-route'
 import borrowBookCopyRoute from './routes/book-copy/borrow-book-copy-route'
 import giveBackBookCopyRoute from './routes/book-copy/give-back-book-copy-route'
-
+import cors from 'cors'
 const app = express()
 
-export const cors = (_: Request, res: Response, next: NextFunction): void => {
-  res.set('access-control-allow-origin', '*')
-  res.set('access-control-allow-headers', '*')
-  res.set('access-control-allow-methods', '*')
-  next()
-}
-
+// export const cors = (_: Request, res: Response, next: NextFunction): void => {
+//   res.set('access-control-allow-origin', '*')
+//   res.set('access-control-allow-headers', '*')
+//   res.set('access-control-allow-methods', '*')
+//   next()
+// }
+app.use(cors({
+  origin: 'https://dominio.com.br'
+}))
 app.use('/api-docs', serve, setup(swaggerConfig))
 
 app.use(express.json())
-app.use(cors)
+// app.use(cors)
 
 const router = Router()
 app.use('/api', router)
