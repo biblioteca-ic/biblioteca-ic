@@ -1,0 +1,7 @@
+version: "3.6"
+
+services:
+        backend:
+                image: registry.gitlab.com/brunog21/biblioteca-ic/backend:${IMAGE_TAG}
+        frontend:
+                image: registry.gitlab.com/brunog21/biblioteca-ic/frontend:${IMAGE_TAG}
