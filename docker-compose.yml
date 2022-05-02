@@ -15,6 +15,11 @@ services:
     ports:
       - '${POSTGRES_PORT:-5432}:5432'
     environment:
+      BACKEND_URL: '${BACKEND_URL}'
+      BACKEND_PORT: '${BACKEND_PORT}'
+      BACKEND_DEBUG_PORT: '${BACKEND_DEBUG_PORT}'
+
+      FRONTEND_PORT: '${FRONTEND_PORT}'
       POSTGRES_DB: '${POSTGRES_DB}'
       POSTGRES_USER: '${POSTGRES_USER}'
       POSTGRES_PASSWORD: '${POSTGRES_PASSWORD}'
@@ -22,3 +27,21 @@ services:
       - ecopostgres:/var/lib/postgresql/data
     networks:
       - eco
+
+
+  frontend:
+    image: infra103/biblioteca-ic/frontend
+    ports:
+      - '3000:3000'
+    environment:
+      REACT_APP_BASE_URL_API: '${REACT_APP_BASE_URL_API}'
+      
+  backend:
+    image: infra103/biblioteca-ic/backend
+    environment:
+      PORT: '${PORT}'
+      DATABASE_URL: '${DATABASE_URL}'
+      SECRET_KEY: '${SECRET_KEY}'
+    ports:
+      - '${PORT}:${PORT}'
+
