@@ -32,7 +32,7 @@ build_frontend:
 delivery:
   stage: delivery
   variables:
-    IMAGE_TAG: $CI_COMMIT_SHORT_RSA
+    IMAGE_TAG: $CI_COMMIT_SHORT_SHA
   script:
     - export IMAGE_TAG=$IMAGE_TAG
     - echo test
