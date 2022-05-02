@@ -34,6 +34,8 @@ delivery:
   variables:
     IMAGE_TAG: $CI_COMMIT_SHORT_RSA
   script:
+    - echo test
+    - echo $IMAGE_TAG
     - cd /app
     - envsubst < "docker.production.template.yml" > "docker.production.yml"
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
