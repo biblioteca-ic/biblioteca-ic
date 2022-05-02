@@ -8,32 +8,6 @@ volumes:
     driver: local
     
 services:
-  frontend:
-    image: brunog21/biblioteca-ic/frontend
-    ports:
-      - '${FRONTEND_PORT:-3000}:3000'
-    environment:
-      - NODE_ENV=development
-      - REACT_APP_BASE_URL_API=${BACKEND_URL}
-    networks:
-      - eco
-    depends_on:
-      - backend
-
-  backend:
-    image: brunog21/biblioteca-ic/backend
-    ports:
-      - '${BACKEND_PORT:-3333}:3333'
-      - '${BACKEND_DEBUG_PORT:-9229}:9229'
-    environment:
-      - NODE_ENV=development
-      - PORT=${BACKEND_PORT}
-      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:${POSTGRES_PORT}/${POSTGRES_DB}?schema=public
-      - SECRET_KEY=${SECRET_KEY}
-    networks:
-      - eco
-    depends_on:
-      - postgres
 
   postgres:
     image: postgres:alpine
