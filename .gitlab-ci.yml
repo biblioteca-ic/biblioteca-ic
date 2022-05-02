@@ -34,6 +34,7 @@ delivery:
   variables:
     IMAGE_TAG: $CI_COMMIT_SHORT_RSA
   script:
+    - export IMAGE_TAG=$IMAGE_TAG
     - echo test
     - echo $IMAGE_TAG
     - cd /app
