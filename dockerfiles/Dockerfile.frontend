@@ -4,6 +4,6 @@ WORKDIR /app
 
 ADD front-end .
 
-RUN npm install -g yarn && yarn
+RUN npm install
 
-CMD ["yarn", "start"]
+CMD ["npm", "start"]
