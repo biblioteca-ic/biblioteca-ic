@@ -33,8 +33,9 @@ services:
     image: infra103/biblioteca-ic/frontend
     environment:
       REACT_APP_BASE_URL_API: '${REACT_APP_BASE_URL_API}'
+    command: echo test && echo $REACT_APP_BASE_URL_API
     ports:
-      - '${FRONTEND_PORT}:80'
+      - '80:80'
       
   backend:
     image: infra103/biblioteca-ic/backend

@@ -6,4 +6,6 @@ ADD back-end .
 
 RUN npm install
 
-CMD ["npm", "start"]
+RUN chmod +x ./entrypoint.sh
+
+CMD ["./entrypoint.sh"]
