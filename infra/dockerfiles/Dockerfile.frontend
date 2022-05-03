@@ -4,7 +4,8 @@ WORKDIR /app
 
 ADD front-end .
 
-RUN npm install && npm run build
+RUN npm install
+RUN npm run build
 
 # production environment
 FROM nginx:1.16.0-alpine
