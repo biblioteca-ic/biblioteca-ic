@@ -118,7 +118,13 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
       userId: user?.userId,
     }
     console.log("Data:",data)
-    // await api.post("/api/book-copy/borrow", data)
+    await api.post("/api/book-copy/borrow", data)
+    
+    onCloseToRentCopy();
+
+    setTimeout(() => {
+      window.location.reload();
+    }, 1400);
   }
 
   return (
