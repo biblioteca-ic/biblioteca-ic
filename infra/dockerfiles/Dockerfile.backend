@@ -6,6 +6,4 @@ ADD back-end .
 
 RUN npm install
 
-RUN echo n | npx prisma migrate dev
-
 CMD ["npm", "start"]
