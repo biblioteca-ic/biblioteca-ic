@@ -31,17 +31,17 @@ services:
 
   frontend:
     image: infra103/biblioteca-ic/frontend
-    ports:
-      - '3000:3000'
     environment:
       REACT_APP_BASE_URL_API: '${REACT_APP_BASE_URL_API}'
+    ports:
+      - '${FRONTEND_PORT}:${FRONTEND_PORT}'
       
   backend:
     image: infra103/biblioteca-ic/backend
     environment:
-      PORT: '${PORT}'
+      PORT: '${BACKEND_PORT}'
       DATABASE_URL: '${DATABASE_URL}'
       SECRET_KEY: '${SECRET_KEY}'
     ports:
-      - '${PORT}:${PORT}'
+      - '${BACKEND_PORT}:${BACKEND_PORT}'
 
