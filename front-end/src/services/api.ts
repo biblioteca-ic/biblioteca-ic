@@ -1,6 +1,8 @@
 import axios from 'axios';
 import { getToken } from './auth';
 
+console.log("A .env eh", process.env.REACT_APP_BASE_URL_API)
+
 const api = axios.create({
   baseURL: process.env.REACT_APP_BASE_URL_API,
 });
