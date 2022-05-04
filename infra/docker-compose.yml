@@ -31,8 +31,9 @@ services:
 
   frontend:
     image: infra103/biblioteca-ic/frontend
-    environment:
-      REACT_APP_BASE_URL_API: '${REACT_APP_BASE_URL_API}'
+    build:
+      args:
+        REACT_APP_BASE_URL_API: ${REACT_APP_BASE_URL_API}
     ports:
       - '80:80'
       
