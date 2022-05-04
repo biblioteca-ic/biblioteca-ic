@@ -52,7 +52,7 @@ const CopiesList = ({ book }: { book: BookType }) => {
   const getAllCopies = async () => {
     try {
       console.log(`Req: /book-copy/${book.code}`)
-      const { data: response } = await api.get(`/api/book-copy/${book.code}`);
+      const { data: response } = await api.get(`api/book-copy/${book.code}`);
 
       // const data = copiesMock.map(copyData => ({ ...copyData, statusToString: COPY_BOOK[copyData.status].label }));
       const booksCopyResponse = response.body.map(function (item: any) {

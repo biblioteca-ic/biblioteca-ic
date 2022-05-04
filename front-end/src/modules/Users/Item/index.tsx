@@ -193,7 +193,7 @@ const UserItemPage = () => {
   const getUserData = async () => {
     setIsLoading(true);
     try {
-      const { data: response } = await api.get('/api/users');
+      const { data: response } = await api.get('api/users');
 
       const userResponse: UserType = response.body?.find((currentUser: UserType) => currentUser.id === id);
 

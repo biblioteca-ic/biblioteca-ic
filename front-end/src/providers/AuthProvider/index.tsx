@@ -38,7 +38,7 @@ const AuthProvider: React.FC = ({ children }) => {
   });
 
   const signIn = useCallback(async ({ cpf, password }) => {
-    const { data: responseLogin } = await api.post('/api/login', {
+    const { data: responseLogin } = await api.post('api/login', {
       cpf,
       password,
     });

@@ -46,7 +46,7 @@ const UserList: React.FC<UserListProps> = (props) => {
   const getAllUsers = async () => {
     setIsLoading(true);
     try {
-      const { data: response } = await api.get('/api/users');
+      const { data: response } = await api.get('api/users');
 
       const usersResponse = response.body
         ?.map((userData: UserType) => (userData.admin ? { ...userData, adminToString: 'admin' } : userData))

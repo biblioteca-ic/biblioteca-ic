@@ -74,7 +74,7 @@ const ChangePassword = () => {
     try {
       const { oldPassword, newPassword, confirmPassword } = data;
 
-      await api.patch(`/api/users/${user.id}/password`, {
+      await api.patch(`api/users/${user.id}/password`, {
         oldPassword,
         newPassword,
         newPasswordConfirmation: confirmPassword,

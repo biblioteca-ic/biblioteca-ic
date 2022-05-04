@@ -48,7 +48,7 @@ const EditProfile = () => {
     try {
       const { name, email, registrationNumber } = data;
 
-      const { data: updatedUser } = await api.patch(`/api/users/${user.id}`, {
+      const { data: updatedUser } = await api.patch(`api/users/${user.id}`, {
         name,
         email,
         registrationNumber,

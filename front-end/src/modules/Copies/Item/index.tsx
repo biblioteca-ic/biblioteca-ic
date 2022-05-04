@@ -102,7 +102,7 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
   const handleSelectUser = async (userReturn: UserListReturn) => {
     setIsOpenToConfirmRent(true);   
 
-    /* await api.get(`/api/users/${userId}`).then((res) => {
+    /* await api.get(`api/users/${userId}`).then((res) => {
       console.log("Attemp to rent to user:", res.data);
       setUser(res.data);
     }) */
@@ -118,7 +118,7 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
       userId: user?.userId,
     }
     console.log("Data:",data)
-    await api.post("/api/book-copy/borrow", data)
+    await api.post("api/book-copy/borrow", data)
     
     onCloseToRentCopy();
 
