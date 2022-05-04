@@ -42,6 +42,7 @@ CREATE TABLE "book_copies" (
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "status" "CopyStatus" NOT NULL DEFAULT E'AVAILABLE',
     "lease_date" TIMESTAMP(3),
+    "devolution_date" TIMESTAMP(3),
     "located_by" TEXT,
     "created_by" TEXT NOT NULL,
 
@@ -57,13 +58,20 @@ CREATE TABLE "view_books" (
     "publishing_house" TEXT NOT NULL,
     "authors" TEXT[],
     "categories" TEXT[],
-    "status" TEXT NOT NULL,
+    "status" "BookStatus" NOT NULL,
     "created_by" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL,
     "copies" INTEGER NOT NULL,
     "borrowed_copies" INTEGER NOT NULL,
     "lost_copies" INTEGER NOT NULL,
     "available_copies" INTEGER NOT NULL
+);
+
+-- CreateTable
+CREATE TABLE "view_rented_copies" (
+    "user_id" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "book_id" TEXT NOT NULL
 );
 
 -- CreateIndex
@@ -83,6 +91,9 @@ CREATE UNIQUE INDEX "view_books_id_key" ON "view_books"("id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "view_books_code_key" ON "view_books"("code");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "view_rented_copies_book_id_key" ON "view_rented_copies"("book_id");
 
 -- AddForeignKey
 ALTER TABLE "books" ADD CONSTRAINT "books_created_by_fkey" FOREIGN KEY ("created_by") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

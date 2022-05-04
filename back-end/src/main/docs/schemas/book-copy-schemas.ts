@@ -39,3 +39,113 @@ export const registerBookCopyResponseSchema = {
     }
   }
 }
+
+export const listBookCopiesRequestSchema = {
+
+}
+
+export const listBookCopiesResponseSchema = {
+  type: 'object',
+  properties: {
+    id: {
+      type: 'string'
+    },
+    code: {
+      type: 'string'
+    },
+    book_id: {
+      type: 'string'
+    },
+    lease_date: {
+      type: 'string',
+    },
+    createdBy: {
+      type: 'string'
+    },
+    createdAt: {
+      type: 'string'
+    },
+    status: {
+      type: 'string'
+    },
+    located_by: {
+      type: 'string'
+    }
+  }
+}
+
+export const listBookCopyDetailsRequestSchema = {
+
+}
+
+export const listBookCopyDetailsResponseSchema = {
+  type: 'object',
+  properties: {
+    id: {
+      type: 'string'
+    },
+    code: {
+      type: 'string'
+    },
+    book_id: {
+      type: 'string'
+    },
+    lease_date: {
+      type: 'string',
+    },
+    createdBy: {
+      type: 'string'
+    },
+    createdAt: {
+      type: 'string'
+    },
+    status: {
+      type: 'string'
+    },
+    located_by: {
+      type: 'string'
+    },
+    user_rented: {
+      id: 'string',
+      name: 'string',
+      email: 'string',
+      cpf: 'number',
+      registration_number: 'number',
+      admin: 'boolean',
+      active: 'boolean'
+    }
+  }
+}
+
+export const borrowBookCopyRequestSchema = {
+  type: 'object',
+  properties: {
+    bookId: {
+      type: 'string'
+    },
+    copyId: {
+      type: 'string'
+    },
+    userId: {
+      type: 'string'
+    }
+  }
+}
+
+export const borrowBookCopyResponseSchema = {
+  type: 'object'
+}
+
+
+export const giveBackBookCopyRequestSchema = {
+  type: 'object',
+  properties: {
+    copyId: {
+      type: 'string'
+    }
+  }
+}
+
+export const giveBackBookCopyResponseSchema = {
+  type: 'object'
+}

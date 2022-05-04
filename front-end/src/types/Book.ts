@@ -18,6 +18,8 @@ export interface BookType {
 
 export interface CopyBookType {
   id: string;
+  book_id: string;
+  bookTitle: string;
   status: string;
   statusToString?: string;
   createdAt: string;

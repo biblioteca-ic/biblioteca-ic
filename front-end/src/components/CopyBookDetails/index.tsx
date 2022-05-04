@@ -52,7 +52,7 @@ export const CopyBookDetails = ({ copyBook }: { copyBook: CopyBookType }) => (
         </Box>
       </>
     )}
-    {copyBook.status === COPY_BOOK.AVALIABLE.value && (
+    {copyBook.status === COPY_BOOK.AVAILABLE.value && (
       <>
         <Box mt={2} textAlign="left">
           <Text fontSize="18px">A cópia está disponível para aluguel.</Text>

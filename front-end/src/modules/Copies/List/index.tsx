@@ -31,7 +31,7 @@ import { CopiesBookItem } from '..';
 import { COPY_BOOK } from '../../../constants';
 
 interface CopyTypeSearch extends CopyBookType {
-  statusToString?: string;
+  statusToString?: string;  
 }
 
 const CopiesList = ({ book }: { book: BookType }) => {
@@ -51,11 +51,16 @@ const CopiesList = ({ book }: { book: BookType }) => {
 
   const getAllCopies = async () => {
     try {
-      // const { data: response } = await api.get('/users');
+      console.log(`Req: /book-copy/${book.code}`)
+      const { data: response } = await api.get(`/api/book-copy/${book.code}`);
 
-      const data = copiesMock.map(copyData => ({ ...copyData, statusToString: COPY_BOOK[copyData.status].label }));
-      setCopies(data);
-      setCopiesSearch(data);
+      // const data = copiesMock.map(copyData => ({ ...copyData, statusToString: COPY_BOOK[copyData.status].label }));
+      const booksCopyResponse = response.body.map(function (item: any) {
+        return ({...item, bookTitle: book.title})
+      });
+      console.log('Cópias:', booksCopyResponse)
+      setCopies(booksCopyResponse);
+      setCopiesSearch(booksCopyResponse);
     } catch (err) {
       console.error(err);
     }
@@ -72,6 +77,7 @@ const CopiesList = ({ book }: { book: BookType }) => {
         const newCopie = copies.filter(copyFilter => {
           return (
             copyFilter?.id?.toLowerCase().includes(value.toLowerCase()) ||
+            copyFilter?.book_id.toLowerCase().includes(value.toLocaleLowerCase()) || 
             copyFilter?.statusToString?.toLowerCase().includes(value.toLowerCase()) ||
             copyFilter?.code?.toLowerCase().includes(value.toLowerCase())
           );
@@ -148,6 +154,7 @@ const CopiesList = ({ book }: { book: BookType }) => {
             </Thead>
             <Tbody>
               {copiesSearch.map((copyFilter: CopyBookType) => {
+                console.log('Cópias:',copiesSearch)
                 return <CopiesBookItem key={copyFilter.id} copyBook={copyFilter} />;
               })}
             </Tbody>
@@ -167,7 +174,7 @@ const CopiesList = ({ book }: { book: BookType }) => {
             </AlertDialogHeader>
 
             <AlertDialogBody>
-              Tem certeza que deseja criar uma nova cópia do livr <strong>&quot;{book.title}&quot;</strong>?
+              Tem certeza que deseja criar uma nova cópia do livro <strong>&quot;{book.title}&quot;</strong>?
             </AlertDialogBody>
 
             <AlertDialogFooter>

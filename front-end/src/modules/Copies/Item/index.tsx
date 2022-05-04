@@ -1,8 +1,9 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   IconButton,
   Tr,
   Link,
+  Box,
   Td,
   AlertDialogBody,
   AlertDialog,
@@ -25,12 +26,20 @@ import { AxiosError } from 'axios';
 import { BsInfoCircle, BsTrashFill } from 'react-icons/bs';
 // import { api } from '../../../services/api';
 import { CopyBookType } from '../../../types/Book';
+import { UserType } from '../../../types/User';
+import { UserListReturn } from '../../../types/UserListReturn';
 import { CopyBookDetails } from '../../../components/CopyBookDetails';
 import { COPY_BOOK } from '../../../constants';
+import UserList from '../../../components/UserList';
+import { useHistory } from 'react-router-dom';
+import { api } from '../../../services/api';
+
 
 export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
   // const history = useHistory();
   const toast = useToast();
+
+  const [user, setUser] = useState<UserListReturn>();
 
   const [isOpenToRemove, setIsOpenToRemove] = useState(false);
   const onCloseToRemove = () => setIsOpenToRemove(false);
@@ -39,18 +48,26 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
   const [isOpenToViewInfo, setIsOpenToViewInfo] = useState(false);
   const onCloseToViewInfo = () => setIsOpenToViewInfo(false);
 
-  const clickToRemove = () => {
-    setIsOpenToRemove(true);
+  const [isOpenToRentCopy, setIsOpenToRentCopy] = useState(false);
+  const onCloseToRentCopy = () => setIsOpenToRentCopy(false);
+
+  const [isOpenToConfirmRent, setIsOpenToConfirmRent] = useState(false);
+  const onCloseToConfirmRent = () => setIsOpenToConfirmRent(false);
+  const cancelRefToRent = useRef<HTMLButtonElement>(null);
+
+  const clickToRemove = () => setIsOpenToRemove(true);
+
+  const clickToViewInfo = () => setIsOpenToViewInfo(true);
+
+  const clickToRentCopy = () => setIsOpenToRentCopy(true);
+
+  const checkIfCanRemoveOrRentCopy = () => {
+    // Usuário só pode deletar ou emprestar uma cópia disponível.
+   
+    return copyBook.status === COPY_BOOK.AVAILABLE.value;
   };
 
-  const clickToViewInfo = () => {
-    setIsOpenToViewInfo(true);
-  };
-
-  const checkIfCanRemoveCopy = () => {
-    // Usuário só pode deletar uma cópia disponível.
-    return copyBook.status === COPY_BOOK.AVALIABLE.value;
-  };
+  useEffect(() => {console.log("o nome do livro recebido foi", copyBook)}, [])
 
   const removeCopy = async () => {
     try {
@@ -80,6 +97,36 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
     }
   };
 
+  const history = useHistory();
+
+  const handleSelectUser = async (userReturn: UserListReturn) => {
+    setIsOpenToConfirmRent(true);   
+
+    /* await api.get(`/api/users/${userId}`).then((res) => {
+      console.log("Attemp to rent to user:", res.data);
+      setUser(res.data);
+    }) */
+
+    console.log('user return', userReturn)
+    setUser(userReturn);    
+  }
+
+  const rentCopy = async () => {
+    const data = {
+      bookId: copyBook.book_id,
+      copyId: copyBook.id,
+      userId: user?.userId,
+    }
+    console.log("Data:",data)
+    await api.post("/api/book-copy/borrow", data)
+    
+    onCloseToRentCopy();
+
+    setTimeout(() => {
+      window.location.reload();
+    }, 1400);
+  }
+
   return (
     <>
       <Tr key={copyBook.id}>
@@ -90,11 +137,12 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
         </Td>
         <Td>
           <Link display="block" href={`users/show/${copyBook.id}`}>
-            {copyBook.statusToString}
+          {COPY_BOOK[copyBook.status].label}
           </Link>
         </Td>
         <Td>
-          <>
+          <Box display="flex" justifyContent="space-between">
+          <Box>
             <IconButton
               variant="outline"
               colorScheme="blue"
@@ -103,17 +151,25 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
               onClick={clickToViewInfo}
               icon={<BsInfoCircle />}
             />
-            {checkIfCanRemoveCopy() && (
+            {checkIfCanRemoveOrRentCopy() && (
               <IconButton
                 variant="outline"
                 colorScheme="red"
+                mr={2}
                 aria-label="Remover cópia"
                 onClick={clickToRemove}
                 icon={<BsTrashFill />}
               />
             )}
-          </>
+            </Box>
+            {checkIfCanRemoveOrRentCopy() && (
+            <Button colorScheme="teal" variant="outline" onClick={clickToRentCopy}>
+                Emprestar
+            </Button>         
+            )}
+          </Box>          
         </Td>
+    
       </Tr>
 
       <AlertDialog isOpen={isOpenToRemove} leastDestructiveRef={cancelRefToRemove} onClose={onCloseToRemove}>
@@ -138,7 +194,8 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
           </AlertDialogContent>
         </AlertDialogOverlay>
       </AlertDialog>
-      <Modal isOpen={isOpenToViewInfo} onClose={onCloseToViewInfo}>
+      
+      <Modal isOpen={isOpenToViewInfo} onClose={onCloseToViewInfo} >
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Informações da cópia {copyBook.code}</ModalHeader>
@@ -149,6 +206,46 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
 
           <ModalFooter>
             <Button onClick={onCloseToViewInfo}>Fechar</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+      
+      <Modal isOpen={isOpenToRentCopy} onClose={onCloseToRentCopy} >
+        <ModalOverlay />
+        <ModalContent  >
+          <ModalHeader>Emprestar cópia {copyBook.code}</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody >
+            <Box h={540} maxH='90%' background=''>
+              <UserList onUserSelected={handleSelectUser}/>
+
+              <AlertDialog isOpen={isOpenToConfirmRent} leastDestructiveRef={cancelRefToRent} onClose={onCloseToConfirmRent}>
+              <AlertDialogOverlay>
+                <AlertDialogContent>
+                  <AlertDialogHeader fontSize="lg" fontWeight="bold">
+                    Confirmar Empréstimo de Cópia
+                  </AlertDialogHeader>
+
+                  <AlertDialogBody>
+                    Confirmar empréstimo de cópia <strong>&quot;{copyBook.code}&quot;</strong> do livro <strong>&quot;{copyBook.bookTitle}&quot;</strong> ao aluno <strong>&quot;{user?.name}&quot;</strong>? 
+                  </AlertDialogBody>
+
+                  <AlertDialogFooter>
+                    <Button colorScheme="green" onClick={rentCopy}>
+                      Confirmar
+                    </Button>
+                    <Button ref={cancelRefToRent} onClick={onCloseToConfirmRent} ml={3}>
+                      Cancelar
+                    </Button>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialogOverlay>
+            </AlertDialog>
+            </Box>
+          </ModalBody>
+
+          <ModalFooter>
+            <Button onClick={onCloseToRentCopy}>Fechar</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

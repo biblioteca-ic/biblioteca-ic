@@ -7,8 +7,22 @@ import { RentedCopy } from '../../domain/models/rented-copy'
 import { PrismaHelper } from './prisma-helper'
 import { LoadRentedCopiesByUserIdRepository } from '../../data/protocols/book_copies/load-rented-copies-by-user-id.repository'
 import { LoadRentedCopiesByBookIdRepository } from '../../data/protocols/book_copies/load-rented-copies-by-book-id.repository'
+import { ListBookCopiesRepository } from '../../data/protocols/book_copies/load-book-copies.repository'
+import { LoadCopiesByUserIdRepository } from '@/data/protocols/book_copies/load-copies-by-user-id.repository'
+import { BorrowCopyRepository } from '@/data/protocols/book_copies/borrow-copy.repository'
+import { CopyStatus } from '@prisma/client'
+import { GiveBackCopyRepository } from '../../data/protocols/book_copies/give-back-copy.repository'
 
-export class BookCopyPrismaRepository implements CreateBookCopyRepository, FindLastBookCopyCodeInsertedRepository, LoadBookCopyByIdRepository, DeleteBookCopyRepository, LoadRentedCopiesByUserIdRepository, LoadRentedCopiesByBookIdRepository {
+export class BookCopyPrismaRepository implements CreateBookCopyRepository, FindLastBookCopyCodeInsertedRepository, LoadBookCopyByIdRepository, DeleteBookCopyRepository, LoadRentedCopiesByUserIdRepository, LoadRentedCopiesByBookIdRepository, ListBookCopiesRepository, LoadCopiesByUserIdRepository, BorrowCopyRepository, GiveBackCopyRepository {
+  async load (id: string): Promise<BookCopyModel[]> {
+    const copies = await PrismaHelper.client.book_Copy.findMany({
+      where: {
+        located_by: id
+      }
+    })
+    return copies && PrismaHelper.bookCopiesMapper(copies)
+  }
+
   async create (data: any): Promise<BookCopyModel> {
     const mappedBook = PrismaHelper.bookCopyDbMapper(data)
     const book = await PrismaHelper.client.book_Copy.create({
@@ -31,7 +45,24 @@ export class BookCopyPrismaRepository implements CreateBookCopyRepository, FindL
   }
 
   async loadById (id: string): Promise<BookCopyModel> {
-    const bookCopy = await PrismaHelper.client.book_Copy.findFirst({ where: { id } })
+    const bookCopy = await PrismaHelper.client.book_Copy.findFirst({
+      where: {
+        id
+      },
+      include: {
+        user_rented: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            cpf: true,
+            registration_number: true,
+            admin: true,
+            active: true
+          }
+        }
+      }
+    })
     return bookCopy && PrismaHelper.bookCopyMapper(bookCopy)
   }
 
@@ -51,5 +82,43 @@ export class BookCopyPrismaRepository implements CreateBookCopyRepository, FindL
       }
     })
     return copies && PrismaHelper.rentedCopiesMapper(copies)
+  }
+
+  async listAllByBookCode (book_code_prefix: string): Promise<BookCopyModel[]> {
+    const copies = await PrismaHelper.client.book_Copy.findMany({
+      where: {
+        code: {
+          contains: book_code_prefix
+        }
+      }
+    })
+
+    return copies && PrismaHelper.bookCopiesDtoMapper(copies)
+  }
+
+  async borrow (copyId: string, data: { locatedBy: string; devolutionDate: Date }): Promise<void> {
+    await PrismaHelper.client.book_Copy.update({
+      where: { id: copyId },
+      data: {
+        lease_date: new Date(),
+        located_by: data.locatedBy,
+        devolution_date: data.devolutionDate,
+        status: CopyStatus.RENTED
+      }
+    })
+  }
+
+  async giveBackCopy (copyId: string): Promise<void> {
+    await PrismaHelper.client.book_Copy.update({
+      where: {
+        id: copyId
+      },
+      data: {
+        status: CopyStatus.AVAILABLE,
+        located_by: null,
+        lease_date: null,
+        devolution_date: null
+      }
+    })
   }
 }
