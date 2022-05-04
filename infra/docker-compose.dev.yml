@@ -1,0 +1,47 @@
+version: "3.6"
+
+networks:
+  eco:
+    driver: bridge
+volumes:
+  ecopostgres:
+    driver: local
+    
+services:
+
+  postgres:
+    image: postgres:alpine
+    restart: always
+    ports:
+      - '${POSTGRES_PORT:-5432}:5432'
+    environment:
+      BACKEND_URL: '${BACKEND_URL}'
+      BACKEND_PORT: '${BACKEND_PORT}'
+      BACKEND_DEBUG_PORT: '${BACKEND_DEBUG_PORT}'
+
+      FRONTEND_PORT: '${FRONTEND_PORT}'
+      POSTGRES_DB: '${POSTGRES_DB}'
+      POSTGRES_USER: '${POSTGRES_USER}'
+      POSTGRES_PASSWORD: '${POSTGRES_PASSWORD}'
+    volumes:
+      - ecopostgres:/var/lib/postgresql/data
+    networks:
+      - eco
+
+
+  frontend:
+    image: frontend
+    environment:
+      REACT_APP_BASE_URL_API: '${REACT_APP_BASE_URL_API}'
+    ports:
+      - '80:80'
+      
+  backend:
+    image: backend
+    environment:
+      PORT: '${BACKEND_PORT}'
+      DATABASE_URL: '${DATABASE_URL}'
+      SECRET_KEY: '${SECRET_KEY}'
+    ports:
+      - '${BACKEND_PORT}:${BACKEND_PORT}'
+
