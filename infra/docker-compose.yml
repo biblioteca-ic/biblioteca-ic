@@ -30,14 +30,14 @@ services:
 
 
   frontend:
-    image: frontend
+    image: infra103/biblioteca-ic/frontend
     environment:
       REACT_APP_BASE_URL_API: '${REACT_APP_BASE_URL_API}'
     ports:
       - '80:80'
       
   backend:
-    image: backend
+    image: infra103/biblioteca-ic/backend
     environment:
       PORT: '${BACKEND_PORT}'
       DATABASE_URL: '${DATABASE_URL}'
