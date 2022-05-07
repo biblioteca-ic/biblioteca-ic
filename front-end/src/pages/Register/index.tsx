@@ -48,7 +48,7 @@ const schema = yup.object().shape({
       /^(?=.*)(?=.*[a-z])(?=.*[A-Z])(?=.*[$*.,&@#\W_-])[a-zA-Z$*&@#.,-_]{6,}$/,
       'A senha precisa ter no mínimo 6 caracteres, deve incluir letras maiúsculas e minúsculas e deve incluir pelo menos um caractere especial',
     ),
-  confirmPassword: yup
+  passwordConfirmation: yup
     .string()
     .required('Por favor, confirme sua senha')
     .oneOf([yup.ref('password'), null], 'Senhas não são iguais.'),
@@ -61,7 +61,7 @@ type RegisterFormInputs = {
   email: string;
   password: string;
   admin: boolean;
-  confirmPassword: string;
+  passwordConfirmation: string;
 };
 
 const Register = () => {
@@ -88,13 +88,14 @@ const Register = () => {
     // history.push('/dashboard');
     console.log({ data });
     try {
-      const { cpf, name, email, password, registrationNumber, admin } = data;
+      const { cpf, name, email, password, passwordConfirmation, registrationNumber, admin } = data;
 
-      await api.post('/signup', {
+      await api.post('api/users', {
         cpf: cpf.replaceAll('.', '').replace('-', ''),
         name,
         email,
         password,
+        passwordConfirmation,
         registrationNumber,
         admin,
       });
@@ -171,10 +172,10 @@ const Register = () => {
               {!!errors.password?.message && <FormErrorMessage>{errors.password?.message}</FormErrorMessage>}
             </FormControl>
 
-            <FormControl my={2} isInvalid={!!errors.confirmPassword?.message}>
+            <FormControl my={2} isInvalid={!!errors.passwordConfirmation?.message}>
               <InputGroup size="md" maxW={380}>
                 <Input
-                  {...register('confirmPassword')}
+                  {...register('passwordConfirmation')}
                   type={showConfirmPassword ? 'text' : 'password'}
                   placeholder="Confirmar senha"
                 />
@@ -196,8 +197,8 @@ const Register = () => {
                   )}
                 </InputRightElement>
               </InputGroup>
-              {!!errors.confirmPassword?.message && (
-                <FormErrorMessage>{errors.confirmPassword?.message}</FormErrorMessage>
+              {!!errors.passwordConfirmation?.message && (
+                <FormErrorMessage>{errors.passwordConfirmation?.message}</FormErrorMessage>
               )}
             </FormControl>
 
