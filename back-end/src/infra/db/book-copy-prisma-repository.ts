@@ -1,19 +1,21 @@
-import { DeleteBookCopyRepository } from '@/data/protocols/book_copies/delete-book-copy.repository'
-import { LoadBookCopyByIdRepository } from '@/data/protocols/book_copies/load-book-copy-by-id.repository'
+import { CopyStatus } from '@prisma/client'
+import { BorrowCopyRepository } from '../../data/protocols/book_copies/borrow-copy.repository'
 import { CreateBookCopyRepository } from '../../data/protocols/book_copies/create-book-copy.repository'
+import { DeleteBookCopyRepository } from '../../data/protocols/book_copies/delete-book-copy.repository'
 import { BookCopyCode, FindLastBookCopyCodeInsertedRepository } from '../../data/protocols/book_copies/find-last-book-copy-code-inserted.repository'
-import { BookCopyModel } from '../../domain/models/book_copy'
+import { GiveBackCopyRepository } from '../../data/protocols/book_copies/give-back-copy.repository'
+import { ListBookCopiesRepository } from '../../data/protocols/book_copies/load-book-copies.repository'
+import { LoadBookCopyByIdRepository } from '../../data/protocols/book_copies/load-book-copy-by-id.repository'
+import { LoadCopiesByUserIdRepository } from '../../data/protocols/book_copies/load-copies-by-user-id.repository'
+import { LoadRentedCopiesByBookIdRepository } from '../../data/protocols/book_copies/load-rented-copies-by-book-id.repository'
+import { LoadRentedCopiesByUserIdRepository } from '../../data/protocols/book_copies/load-rented-copies-by-user-id.repository'
+import { LoadRentedCopiesRepository } from '../../data/protocols/book_copies/load-rented-copies.repository'
+import { UpdateBookCopyStatusRepository } from '../../data/protocols/book_copies/update-book-copy.repository'
+import { BookCopyModel, BookCopyStatus } from '../../domain/models/book_copy'
 import { RentedCopy } from '../../domain/models/rented-copy'
 import { PrismaHelper } from './prisma-helper'
-import { LoadRentedCopiesByUserIdRepository } from '../../data/protocols/book_copies/load-rented-copies-by-user-id.repository'
-import { LoadRentedCopiesByBookIdRepository } from '../../data/protocols/book_copies/load-rented-copies-by-book-id.repository'
-import { ListBookCopiesRepository } from '../../data/protocols/book_copies/load-book-copies.repository'
-import { LoadCopiesByUserIdRepository } from '@/data/protocols/book_copies/load-copies-by-user-id.repository'
-import { BorrowCopyRepository } from '@/data/protocols/book_copies/borrow-copy.repository'
-import { CopyStatus } from '@prisma/client'
-import { GiveBackCopyRepository } from '../../data/protocols/book_copies/give-back-copy.repository'
 
-export class BookCopyPrismaRepository implements CreateBookCopyRepository, FindLastBookCopyCodeInsertedRepository, LoadBookCopyByIdRepository, DeleteBookCopyRepository, LoadRentedCopiesByUserIdRepository, LoadRentedCopiesByBookIdRepository, ListBookCopiesRepository, LoadCopiesByUserIdRepository, BorrowCopyRepository, GiveBackCopyRepository {
+export class BookCopyPrismaRepository implements CreateBookCopyRepository, FindLastBookCopyCodeInsertedRepository, LoadBookCopyByIdRepository, DeleteBookCopyRepository, LoadRentedCopiesByUserIdRepository, LoadRentedCopiesByBookIdRepository, ListBookCopiesRepository, LoadCopiesByUserIdRepository, BorrowCopyRepository, GiveBackCopyRepository, LoadRentedCopiesRepository, UpdateBookCopyStatusRepository {
   async load (id: string): Promise<BookCopyModel[]> {
     const copies = await PrismaHelper.client.book_Copy.findMany({
       where: {
@@ -118,6 +120,33 @@ export class BookCopyPrismaRepository implements CreateBookCopyRepository, FindL
         located_by: null,
         lease_date: null,
         devolution_date: null
+      }
+    })
+  }
+
+  async loadAll (): Promise<BookCopyModel[]> {
+    const copies = await PrismaHelper.client.book_Copy.findMany({ where: { status: CopyStatus.RENTED } })
+    return copies && PrismaHelper.bookCopiesMapper(copies)
+  }
+
+  async updateToMisplaced (copyId: string): Promise<void> {
+    await PrismaHelper.client.book_Copy.update({
+      where: {
+        id: copyId
+      },
+      data: {
+        status: CopyStatus.MISPLACED
+      }
+    })
+  }
+
+  async updateToLate (copyId: string): Promise<void> {
+    await PrismaHelper.client.book_Copy.update({
+      where: {
+        id: copyId
+      },
+      data: {
+        status: CopyStatus.LATE
       }
     })
   }

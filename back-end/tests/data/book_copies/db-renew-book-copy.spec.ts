@@ -5,7 +5,7 @@ import { BookCopyModel } from "../../../src/domain/models/book_copy"
 import { bookCopyModelMock } from "../../domain/mocks/bookCopy.mock"
 
 class FindBookCopyByIdStub implements FindBookCopyById {
-  async find(id: string): Promise<BookCopyModel|void> {
+  async find (id: string): Promise<BookCopyModel | void> {
     return Promise.resolve(bookCopyModelMock)
   }
 }

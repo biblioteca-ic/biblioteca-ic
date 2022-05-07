@@ -1,10 +1,10 @@
-import { BookCopyModel, BookStatus } from "../../../src/domain/models/book_copy";
+import { BookCopyModel, BookCopyStatus } from "../../../src/domain/models/book_copy";
 
 export const bookCopyModelMock: BookCopyModel = {
   id: "any_uuid",
   book_id: "any_uuid",
   code: "0000-000",
-  status: BookStatus.AVAILABLE,
+  status: BookCopyStatus.AVAILABLE,
   created_by: "any_uuid",
   located_by: "any-uuid",
   lease_date: new Date(),

@@ -1,14 +1,15 @@
-export enum BookStatus {
+export enum BookCopyStatus {
   AVAILABLE,
   RENTED,
-  LOST
+  MISPLACED,
+  LATE
 }
 
 export type BookCopyModel = {
   id: string
   book_id: string
   code: string
-  status: BookStatus
+  status: BookCopyStatus
   created_by: string
   located_by: string
   lease_date: Date
