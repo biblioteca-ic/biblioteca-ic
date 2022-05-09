@@ -8,9 +8,11 @@ export class ListUsersController implements Controller {
 
   async handle (request: ListUsersControllerRequest): Promise<HttpResponse> {
     try {
-      const { name, admin } = request
+      const { name, admin, id } = request
       let users: any
-      if (name) {
+      if (id) {
+        users = await this._listUsers.loadById(id)
+      } else if (name) {
         users = await this._listUsers.loadByName(name)
       } else if (admin !== undefined) {
         users = await this._listUsers.loadByAdmin(JSON.parse(admin))
@@ -20,12 +22,14 @@ export class ListUsersController implements Controller {
       if (!users || users.length < 1) return notFound()
       return ok(users)
     } catch (error) {
+      console.error(error)
       return serverError()
     }
   }
 }
 
 export type ListUsersControllerRequest = {
+  id?: string
   name?: string
   admin?: string
 }

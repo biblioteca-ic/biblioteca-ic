@@ -4,4 +4,5 @@ import { makeListUsersController } from '../factories/users/make-list-users-cont
 
 export default (router: Router): void => {
   router.get('/users', adminAuth, async (req, res) => makeListUsersController(req, res))
+  router.get('/users/:id', adminAuth, async (req, res) => makeListUsersController(req, res))
 }

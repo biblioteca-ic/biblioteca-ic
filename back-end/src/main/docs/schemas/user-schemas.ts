@@ -210,3 +210,24 @@ export const deleteUserResponseSchema = {
     }
   }
 }
+
+export const listUserByIdResponseSchema = {
+  type: 'object',
+  properties: {
+    name: {
+      type: 'string'
+    },
+    email: {
+      type: 'string'
+    },
+    cpf: {
+      type: 'string'
+    },
+    registrationNumber: {
+      type: 'string'
+    },
+    admin: {
+      type: 'boolean'
+    }
+  }
+}

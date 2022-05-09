@@ -6,7 +6,7 @@ import { ListUsersController } from '../../../presentation/controller/user/list-
 
 const makeListUsers = (): LoadUsers => {
   const userPrismaRepository = new UserPrismaRepository()
-  return new DbListUsers(userPrismaRepository, userPrismaRepository, userPrismaRepository)
+  return new DbListUsers(userPrismaRepository, userPrismaRepository, userPrismaRepository, userPrismaRepository)
 }
 
 export const makeListUsersController = async (req: Request, res: Response): Promise<any> => {

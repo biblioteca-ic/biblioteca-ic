@@ -18,8 +18,6 @@ export class DbRegisterBookCopy implements RegisterBookCopy {
     const bookExists = await this._loadBookByCodeRepository.loadByCode(book_code)
     const userExists = await this._loadUserByIdRepository.loadById(created_by)
 
-    console.log(bookExists)
-    console.log(userExists)
     if (bookExists && userExists && userExists.admin) {
       const prefix = bookExists.code.split('-')[0]
       const copyCode = await this._bookCopyCodeGenerator.generate(prefix)

@@ -1,9 +1,9 @@
 import { deleteBookCopyPath, registerBookCopyPath, listBookCopiesPath, listBookCopyDetailsPath, borrowBookCopyPath, giveBackBookCopyPath } from './paths/book-copy-path'
 import { deleteBookPath, listBooksPath, registerBookPath, updateBookPath } from './paths/book-path'
-import { changeAdminPath, changePasswordPath, createUserPath, deleteUserPath, editUserPath, listUsersPath, loginPath } from './paths/user-paths'
+import { changeAdminPath, changePasswordPath, createUserPath, deleteUserPath, editUserPath, listUserByIdPath, listUsersPath, loginPath } from './paths/user-paths'
 import { registerBookCopyRequestSchema, registerBookCopyResponseSchema, listBookCopyDetailsResponseSchema, listBookCopiesResponseSchema, borrowBookCopyRequestSchema, borrowBookCopyResponseSchema, giveBackBookCopyRequestSchema, giveBackBookCopyResponseSchema } from './schemas/book-copy-schemas'
 import { listBooksResponseSchema, registerBookRequestSchema, registerBookResponseSchema, updateBookRequestSchema, updateBookResponseSchema } from './schemas/book-schemas'
-import { changeAdminRequestSchema, changeAdminResponseSchema, changePasswordRequestSchema, changePasswordResponseSchema, createUserRequestSchema, createUserResponseSchema, deleteUserResponseSchema, editUserRequestSchema, editUserResponseSchema, listUsersResponseSchema, loginRequestSchema, loginResponseSchema } from './schemas/user-schemas'
+import { changeAdminRequestSchema, changeAdminResponseSchema, changePasswordRequestSchema, changePasswordResponseSchema, createUserRequestSchema, createUserResponseSchema, deleteUserResponseSchema, editUserRequestSchema, editUserResponseSchema, listUserByIdResponseSchema, listUsersResponseSchema, loginRequestSchema, loginResponseSchema } from './schemas/user-schemas'
 
 export default {
   openapi: '3.0.0',
@@ -30,6 +30,7 @@ export default {
     },
     '/users/{id}': {
       patch: editUserPath,
+      get: listUserByIdPath, // list user by id
       delete: deleteUserPath
     },
     '/users/{id}/password': changePasswordPath,
@@ -55,6 +56,7 @@ export default {
     createUserRequest: createUserRequestSchema,
     createUserResponse: createUserResponseSchema,
     listUsersResponse: listUsersResponseSchema,
+    listUserByIdResponse: listUserByIdResponseSchema,
     editUserRequest: editUserRequestSchema,
     editUserResponse: editUserResponseSchema,
     deleteUserResponse: deleteUserResponseSchema,

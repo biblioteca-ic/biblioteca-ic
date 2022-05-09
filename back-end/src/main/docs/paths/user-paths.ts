@@ -282,3 +282,39 @@ export const deleteUserPath = {
     }
   }
 }
+
+export const listUserByIdPath = {
+  tags: ['Users'],
+  summary: 'Listagem de usuário por id',
+  security: [{ apiKeyAuth: [] }],
+  parameters: [
+    {
+      name: 'id',
+      in: 'path',
+      description: 'Id do usuário',
+      required: false,
+      type: 'string'
+    }
+  ],
+  responses: {
+    200: {
+      description: 'Sucesso',
+      content: {
+        'application/json': {
+          schema: {
+            $ref: '#/schemas/listUserByIdResponse'
+          }
+        }
+      }
+    },
+    401: {
+      description: 'Unauthorized'
+    },
+    403: {
+      description: 'Forbidden'
+    },
+    500: {
+      description: 'ServerError'
+    }
+  }
+}
