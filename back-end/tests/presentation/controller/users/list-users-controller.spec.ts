@@ -10,14 +10,17 @@ type SutTypes = {
 }
 
 class LoadUsersStub implements LoadUsers {
-  async loadAll(): Promise<UserModelDto[]> {
-    return Promise.resolve([ mockUserModelDto ])
+  async loadAll (): Promise<UserModelDto[]> {
+    return Promise.resolve([mockUserModelDto])
   }
-  async loadByName(name: string): Promise<UserModelDto> {
+  async loadByName (name: string): Promise<UserModelDto> {
     return Promise.resolve(mockUserModelDto)
   }
-  async loadByAdmin(admin: boolean): Promise<UserModelDto[]> {
-    return Promise.resolve([ mockUserModelDto ])
+  async loadByAdmin (admin: boolean): Promise<UserModelDto[]> {
+    return Promise.resolve([mockUserModelDto])
+  }
+  async loadById (id: string): Promise<UserModelDto> {
+    return Promise.resolve(mockUserModelDto)
   }
 }
 
@@ -120,7 +123,7 @@ describe('LoginController', () => {
   test('should return ok on call loadAll correctly', async () => {
     const { sut } = makeSut()
     const result = await sut.handle({})
-    expect(result).toEqual(ok([ mockUserModelDto ]))
+    expect(result).toEqual(ok([mockUserModelDto]))
     expect(result.statusCode).toBe(200)
   })
   test('should return ok on call loadByName correctly', async () => {
@@ -132,10 +135,10 @@ describe('LoginController', () => {
   test('should return ok on call loadAll correctly', async () => {
     const { sut } = makeSut()
     const firstResult = await sut.handle({ admin: 'true' })
-    expect(firstResult).toEqual(ok([ mockUserModelDto ]))
+    expect(firstResult).toEqual(ok([mockUserModelDto]))
     expect(firstResult.statusCode).toBe(200)
     const secondResult = await sut.handle({ admin: 'false' })
-    expect(secondResult).toEqual(ok([ mockUserModelDto ]))
+    expect(secondResult).toEqual(ok([mockUserModelDto]))
     expect(secondResult.statusCode).toBe(200)
   })
 })

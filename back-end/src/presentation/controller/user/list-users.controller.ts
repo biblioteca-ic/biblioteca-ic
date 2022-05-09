@@ -22,7 +22,6 @@ export class ListUsersController implements Controller {
       if (!users || users.length < 1) return notFound()
       return ok(users)
     } catch (error) {
-      console.error(error)
       return serverError()
     }
   }

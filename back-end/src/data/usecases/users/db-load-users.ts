@@ -1,4 +1,5 @@
 import { LoadUserByIdRepository } from '@/data/protocols/users/load-user-by-id.repository'
+import { PrismaHelper } from '@/infra/db/prisma-helper'
 import { UserModel, UserModelDto } from '../../../domain/models/user'
 import { LoadUsers } from '../../../domain/usecases/users/load-users'
 import { LoadUserByNameRepository } from '../../protocols/users/load-user-by-name.repository'
@@ -28,8 +29,8 @@ export class DbListUsers implements LoadUsers {
     return users
   }
 
-  async loadById (id: string): Promise<UserModel> {
+  async loadById (id: string): Promise<UserModelDto> {
     const user = await this._loadUserByIdRepository.loadById(id)
-    return user
+    return user && PrismaHelper.userDtoMapper(user)
   }
 }
