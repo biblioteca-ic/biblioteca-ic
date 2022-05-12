@@ -4,7 +4,7 @@ import { BookCode, FindLastBookCodeInsertedRepository } from '../../data/protoco
 import { ListBooksRepository } from '../../data/protocols/books/list-books.repository'
 import { BookModel, BookModelDto } from '../../domain/models/book'
 import { PrismaHelper } from './prisma-helper'
-import { LoadBookByCodeRepository } from '@/data/protocols/books/load-book-by-code.repository'
+import { LoadBookByCodeRepository } from '../../data/protocols/books/load-book-by-code.repository'
 import { DeleteBookAndCopiesRepository } from '../../data/protocols/books/delete-book-and-copies.repository'
 import { UpdateBookRepository } from '../../data/protocols/books/update-book.repository'
 
