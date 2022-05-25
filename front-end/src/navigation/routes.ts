@@ -19,35 +19,35 @@ export const routes = [
   {
     path: '/register',
     component: Register,
-    private: false,
-    onlyAdmin: false,
+    private: true,
+    onlyAdmin: true,
   },
   {
     path: '/profile',
     component: ShowProfile,
-    private: false,
+    private: true,
   },
   {
     path: '/profile/edit',
     component: EditProfile,
-    private: false,
+    private: true,
   },
   {
     path: '/profile/edit/password',
     component: ChangePassword,
-    private: false,
+    private: true,
   },
   {
     path: '/users',
     component: UsersList,
-    private: false,
-    onlyAdmin: false,
+    private: true,
+    onlyAdmin: true,
   },
   {
     path: '/users/show/:id',
     component: UsersItemPage,
-    private: false,
-    onlyAdmin: false,
+    private: true,
+    onlyAdmin: true,
   },
   {
     path: '/books',
@@ -64,14 +64,14 @@ export const routes = [
   {
     path: '/books/new',
     component: NewEditBook,
-    private: false,
-    onlyAdmin: false,
+    private: true,
+    onlyAdmin: true,
   },
   {
     path: '/books/edit/:id',
     component: NewEditBook,
-    private: false,
-    onlyAdmin: false,
+    private: true,
+    onlyAdmin: true,
   },
   {
     path: '/books/show/:id',
