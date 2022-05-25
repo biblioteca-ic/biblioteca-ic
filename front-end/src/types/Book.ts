@@ -17,10 +17,11 @@ export interface BookType {
 }
 
 export interface CopyBookType {
+  title: string;
   id: string;
   book_id: string;
   bookTitle: string;
-  status: string;
+  status: { label: string; value: string };
   statusToString?: string;
   createdAt: string;
   code: string;

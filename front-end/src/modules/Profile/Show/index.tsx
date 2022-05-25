@@ -14,6 +14,11 @@ import {
   AlertDialogFooter,
   useToast,
   useMediaQuery,
+  Table,
+  Thead,
+  Tr,
+  Th,
+  Tbody,
 } from '@chakra-ui/react';
 import { BsTrashFill } from 'react-icons/bs';
 import { api } from '../../../services/api';
@@ -25,6 +30,8 @@ import { useAuth } from '../../../providers/AuthProvider';
 import { getUser } from '../../../services/auth';
 import { UserDetails } from '../../../components/UserDetails';
 import { UserType } from '../../../types/User';
+import ListCopies from './ListCopies';
+import { booksMock } from '../../../services/mocks';
 
 export const UserItem = ({ userData }: { userData: UserType | undefined }) => {
   const history = useHistory();
@@ -143,29 +150,30 @@ const Profile = () => {
                   </Button>
                 </Link>
               </Box>
+              {user.admin && (
+                <Box>
+                  <Heading as="h6" size="md" my={4}>
+                    Funções de Administrador
+                  </Heading>
+                  <Box mb={4}>
+                    <Link href="/users" textDecoration="none">
+                      <Button colorScheme="teal" leftIcon={<FaUserFriends />}>
+                        Ver usuários
+                      </Button>
+                    </Link>
+                  </Box>
+                  <Box>
+                    <Link href="/register" textDecoration="none">
+                      <Button colorScheme="teal" leftIcon={<FaUserPlus />}>
+                        Adicionar usuário
+                      </Button>
+                    </Link>
+                  </Box>
+                </Box>
+              )}
             </Box>
           </Box>
-          {user.admin && (
-            <Box>
-              <Heading as="h6" size="md" my={4}>
-                Funções de Administrador
-              </Heading>
-              <Box mb={4}>
-                <Link href="/users" textDecoration="none">
-                  <Button colorScheme="teal" leftIcon={<FaUserFriends />}>
-                    Ver usuários
-                  </Button>
-                </Link>
-              </Box>
-              <Box>
-                <Link href="/register" textDecoration="none">
-                  <Button colorScheme="teal" leftIcon={<FaUserPlus />}>
-                    Adicionar usuário
-                  </Button>
-                </Link>
-              </Box>
-            </Box>
-          )}
+          {true && <ListCopies book={booksMock} />}
         </Box>
       </Container>
     </Page>
