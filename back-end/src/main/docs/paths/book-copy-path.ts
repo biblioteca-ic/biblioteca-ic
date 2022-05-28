@@ -226,3 +226,42 @@ export const giveBackBookCopyPath = {
     }
   }
 }
+
+export const listRentedCopiesByUserIdPath = {
+  get: {
+    tags: ['BookCopy'],
+    summary: 'Lista cópias emprestadas por usuário',
+    security: [{ apiKeyAuth: [] }],
+    parameters: [{
+      in: 'path',
+      name: 'userId',
+      description: 'ID do usuário',
+      schema: {
+        type: 'string'
+      },
+      required: true
+    }],
+    responses: {
+      200: {
+        description: 'Sucesso',
+        content: {
+          'application/json': {
+            schema: {
+              $ref: '#/schemas/listRentedCopiesByUserIdResponse'
+            }
+          }
+        }
+      },
+      401: {
+        description: 'Unauthorized'
+      },
+      403: {
+        description: 'Forbidden'
+      },
+      500: {
+        description: 'ServerError'
+      }
+    }
+  }
+}
+

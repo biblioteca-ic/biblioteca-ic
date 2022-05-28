@@ -149,3 +149,48 @@ export const giveBackBookCopyRequestSchema = {
 export const giveBackBookCopyResponseSchema = {
   type: 'object'
 }
+
+
+export const listRentedCopiesByUserIdRequestSchema = {
+}
+
+
+export const listRentedCopiesByUserIdResponseSchema = {
+  type: 'object',
+  properties: {
+    copyCode: {
+      type: 'string'
+    },
+    title: {
+      type: 'string'
+    },
+    authors: {
+      type: {
+        array: {
+          type: 'string'
+        }
+      }
+    },
+    status: {
+      type: 'string',
+    },
+    leaseDate: {
+      type: 'string',
+    },
+    devolutionDate: {
+      type: 'string'
+    },
+    email: {
+      type: 'string'
+    },
+    userId: {
+      type: 'string'
+    },
+    copyId: {
+      type: 'string'
+    },
+    bookId: {
+      type: 'string'
+    }
+  }
+}

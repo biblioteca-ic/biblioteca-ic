@@ -20,6 +20,7 @@ import listUsersRoute from './routes/list-users-route'
 import loginRoute from './routes/login-route'
 import registerBookRoute from './routes/register-book-route'
 import updateBookRoute from './routes/update-book-route'
+import listRentedCopiesByUserIdRoute from './routes/book-copy/list-rented-copies-by-user-id-route'
 const app = express()
 
 app.use(cors())
@@ -48,6 +49,7 @@ registerBookCopyRoute(router)
 listBookCopiesRoute(router)
 borrowBookCopyRoute(router)
 giveBackBookCopyRoute(router)
+listRentedCopiesByUserIdRoute(router)
 
 app.listen(3333, () => {
   console.log('listening at http://localhost:3333')

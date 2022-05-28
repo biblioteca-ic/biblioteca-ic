@@ -95,9 +95,15 @@ model ViewBooks {
 }
 
 model ViewRentedCopies {
-  user_id String
-  email   String
-  book_id String @unique()
+  copy_code       String
+  title           String
+  authors         String[]
+  email           String
+  lease_date      DateTime
+  devolution_date DateTime
+  user_id         String
+  copy_id         String   @unique()
+  book_id         String   @unique()
 
   @@map("view_rented_copies")
 }

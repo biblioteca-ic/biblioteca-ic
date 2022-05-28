@@ -1,7 +1,7 @@
-import { deleteBookCopyPath, registerBookCopyPath, listBookCopiesPath, listBookCopyDetailsPath, borrowBookCopyPath, giveBackBookCopyPath } from './paths/book-copy-path'
+import { deleteBookCopyPath, registerBookCopyPath, listBookCopiesPath, listBookCopyDetailsPath, borrowBookCopyPath, giveBackBookCopyPath, listRentedCopiesByUserIdPath } from './paths/book-copy-path'
 import { deleteBookPath, listBooksPath, registerBookPath, updateBookPath } from './paths/book-path'
 import { changeAdminPath, changePasswordPath, createUserPath, deleteUserPath, editUserPath, listUserByIdPath, listUsersPath, loginPath } from './paths/user-paths'
-import { registerBookCopyRequestSchema, registerBookCopyResponseSchema, listBookCopyDetailsResponseSchema, listBookCopiesResponseSchema, borrowBookCopyRequestSchema, borrowBookCopyResponseSchema, giveBackBookCopyRequestSchema, giveBackBookCopyResponseSchema } from './schemas/book-copy-schemas'
+import { registerBookCopyRequestSchema, registerBookCopyResponseSchema, listBookCopyDetailsResponseSchema, listBookCopiesResponseSchema, borrowBookCopyRequestSchema, borrowBookCopyResponseSchema, giveBackBookCopyRequestSchema, giveBackBookCopyResponseSchema, listRentedCopiesByUserIdResponseSchema } from './schemas/book-copy-schemas'
 import { listBooksResponseSchema, registerBookRequestSchema, registerBookResponseSchema, updateBookRequestSchema, updateBookResponseSchema } from './schemas/book-schemas'
 import { changeAdminRequestSchema, changeAdminResponseSchema, changePasswordRequestSchema, changePasswordResponseSchema, createUserRequestSchema, createUserResponseSchema, deleteUserResponseSchema, editUserRequestSchema, editUserResponseSchema, listUserByIdResponseSchema, listUsersResponseSchema, loginRequestSchema, loginResponseSchema } from './schemas/user-schemas'
 
@@ -48,7 +48,8 @@ export default {
     '/book-copy/{book_code}': listBookCopiesPath,
     '/book-copy/details/{book_copy_id}': listBookCopyDetailsPath,
     '/book-copy/borrow': borrowBookCopyPath,
-    '/book-copy/give-back': giveBackBookCopyPath
+    '/book-copy/give-back': giveBackBookCopyPath,
+    '/rented-copies/{userId}': listRentedCopiesByUserIdPath
   },
   schemas: {
     loginRequest: loginRequestSchema,
@@ -76,7 +77,8 @@ export default {
     borrowBookCopyRequest: borrowBookCopyRequestSchema,
     borrowBookCopyResponse: borrowBookCopyResponseSchema,
     giveBackBookCopyRequest: giveBackBookCopyRequestSchema,
-    giveBackBookCopyResponse: giveBackBookCopyResponseSchema
+    giveBackBookCopyResponse: giveBackBookCopyResponseSchema,
+    listRentedCopiesByUserIdResponse: listRentedCopiesByUserIdResponseSchema
   },
   components: {
     securitySchemes: {
