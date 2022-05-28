@@ -68,6 +68,7 @@ export const copiesMock = [
     createdAt: '2022',
     rentedBy: usersMock[0],
     rentedAt: '01-03-2022',
-    status: COPY_BOOK.AVALIABLE.value,
+    book_id: 1,
+    status: COPY_BOOK.AVAILABLE,
   },
 ];

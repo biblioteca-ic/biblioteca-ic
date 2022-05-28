@@ -85,7 +85,7 @@ const BooksList = () => {
             <Heading color="teal" textAlign="center" mr={2}>
               Livros
             </Heading>
-            {user && (
+            {user?.admin && (
               <Button
                 leftIcon={<AddIcon />}
                 onClick={() => history.push('/books/new')}
@@ -148,11 +148,13 @@ const BooksList = () => {
         ) : (
           <>
             <Text>Não há livros cadastrados</Text>
-            <Link href="/books/new" textDecoration="none">
-              <Button colorScheme="teal" leftIcon={<FaUserPlus />}>
-                Cadastrar livro
-              </Button>
-            </Link>
+            {user?.admin && (
+              <Link href="/books/new" textDecoration="none">
+                <Button colorScheme="teal" leftIcon={<FaUserPlus />}>
+                  Cadastrar livro
+                </Button>
+              </Link>
+            )}
           </>
         )}
       </Box>
