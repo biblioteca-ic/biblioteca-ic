@@ -52,17 +52,12 @@ const CopiesList = ({ book }: { book: BookType }) => {
   const getAllCopies = async () => {
     try {
       console.log(`Req: /book-copy/${book.code}`);
-      // const { data: response } = await api.get(`api/book-copy/${book.code}`);
-
+      
       // const booksCopyResponse = copiesMock.map(copyData => ({
       //   ...copyData,
       //   // statusToString: COPY_BOOK[copyData.status].label,
       // }));
-      const booksCopyResponse = copiesMock.map(function (item: any) {
-        console.log('status list', item.status.label);
-        return { ...item, bookTitle: book.title, statusToString: item.status.label };
-      });
-      console.log('Cópias:', booksCopyResponse);
+      const { data: { body: booksCopyResponse } } = await api.get(`api/book-copy/${book.code}`);
       setCopies(booksCopyResponse);
       setCopiesSearch(booksCopyResponse);
     } catch (err) {

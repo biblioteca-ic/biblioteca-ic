@@ -68,14 +68,14 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
 
   const checkIfCanRemoveOrRentCopy = () => {
     // Usuário só pode deletar ou emprestar uma cópia disponível.
-
-    return copyBook.status.value === COPY_BOOK.AVAILABLE.value;
+    console.log('ewmprestar', copyBook.status, COPY_BOOK.AVAILABLE.value, copyBook.status === COPY_BOOK.AVAILABLE.value);
+    return copyBook.status === COPY_BOOK.AVAILABLE.value;
   };
 
   const checkIfCanBackCopy = () => {
     // Usuário só pode deletar ou emprestar uma cópia disponível.
-
-    return copyBook.status.value === COPY_BOOK.RENTED.value;
+    console.log('devolução', copyBook.status, COPY_BOOK.RENTED.value, copyBook.status === COPY_BOOK.RENTED.value);
+    return copyBook.status === COPY_BOOK.RENTED.value;
   };
 
   useEffect(() => {
@@ -167,7 +167,7 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
         </Td>
         <Td>
           <Link display="block" href={`books/show/${copyBook.id}`}>
-            {copyBook.status.label}
+            {copyBook.status}
           </Link>
         </Td>
         <Td>
@@ -197,7 +197,7 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
                 Emprestar
               </Button>
             )}
-            {!checkIfCanBackCopy() && (
+            {checkIfCanBackCopy() && (
               <Button colorScheme="blue" variant="outline" onClick={clickToBackCopy}>
                 Fazer devolução
               </Button>
@@ -288,8 +288,7 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
                     </AlertDialogHeader>
 
                     <AlertDialogBody>
-                      Confirmar empréstimo de cópia <strong>&quot;{copyBook.code}&quot;</strong> do livro{' '}
-                      <strong>&quot;{copyBook.bookTitle}&quot;</strong> ao aluno{' '}
+                      Confirmar empréstimo de cópia <strong>&quot;{copyBook.code}&quot;</strong> ao aluno{' '}
                       <strong>&quot;{user?.name}&quot;</strong>?
                     </AlertDialogBody>
 
