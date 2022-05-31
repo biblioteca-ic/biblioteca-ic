@@ -10,7 +10,7 @@ const Page = ({ children }: Props) => {
   const [isLargerThan768] = useMediaQuery('(max-width: 768px)');
 
   return (
-    <div style={{ margin: 'auto', maxWidth: 1440 }}>
+    <div style={{ margin: 'auto' }}>
       <NavBar />
       <div style={{ paddingTop: !isLargerThan768 ? 'initial' : '4.5rem' }}>{children}</div>
     </div>
