@@ -166,7 +166,7 @@ const Register = () => {
     }
   }, [id]);
 
-  console.log(getValues())
+  // console.log(getValues())
 
   const { user } = useAuth();
 
@@ -190,7 +190,7 @@ const Register = () => {
         categories: categoriesData.map(category => category.label),
         createdBy: id ? currentBook?.createdBy : user.id,
       };
-      console.log(formattedData)
+      // console.log(formattedData)
       if (id) {
         const { data: responseSuccess } = await api.patch(`api/books/${id}`, { id, ...formattedData });
         toast({

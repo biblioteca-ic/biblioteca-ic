@@ -86,7 +86,7 @@ const Register = () => {
     // colocar type/interface
     // verificar credenciais e redirecionar para a dashboard
     // history.push('/dashboard');
-    console.log({ data });
+    // console.log({ data });
     try {
       const { cpf, name, email, password, passwordConfirmation, registrationNumber, admin } = data;
 

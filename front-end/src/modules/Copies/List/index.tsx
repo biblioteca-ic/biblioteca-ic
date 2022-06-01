@@ -51,7 +51,7 @@ const CopiesList = ({ book }: { book: BookType }) => {
 
   const getAllCopies = async () => {
     try {
-      console.log(`Req: /book-copy/${book.code}`);
+      // console.log(`Req: /book-copy/${book.code}`);
       
       // const booksCopyResponse = copiesMock.map(copyData => ({
       //   ...copyData,
@@ -153,7 +153,7 @@ const CopiesList = ({ book }: { book: BookType }) => {
             </Thead>
             <Tbody>
               {copiesSearch.map((copyFilter: CopyBookType) => {
-                console.log('Cópias:', copiesSearch);
+                // console.log('Cópias:', copiesSearch);
                 return <CopiesBookItem key={copyFilter.id} copyBook={copyFilter} />;
               })}
             </Tbody>

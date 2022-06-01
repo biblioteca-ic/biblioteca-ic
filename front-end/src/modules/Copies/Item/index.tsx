@@ -34,6 +34,20 @@ import UserList from '../../../components/UserList';
 import { useHistory } from 'react-router-dom';
 import { api } from '../../../services/api';
 
+interface UserRentedCopiesInterface {
+  copyCode: string,
+  title: string,
+  authors: string[],
+  status: string,
+  leaseDate: string,
+  devolutionDate: string,
+  email: string,
+  userId: string,
+  copyId: string,
+  bookId: string
+
+}
+
 export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
   // const history = useHistory();
   const toast = useToast();
@@ -68,18 +82,18 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
 
   const checkIfCanRemoveOrRentCopy = () => {
     // Usuário só pode deletar ou emprestar uma cópia disponível.
-    console.log('ewmprestar', copyBook.status, COPY_BOOK.AVAILABLE.value, copyBook.status === COPY_BOOK.AVAILABLE.value);
+    // console.log('ewmprestar', copyBook.status, COPY_BOOK.AVAILABLE.value, copyBook.status === COPY_BOOK.AVAILABLE.value);
     return copyBook.status === COPY_BOOK.AVAILABLE.value;
   };
 
   const checkIfCanBackCopy = () => {
     // Usuário só pode deletar ou emprestar uma cópia disponível.
-    console.log('devolução', copyBook.status, COPY_BOOK.RENTED.value, copyBook.status === COPY_BOOK.RENTED.value);
+    // console.log('devolução', copyBook.status, COPY_BOOK.RENTED.value, copyBook.status === COPY_BOOK.RENTED.value);
     return copyBook.status === COPY_BOOK.RENTED.value;
   };
 
   useEffect(() => {
-    console.log('o nome do livro recebido foi', copyBook);
+    // console.log('o nome do livro recebido foi', copyBook);
   }, []);
 
   const removeCopy = async () => {
@@ -116,28 +130,68 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
     setIsOpenToConfirmRent(true);
 
     /* await api.get(`api/users/${userId}`).then((res) => {
-      console.log("Attemp to rent to user:", res.data);
+      // console.log("Attemp to rent to user:", res.data);
       setUser(res.data);
     }) */
 
-    console.log('user return', userReturn);
+    // console.log('user return', userReturn);
     setUser(userReturn);
   };
 
   const rentCopy = async () => {
+    console.log("on rent copy")
+    const dtNow = new Date();
     const data = {
       bookId: copyBook.book_id,
       copyId: copyBook.id,
       userId: user?.userId,
     };
-    console.log('Data:', data);
-    await api.post('api/book-copy/borrow', data);
 
-    onCloseToRentCopy();
+    const { data: { body: userRentedCopies } } = await api.get(`api/rented-copies/${data.userId}`);
+
+    console.log("api/rented-copies/{data.userId}", userRentedCopies)
+    console.log("api/rented-copies/{data.userId}", userRentedCopies.length)
+
+    let error;
+    if (userRentedCopies.length >= 3) {
+      console.log('inside condition');
+      error = 'Não é possível realizar o empréstimo. Limite de cópias atingido.';
+    }
+
+    console.log('a'); 
+    console.log("user copies:",userRentedCopies);
+
+    Object.values(userRentedCopies).forEach((copy: any) => {
+      console.log('for copies: ', copy)
+      if (dtNow.valueOf() - new Date(copy.devolutionDate).valueOf() > 604800000) {
+        error = 'Não é possível realizar o empréstimo. Existe devolução de cópia em atraso.';
+      }
+      if (copy.bookId === data.bookId) {
+        error = 'Não é possível realizar o empréstimo. Já existe uma cópia do mesmo livro emprestada para este usuário.';
+      }
+    })
+
+    if (!error) {
+      console.log('Data:', data);
+      await api.post('api/book-copy/borrow', data);
+      onCloseToRentCopy();
+    } else alert(error);
 
     setTimeout(() => {
       window.location.reload();
     }, 1400);
+
+    // for (const copy in userRentedCopys) {
+    //   // console.log('for copies: ', copy)
+    //   // if (dtNow.valueOf() - new Date(copy.devolutionDate).valueOf() > 604800000) {
+    //   //   // console.log('Não é possível realizar o empréstimo. Limite de cópias atingido.');
+    //   //   return;
+    //   // }
+    //   // if (copy.bookId === data.bookId) {
+    //   //   // console.log('Não é possível realizar o empréstimo. Já existe uma cópia do mesmo livro emprestada para este usuário.');
+    //   //   return;
+    //   // }
+    // }
   };
 
   const backCopy = async () => {
@@ -146,7 +200,7 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
       copyId: copyBook.id,
       userId: user?.userId,
     };
-    console.log('Data:', data);
+    // console.log('Data:', data);
     // await api.post('api/book-copy/borrow', data);
 
     onCloseToRentCopy();
@@ -156,7 +210,8 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
     }, 1400);
   };
 
-  console.log('copybook', copyBook);
+  // console.log('copybook', copyBook);
+
   return (
     <>
       <Tr key={copyBook.id}>
