@@ -38,14 +38,14 @@ const BooksList = () => {
 
   const token = getToken();
 
-  console.log('token', token);
+  // console.log('token', token);
 
   const getAllBooks = async () => {
     try {
       const { data } = await api.get('api/books');
 
       // const data = booksMock;
-      console.log(data.body);
+      // console.log(data.body);
       setBooks(data.body);
       setBooksSearch(data.body);
     } catch (err) {

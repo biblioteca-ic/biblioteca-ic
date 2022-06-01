@@ -33,7 +33,7 @@ const ListCopies = ({ book }: { book: BookType }) => {
 
   const getAllCopies = async () => {
     try {
-      console.log(`Req: /book-copy/${book.code}`);
+      // console.log(`Req: /book-copy/${book.code}`);
       // const { data: response } = await api.get(`api/book-copy/${book.code}`);
 
       // const booksCopyResponse = copiesMock.map(copyData => ({
@@ -41,10 +41,10 @@ const ListCopies = ({ book }: { book: BookType }) => {
       //   // statusToString: COPY_BOOK[copyData.status].label,
       // }));
       const booksCopyResponse = copiesMock.map(function (item: any) {
-        console.log('status list', item.status.label);
+        // console.log('status list', item.status.label);
         return { ...item, bookTitle: book.title, statusToString: item.status.label };
       });
-      console.log('Cópias:', booksCopyResponse);
+      // console.log('Cópias:', booksCopyResponse);
       setCopies(booksCopyResponse);
       setCopiesSearch(booksCopyResponse);
     } catch (err) {
@@ -107,7 +107,7 @@ const ListCopies = ({ book }: { book: BookType }) => {
             </Thead>
             <Tbody>
               {copiesSearch.map((copyFilter: CopyBookType) => {
-                console.log('Cópias:', copiesSearch);
+                // console.log('Cópias:', copiesSearch);
                 return <CopiesBookItem key={copyFilter.id} copyBook={copyFilter} />;
               })}
             </Tbody>

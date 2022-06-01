@@ -93,10 +93,10 @@ const Register = () => {
   const history = useHistory();
 
   const onSubmitRegister = async (data: RegisterFormInputs) => {
-    console.log({ data });
+    // console.log({ data });
     try {
       const { bookName, authors, year, publishingCompany } = data;
-      console.log(data);
+      // console.log(data);
       // fazer chamada a api
       await api.post('/books', {
         bookName,

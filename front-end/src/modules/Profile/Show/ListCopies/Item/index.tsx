@@ -63,11 +63,11 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
   const checkIfCanBackCopyOrRentCopy = () => {
     // Usuário só pode deletar ou emprestar uma cópia disponível.
 
-    return copyBook.status.value === COPY_BOOK.AVAILABLE.value;
+    return copyBook.status === COPY_BOOK.AVAILABLE.value;
   };
 
   useEffect(() => {
-    console.log('o nome do livro recebido foi', copyBook);
+    // console.log('o nome do livro recebido foi', copyBook);
   }, []);
 
   const backCopy = async () => {
@@ -106,7 +106,7 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
       copyId: copyBook.id,
       userId: user?.userId,
     };
-    console.log('Data:', data);
+    // console.log('Data:', data);
     await api.post('api/book-copy/borrow', data);
 
     onCloseToRentCopy();
@@ -116,7 +116,7 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
     }, 1400);
   };
 
-  console.log('copybook', copyBook);
+  // console.log('copybook', copyBook);
   return (
     <>
       <Tr key={copyBook.id}>
