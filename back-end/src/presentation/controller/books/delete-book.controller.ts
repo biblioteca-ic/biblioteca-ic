@@ -16,7 +16,7 @@ export class DeleteBookController implements Controller {
       if (error) return badRequest(error.message)
       const { id } = request
       const deletedBook = await this._deleteBook.delete(id)
-      if (!deletedBook) return badRequest('Não é possível deletar este livro no momento!')
+      if (!deletedBook) return badRequest('O livro informado não foi encontrado ou não está disponível para exclusão.')
       return noContent()
     } catch (error) {
       return serverError()

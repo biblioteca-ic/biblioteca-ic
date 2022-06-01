@@ -1,7 +1,7 @@
 import { UserModelDto } from '../models/user'
 
 export interface CreateUserData {
-  create: (params: CreateUserData.Params) => Promise<UserModelDto>
+  create: (params: CreateUserData.Params) => Promise<UserModelDto | Error>
 }
 
 export namespace CreateUserData {

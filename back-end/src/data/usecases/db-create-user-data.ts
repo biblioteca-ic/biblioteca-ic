@@ -5,6 +5,7 @@ import { LoadUserByCpfRepository } from '../protocols/users/load-user-by-cpf.rep
 import { LoadUserByEmailRepository } from '../protocols/load-user-by-email.repository'
 import { LoadUserByRegisterNumberepository } from '../protocols/load-user-by-registernumber.repository'
 import { Hasher } from '../protocols/hasher'
+import { CpfAlreadyInUseError, EmailAlreadyInUseError, RegistrationNumberAlreadyInUseError } from '../errors/exceptions'
 
 export class DbCreateUserData implements CreateUserData {
   constructor (
@@ -15,15 +16,23 @@ export class DbCreateUserData implements CreateUserData {
     private readonly _hasher: Hasher
   ) { }
 
-  async create (params: CreateUserData.Params): Promise<UserModelDto> {
+  async create (params: CreateUserData.Params): Promise<UserModelDto | Error> {
     const { cpf, email, name, registrationNumber, admin, password } = params
 
-    const isCpfAvailable = await this._loadUserByCpfRepository.loadByCpf(cpf)
-    const isEmailAvailable = await this._loadUserByEmailRepository.loadByEmail(email)
-    const isRegisterNumberAvailable = await this._loadUserByRegisterNumberRepository.loadByRegisterNumber(registrationNumber)
+    const isCpfUnavailable = await this._loadUserByCpfRepository.loadByCpf(cpf)
+    const isEmailUnavailable = await this._loadUserByEmailRepository.loadByEmail(email)
+    const isRegisterNumberUnavailable = await this._loadUserByRegisterNumberRepository.loadByRegisterNumber(registrationNumber)
 
-    if (isCpfAvailable || isEmailAvailable || isRegisterNumberAvailable) {
-      return null
+    if (isCpfUnavailable) {
+      return new CpfAlreadyInUseError()
+    }
+
+    if (isEmailUnavailable) {
+      return new EmailAlreadyInUseError()
+    }
+
+    if (isRegisterNumberUnavailable) {
+      return new RegistrationNumberAlreadyInUseError()
     }
 
     const hashedPassword = await this._hasher.hash(password)

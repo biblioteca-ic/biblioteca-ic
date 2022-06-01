@@ -16,7 +16,9 @@ export class DeleteUserController implements Controller {
       if (error) return badRequest(error.message)
       const { id } = request
       const deactivatedUser = await this._deleteUser.deactivate(id)
-      if (!deactivatedUser) return badRequest('Não é possível deletar este(a) usuário(a)')
+      if (deactivatedUser instanceof Error) {
+        return badRequest(deactivatedUser.message)
+      }
       return ok(deactivatedUser)
     } catch (error) {
       return serverError()

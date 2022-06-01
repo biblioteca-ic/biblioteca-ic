@@ -19,7 +19,9 @@ export const noContent = (message?: string): HttpResponse => ({
 
 export const badRequest = (message: string): HttpResponse => ({
   statusCode: 400,
-  body: {},
+  body: {
+    message
+  },
   message
 })
 
@@ -42,6 +44,8 @@ export const serverError = (message?: string): HttpResponse => ({
 
 export const notFound = (message?: string): HttpResponse => ({
   statusCode: 404,
-  body: {},
+  body: {
+    message
+  },
   message
 })

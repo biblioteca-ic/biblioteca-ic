@@ -17,8 +17,8 @@ export class CreateUserController implements Controller {
         return badRequest(error.message)
       }
       const user = await this._createUserData.create(Object.assign({}, request, { admin: false }))
-      if (!user) {
-        return badRequest('Usuário já existe.')
+      if (user instanceof Error) {
+        return badRequest(user.message)
       }
       return created(user)
     } catch (error) {
