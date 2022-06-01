@@ -27,7 +27,6 @@ export class ListBooksController implements Controller {
         }
       }
       const books = await this._listBooks.list(params)
-      if (!books || books.length === 0) return notFound()
       return ok(books)
     } catch (error) {
       return serverError(error)

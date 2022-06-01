@@ -19,7 +19,7 @@ export class ListUsersController implements Controller {
       } else {
         users = await this._listUsers.loadAll()
       }
-      if (!users || users.length < 1) return notFound()
+      if (!users) return notFound()
       return ok(users)
     } catch (error) {
       return serverError()

@@ -19,7 +19,6 @@ export class ListCopiesLoanedToUserController implements Controller {
       const error = this._validation.validate(request)
       if (error) return badRequest(error.message)
       const bookCopies = await this._listCopiesLoanedToUser.list(request.user_id)
-      if (!bookCopies || bookCopies.length === 0) return notFound()
       return ok(bookCopies)
     } catch (error) {
       return serverError()

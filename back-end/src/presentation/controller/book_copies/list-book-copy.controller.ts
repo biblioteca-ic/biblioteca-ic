@@ -12,7 +12,6 @@ export class ListBookCopiesController implements Controller {
     try {
       let { book_code } = request
       const bookCopies = await this._listBookCopies.list(book_code)
-      if (!bookCopies || bookCopies.length === 0) return notFound()
       return ok(bookCopies)
     } catch (error) {
       return serverError()

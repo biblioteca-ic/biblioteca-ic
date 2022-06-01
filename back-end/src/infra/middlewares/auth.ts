@@ -6,7 +6,7 @@ export const auth = async (req: Request, res: Response, next: NextFunction): Pro
   if (!token) return res.status(401).json({ statusCode: 401, error: 'Unauthorized' })
 
   verify(token, process.env.SECRET_KEY, function (err, decoded: any) {
-    req.body.admin = decoded.admin
+    req.body.admin = decoded?.admin
     if (err) return res.status(500).json({ statusCode: 500, error: 'Internal Server Error' })
     if (err?.message === 'invalid signature') return res.status(401).json({ statusCode: 401, error: 'Unauthorized' })
     next()
