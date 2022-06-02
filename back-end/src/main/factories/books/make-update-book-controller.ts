@@ -12,9 +12,6 @@ import { ValidationComposite } from '../../../presentation/validation/validators
 
 const makeValidation = (): Validation => {
   const validations: Validation[] = []
-  for (const field of ['code', 'createdBy', 'createdAt', 'updatedAt', 'borrowed_copies', 'lost_copies', 'available_copies']) {
-    validations.push(new UnwantedFieldValidator(field))
-  }
   validations.push(new RequiredFieldValidator('id'))
   validations.push(new IsArrayValidator('authors'))
   validations.push(new IsArrayValidator('categories'))
