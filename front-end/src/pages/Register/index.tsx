@@ -114,6 +114,7 @@ const Register = () => {
       });
     } catch (error) {
       const err = error as AxiosError;
+      console.error('err', err)
       toast({
         title: 'Ocorreu um erro ao fazer o cadastro na plataforma',
         description: err?.message ? err?.message : 'Tente novamente mais tarde',

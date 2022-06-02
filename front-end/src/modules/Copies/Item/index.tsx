@@ -35,17 +35,16 @@ import { useHistory } from 'react-router-dom';
 import { api } from '../../../services/api';
 
 interface UserRentedCopiesInterface {
-  copyCode: string,
-  title: string,
-  authors: string[],
-  status: string,
-  leaseDate: string,
-  devolutionDate: string,
-  email: string,
-  userId: string,
-  copyId: string,
-  bookId: string
-
+  copyCode: string;
+  title: string;
+  authors: string[];
+  status: string;
+  leaseDate: string;
+  devolutionDate: string;
+  email: string;
+  userId: string;
+  copyId: string;
+  bookId: string;
 }
 
 export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
@@ -98,7 +97,7 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
 
   const removeCopy = async () => {
     try {
-      // await api.delete(`api//users/${id}`, { data: { userId: user.id } });
+      await api.delete(`api/book-copy/${copyBook.book_id}`);
 
       toast({
         title: 'Cópia removida com sucesso',
@@ -139,40 +138,33 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
   };
 
   const rentCopy = async () => {
-    console.log("on rent copy")
     const dtNow = new Date();
     const data = {
-      bookId: copyBook.bookId,
-      copyId: copyBook.copyId,
+      bookId: copyBook.book_id,
+      copyId: copyBook.id,
       userId: user?.userId,
     };
 
-    const { data: { body: userRentedCopies } } = await api.get(`api/rented-copies/${data.userId}`);
-
-    console.log("api/rented-copies/{data.userId}", userRentedCopies)
-    console.log("api/rented-copies/{data.userId}", userRentedCopies.length)
+    const {
+      data: { body: userRentedCopies },
+    } = await api.get(`api/rented-copies/${data.userId}`);
 
     let error;
     if (userRentedCopies.length >= 3) {
-      console.log('inside condition');
       error = 'Não é possível realizar o empréstimo. Limite de cópias atingido.';
     }
 
-    console.log('a'); 
-    console.log("user copies:",userRentedCopies);
-
     Object.values(userRentedCopies).forEach((copy: any) => {
-      console.log('for copies: ', copy)
       if (dtNow.valueOf() - new Date(copy.devolutionDate).valueOf() > 604800000) {
         error = 'Não é possível realizar o empréstimo. Existe devolução de cópia em atraso.';
       }
       if (copy.bookId === data.bookId) {
-        error = 'Não é possível realizar o empréstimo. Já existe uma cópia do mesmo livro emprestada para este usuário.';
+        error =
+          'Não é possível realizar o empréstimo. Já existe uma cópia do mesmo livro emprestada para este usuário.';
       }
-    })
+    });
 
     if (!error) {
-      console.log('Data:', data);
       await api.post('api/book-copy/borrow', data);
       onCloseToRentCopy();
     } else alert(error);
@@ -195,19 +187,44 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
   };
 
   const backCopy = async () => {
-    const data = {
-      bookId: copyBook.bookId,
-      copyId: copyBook.copyId,
-      userId: user?.userId,
-    };
+    // const data = {
+    //   bookId: copyBook.bookId,
+    //   copyId: copyBook.copyId,
+    //   userId: user?.userId,
+    // };
     // console.log('Data:', data);
     // await api.post('api/book-copy/borrow', data);
 
-    onCloseToRentCopy();
+    // setTimeout(() => {
+    //   window.location.reload();
+    // }, 1400);
 
-    setTimeout(() => {
-      window.location.reload();
-    }, 1400);
+    try {
+      await api.post('api/book-copy/give-back', {
+        copyId: copyBook.id,
+      });
+      toast({
+        title: 'Devolução feita com sucesso',
+        status: 'success',
+        position: 'top-right',
+        isClosable: true,
+      });
+
+      onCloseToRentCopy();
+
+      setTimeout(() => {
+        window.location.reload();
+      }, 1400);
+    } catch (error) {
+      const err = error as AxiosError;
+      toast({
+        title: 'Ocorreu um erro ao fazer a devolução do livro',
+        description: err?.message ? err?.message : 'Tente novamente mais tarde',
+        status: 'error',
+        position: 'top-right',
+        isClosable: true,
+      });
+    }
   };
 
   // console.log('copybook', copyBook);
