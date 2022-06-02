@@ -1,5 +1,4 @@
 DROP TABLE IF EXISTS view_rented_copies;
-DROP VIEW IF EXISTS view_rented_copies;
 CREATE OR REPLACE VIEW view_rented_copies AS 
 SELECT
 	bc.code as copy_code,

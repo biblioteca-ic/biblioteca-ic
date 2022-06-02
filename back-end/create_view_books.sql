@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS view_books;
 CREATE OR REPLACE VIEW view_books AS SELECT
 	b.id,
 	b.code,

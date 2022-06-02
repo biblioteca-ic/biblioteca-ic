@@ -69,8 +69,15 @@ CREATE TABLE "view_books" (
 
 -- CreateTable
 CREATE TABLE "view_rented_copies" (
-    "user_id" TEXT NOT NULL,
+    "copy_code" TEXT NOT NULL,
+    "title" TEXT NOT NULL,
+    "authors" TEXT[],
     "email" TEXT NOT NULL,
+    "status" "CopyStatus" NOT NULL,
+    "lease_date" TIMESTAMP(3) NOT NULL,
+    "devolution_date" TIMESTAMP(3) NOT NULL,
+    "user_id" TEXT NOT NULL,
+    "copy_id" TEXT NOT NULL,
     "book_id" TEXT NOT NULL
 );
 
@@ -91,6 +98,9 @@ CREATE UNIQUE INDEX "view_books_id_key" ON "view_books"("id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "view_books_code_key" ON "view_books"("code");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "view_rented_copies_copy_id_key" ON "view_rented_copies"("copy_id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "view_rented_copies_book_id_key" ON "view_rented_copies"("book_id");
