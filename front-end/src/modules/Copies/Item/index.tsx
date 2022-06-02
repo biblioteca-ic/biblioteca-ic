@@ -52,6 +52,8 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
   // const history = useHistory();
   const toast = useToast();
 
+  console.log('copyBook', copyBook)
+
   const [user, setUser] = useState<UserListReturn>();
 
   const [isOpenToRemove, setIsOpenToRemove] = useState(false);
@@ -98,7 +100,7 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
 
   const removeCopy = async () => {
     try {
-      // await api.delete(`api//users/${id}`, { data: { userId: user.id } });
+      await api.delete(`api/book-copy/${copyBook.book_id}`);
 
       toast({
         title: 'Cópia removida com sucesso',
