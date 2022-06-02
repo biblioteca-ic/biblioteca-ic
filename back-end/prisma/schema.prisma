@@ -99,11 +99,12 @@ model ViewRentedCopies {
   title           String
   authors         String[]
   email           String
+  status          CopyStatus
   lease_date      DateTime
   devolution_date DateTime
   user_id         String
-  copy_id         String   @unique()
-  book_id         String   @unique()
+  copy_id         String     @unique()
+  book_id         String     @unique()
 
   @@map("view_rented_copies")
 }
