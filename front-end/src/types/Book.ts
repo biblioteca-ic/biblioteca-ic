@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { UserType } from './User';
 
 export interface BookType {
@@ -17,6 +18,7 @@ export interface BookType {
 }
 
 export interface CopyBookType {
+  code: string;
   copyCode: string;
   title: string;
   authors: string[];
@@ -28,3 +30,4 @@ export interface CopyBookType {
   copyId: string;
   bookId: string;
 }
+

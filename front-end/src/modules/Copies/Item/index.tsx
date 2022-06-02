@@ -92,12 +92,12 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
   };
 
   useEffect(() => {
-    // console.log('o nome do livro recebido foi', copyBook);
+    console.log('o nome do livro recebido foi', copyBook);
   }, []);
 
   const removeCopy = async () => {
     try {
-      await api.delete(`api/book-copy/${copyBook.book_id}`);
+      await api.delete(`api/book-copy/${copyBook.bookId}`);
 
       toast({
         title: 'Cópia removida com sucesso',
@@ -140,8 +140,8 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
   const rentCopy = async () => {
     const dtNow = new Date();
     const data = {
-      bookId: copyBook.book_id,
-      copyId: copyBook.id,
+      bookId: copyBook.bookId,
+      copyId: copyBook.copyId,
       userId: user?.userId,
     };
 
@@ -201,7 +201,7 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
 
     try {
       await api.post('api/book-copy/give-back', {
-        copyId: copyBook.id,
+        copyId: copyBook.copyId,
       });
       toast({
         title: 'Devolução feita com sucesso',
@@ -234,7 +234,7 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
       <Tr key={copyBook.copyId}>
         <Td>
           <Link display="block" href={`books/show/${copyBook.copyId}`}>
-            {copyBook.title}
+            {copyBook.code}
           </Link>
         </Td>
         <Td>
@@ -330,7 +330,7 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
           <ModalHeader>Informações da cópia {copyBook.copyCode}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <CopyBookDetails copyBook={copyBook} />
+            <CopyBookDetails copyBook={copyBook} userId={copyBook.userId}/>
           </ModalBody>
 
           <ModalFooter>
