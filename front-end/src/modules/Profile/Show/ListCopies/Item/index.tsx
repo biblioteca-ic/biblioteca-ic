@@ -69,7 +69,6 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
         data: { body },
       } = await api.get(`/api/users/${copyBook.userId}`);
       setUser(body);
-      console.log(body);
     } catch (err) {
       console.error(err);
     }
@@ -79,8 +78,6 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
     // console.log('o nome do livro recebido foi', copyBook);
     getUser();
   }, []);
-
-  console.log(copyBook);
 
   const backCopy = async () => {
     try {
@@ -133,36 +130,36 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
     <>
       <Tr key={copyBook.copyId}>
         <Td>
-          <Link display="block" href={`books/show/${copyBook.copyId}`}>
+          <Link display="block" href={`books/show/${copyBook.bookId}`}>
             {copyBook.title}
           </Link>
         </Td>
         <Td>
-          <Link display="block" href={`books/show/${copyBook.copyId}`}>
+          <Link display="block" href={`books/show/${copyBook.bookId}`}>
             {moment(new Date(copyBook.leaseDate)).format('DD/MM/YYYY')}
           </Link>
         </Td>
         <Td>
-          <Link display="block" href={`books/show/${copyBook.copyId}`}>
+          <Link display="block" href={`books/show/${copyBook.bookId}`}>
             {moment(new Date(copyBook.devolution_date)).format('DD/MM/YYYY')}
           </Link>
         </Td>
         <Td>
-          <Link display="block" href={`books/show/${copyBook.copyId}`}>
+          <Link display="block" href={`books/show/${copyBook.bookId}`}>
             1/3
           </Link>
         </Td>
         <Td>
           <Box display="flex" justifyContent="space-between">
             <Box>
-              <IconButton
+              {/* <IconButton
                 variant="outline"
                 colorScheme="blue"
                 mr={2}
                 aria-label="Informações da cópia"
                 onClick={clickToViewInfo}
                 icon={<BsInfoCircle />}
-              />
+              /> */}
               {true && ( //devolver
                 <Button colorScheme="red" variant="outline" onClick={clickToBackCopy}>
                   Devolver

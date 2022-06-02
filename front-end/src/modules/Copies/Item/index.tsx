@@ -51,8 +51,6 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
   // const history = useHistory();
   const toast = useToast();
 
-  console.log('copyBook', copyBook);
-
   const [user, setUser] = useState<UserListReturn>();
 
   const [isOpenToRemove, setIsOpenToRemove] = useState(false);
@@ -140,7 +138,6 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
   };
 
   const rentCopy = async () => {
-    console.log('on rent copy');
     const dtNow = new Date();
     const data = {
       bookId: copyBook.book_id,
@@ -152,20 +149,12 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
       data: { body: userRentedCopies },
     } = await api.get(`api/rented-copies/${data.userId}`);
 
-    console.log('api/rented-copies/{data.userId}', userRentedCopies);
-    console.log('api/rented-copies/{data.userId}', userRentedCopies.length);
-
     let error;
     if (userRentedCopies.length >= 3) {
-      console.log('inside condition');
       error = 'Não é possível realizar o empréstimo. Limite de cópias atingido.';
     }
 
-    console.log('a');
-    console.log('user copies:', userRentedCopies);
-
     Object.values(userRentedCopies).forEach((copy: any) => {
-      console.log('for copies: ', copy);
       if (dtNow.valueOf() - new Date(copy.devolutionDate).valueOf() > 604800000) {
         error = 'Não é possível realizar o empréstimo. Existe devolução de cópia em atraso.';
       }
@@ -176,7 +165,6 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
     });
 
     if (!error) {
-      console.log('Data:', data);
       await api.post('api/book-copy/borrow', data);
       onCloseToRentCopy();
     } else alert(error);

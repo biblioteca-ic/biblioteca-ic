@@ -31,19 +31,12 @@ const ListCopies = ({ user }: { user: UserType }) => {
 
   const getAllCopies = async () => {
     try {
-      // console.log(`Req: /rented-copies/${user.id}`);
-      // const { data: response } = await api.get(`api/rented-copies/${user.id}`);
+      const {
+        data: { body },
+      } = await api.get(`api/rented-copies/${user.id}`);
 
-      // console.log('response', response);
-      const booksCopyResponse = copiesMock.map((item: any) => {
-        // console.log('status list', item.status.label);
-        return { ...item };
-      });
-
-      console.log(booksCopyResponse)
-      // console.log('Cópias:', booksCopyResponse);
-      setCopies(booksCopyResponse);
-      setCopiesSearch(booksCopyResponse);
+      setCopies(body);
+      setCopiesSearch(body);
     } catch (err) {
       console.error(err);
     }
