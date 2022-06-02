@@ -63,7 +63,9 @@ export class BookPrismaRepository implements CreateBookRepository, FindLastBookC
   }
 
   async update (id: string, params: any): Promise<BookModelDto> {
-    const updatedBook = await PrismaHelper.client.book.update({ data: params, where: { id } })
+    const { publishingHouse, publishedIn, ...rest } = params
+    const newParams = Object.assign({}, rest, { publishing_house: publishingHouse, published_in: new Date(publishedIn) })
+    const updatedBook = await PrismaHelper.client.book.update({ data: newParams, where: { id } })
     return updatedBook && PrismaHelper.bookDtoMapper(updatedBook)
   }
 }
