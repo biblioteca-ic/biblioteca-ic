@@ -16,11 +16,11 @@ export class DbDeleteUser implements DeleteUser {
   ) { }
 
   async deactivate (id: string): Promise<UserModelDto | Error> {
-    if (this.userIsOnlyAdmin(id)) {
+    if (await this.userIsOnlyAdmin(id)) {
       return new DeleteUserError('Não é possível deletar este usuário, pois ele é o único admin.')
     }
 
-    if (this.hasRentedCopies(id)) {
+    if (await this.hasRentedCopies(id)) {
       return new DeleteUserError('Nao é possivel deletar usuário pois ele possui livros emprestados.')
     }
 
@@ -31,7 +31,7 @@ export class DbDeleteUser implements DeleteUser {
   private async userIsOnlyAdmin (id: string): Promise<boolean> {
     const user = await this._loadUserByIdRepository.loadById(id)
     const adminUsers = await this._loadUserByAdminRepository.loadByAdmin(true)
-    return !((adminUsers.length > 1) || (!user.admin))
+    return ((adminUsers.length === 1) && (user.admin === true))
   }
 
   private async hasRentedCopies (id: string): Promise<boolean> {
