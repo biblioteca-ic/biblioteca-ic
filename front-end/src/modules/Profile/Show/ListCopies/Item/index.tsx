@@ -21,24 +21,21 @@ import {
   ModalFooter,
   ModalHeader,
 } from '@chakra-ui/react';
+import moment from 'moment';
 import { AxiosError } from 'axios';
-// import { useHistory } from 'react-router-dom';
-import { BsInfoCircle, BsTrashFill } from 'react-icons/bs';
-// import { api } from '../../../services/api';
+import { useHistory } from 'react-router-dom';
+import { BsInfoCircle } from 'react-icons/bs';
 import { CopyBookType } from '../../../../../types/Book';
 import { UserType } from '../../../../../types/User';
-import { UserListReturn } from '../../../../../types/UserListReturn';
 import { CopyBookDetails } from '../../../../../components/CopyBookDetails';
 import { COPY_BOOK } from '../../../../../constants';
-import UserList from '../../../../../components/UserList';
-import { useHistory } from 'react-router-dom';
 import { api } from '../../../../../services/api';
 
 export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
   // const history = useHistory();
   const toast = useToast();
 
-  const [user, setUser] = useState<UserListReturn>();
+  const [user, setUser] = useState<UserType>();
 
   const [isOpenToBackCopy, setIsOpenToBackCopy] = useState(false);
   const onCloseToBackCopy = () => setIsOpenToBackCopy(false);
@@ -66,9 +63,24 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
     return copyBook.status === COPY_BOOK.AVAILABLE.value;
   };
 
+  const getUser = async () => {
+    try {
+      const {
+        data: { body },
+      } = await api.get(`/api/users/${copyBook.userId}`);
+      setUser(body);
+      console.log(body);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   useEffect(() => {
     // console.log('o nome do livro recebido foi', copyBook);
+    getUser();
   }, []);
+
+  console.log(copyBook);
 
   const backCopy = async () => {
     try {
@@ -102,9 +114,9 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
 
   const rentCopy = async () => {
     const data = {
-      bookId: copyBook.book_id,
-      copyId: copyBook.id,
-      userId: user?.userId,
+      bookId: copyBook.bookId,
+      copyId: copyBook.copyId,
+      userId: copyBook.userId,
     };
     // console.log('Data:', data);
     await api.post('api/book-copy/borrow', data);
@@ -119,24 +131,24 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
   // console.log('copybook', copyBook);
   return (
     <>
-      <Tr key={copyBook.id}>
+      <Tr key={copyBook.copyId}>
         <Td>
-          <Link display="block" href={`books/show/${copyBook.id}`}>
+          <Link display="block" href={`books/show/${copyBook.copyId}`}>
             {copyBook.title}
           </Link>
         </Td>
         <Td>
-          <Link display="block" href={`books/show/${copyBook.id}`}>
-            16/02/2022
+          <Link display="block" href={`books/show/${copyBook.copyId}`}>
+            {moment(new Date(copyBook.leaseDate)).format('DD/MM/YYYY')}
           </Link>
         </Td>
         <Td>
-          <Link display="block" href={`books/show/${copyBook.id}`}>
-            26/02/2022
+          <Link display="block" href={`books/show/${copyBook.copyId}`}>
+            {moment(new Date(copyBook.devolution_date)).format('DD/MM/YYYY')}
           </Link>
         </Td>
         <Td>
-          <Link display="block" href={`books/show/${copyBook.id}`}>
+          <Link display="block" href={`books/show/${copyBook.copyId}`}>
             1/3
           </Link>
         </Td>
@@ -174,7 +186,7 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
             </AlertDialogHeader>
 
             <AlertDialogBody>
-              Tem certeza que deseja devolver a cópia <strong>&quot;{copyBook.code}&quot;</strong>?
+              Tem certeza que deseja devolver a cópia <strong>&quot;{copyBook.copyCode}&quot;</strong>?
             </AlertDialogBody>
 
             <AlertDialogFooter>
@@ -192,10 +204,10 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
       <Modal isOpen={isOpenToViewInfo} onClose={onCloseToViewInfo}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Informações da cópia {copyBook.code}</ModalHeader>
+          <ModalHeader>Informações da cópia {copyBook.copyCode}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <CopyBookDetails copyBook={copyBook} />
+            <CopyBookDetails copyBook={copyBook} user={user} />
           </ModalBody>
 
           <ModalFooter>
@@ -212,8 +224,8 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
             </AlertDialogHeader>
 
             <AlertDialogBody>
-              Confirmar renovação de cópia <strong>&quot;{copyBook.code}&quot;</strong> do livro{' '}
-              <strong>&quot;{copyBook.bookTitle}&quot;</strong>?
+              Confirmar renovação de cópia <strong>&quot;{copyBook.copyCode}&quot;</strong> do livro{' '}
+              <strong>&quot;{copyBook.title}&quot;</strong>?
             </AlertDialogBody>
 
             <AlertDialogFooter>

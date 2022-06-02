@@ -17,15 +17,14 @@ export interface BookType {
 }
 
 export interface CopyBookType {
+  copyCode: string;
   title: string;
-  id: string;
-  book_id: string;
-  bookTitle: string;
+  authors: string[];
   status: string;
-  statusToString?: string;
-  createdAt: string;
-  code: string;
-  createdBy: string;
-  rentedBy?: UserType;
-  rentedAt?: string;
+  leaseDate: string;
+  devolution_date: string;
+  email: string;
+  userId: string;
+  copyId: string;
+  bookId: string;
 }

@@ -14,36 +14,33 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { BsSearch } from 'react-icons/bs';
-import { useAuth } from '../../../../providers/AuthProvider';
+// import { useAuth } from '../../../../providers/AuthProvider';
 import { api } from '../../../../services/api';
 import { copiesMock } from '../../../../services/mocks';
-import { BookType, CopyBookType } from '../../../../types/Book';
+import { CopyBookType } from '../../../../types/Book';
 import CopiesBookItem from './Item';
+import { UserType } from '../../../../types/User';
 
 interface CopyTypeSearch extends CopyBookType {
   statusToString?: string;
 }
 
-const ListCopies = ({ book }: { book: BookType }) => {
+const ListCopies = ({ user }: { user: UserType }) => {
   const [copies, setCopies] = React.useState<CopyTypeSearch[]>([]);
   const [copiesSearch, setCopiesSearch] = React.useState<CopyTypeSearch[]>([]);
 
-  const { user } = useAuth();
-
-
   const getAllCopies = async () => {
     try {
-      // console.log(`Req: /book-copy/${book.code}`);
-      // const { data: response } = await api.get(`api/book-copy/${book.code}`);
+      // console.log(`Req: /rented-copies/${user.id}`);
+      // const { data: response } = await api.get(`api/rented-copies/${user.id}`);
 
-      // const booksCopyResponse = copiesMock.map(copyData => ({
-      //   ...copyData,
-      //   // statusToString: COPY_BOOK[copyData.status].label,
-      // }));
-      const booksCopyResponse = copiesMock.map(function (item: any) {
+      // console.log('response', response);
+      const booksCopyResponse = copiesMock.map((item: any) => {
         // console.log('status list', item.status.label);
-        return { ...item, bookTitle: book.title, statusToString: item.status.label };
+        return { ...item };
       });
+
+      console.log(booksCopyResponse)
       // console.log('Cópias:', booksCopyResponse);
       setCopies(booksCopyResponse);
       setCopiesSearch(booksCopyResponse);
@@ -62,10 +59,10 @@ const ListCopies = ({ book }: { book: BookType }) => {
       if (value) {
         const newCopie = copies.filter(copyFilter => {
           return (
-            copyFilter?.id?.toLowerCase().includes(value.toLowerCase()) ||
-            copyFilter?.book_id?.toLowerCase().includes(value.toLocaleLowerCase()) ||
+            copyFilter?.copyId?.toLowerCase().includes(value.toLowerCase()) ||
+            copyFilter?.bookId?.toLowerCase().includes(value.toLocaleLowerCase()) ||
             copyFilter?.statusToString?.toLowerCase().includes(value.toLowerCase()) ||
-            copyFilter?.code?.toLowerCase().includes(value.toLowerCase())
+            copyFilter?.copyCode?.toLowerCase().includes(value.toLowerCase())
           );
         });
         setCopiesSearch(newCopie);
@@ -108,17 +105,16 @@ const ListCopies = ({ book }: { book: BookType }) => {
             <Tbody>
               {copiesSearch.map((copyFilter: CopyBookType) => {
                 // console.log('Cópias:', copiesSearch);
-                return <CopiesBookItem key={copyFilter.id} copyBook={copyFilter} />;
+                return <CopiesBookItem key={copyFilter.copyId} copyBook={copyFilter} />;
               })}
             </Tbody>
           </Table>
         ) : (
           <>
-            <Text textAlign="center">Não há cópias cadastradas.</Text>
+            <Text textAlign="center">Não há livros alugados.</Text>
           </>
         )}
       </Box>
-
     </>
   );
 };
