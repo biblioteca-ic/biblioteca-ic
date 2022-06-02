@@ -35,7 +35,7 @@ import { useHistory } from 'react-router-dom';
 import { api } from '../../../services/api';
 
 interface UserRentedCopiesInterface {
-  copyCode: string;
+  code: string;
   title: string;
   authors: string[];
   status: string;
@@ -43,7 +43,7 @@ interface UserRentedCopiesInterface {
   devolutionDate: string;
   email: string;
   userId: string;
-  copyId: string;
+  copy_id: string;
   bookId: string;
 }
 
@@ -92,12 +92,12 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
   };
 
   useEffect(() => {
-    // console.log('o nome do livro recebido foi', copyBook);
+    console.log('o nome do livro recebido foi', copyBook);
   }, []);
 
   const removeCopy = async () => {
     try {
-      await api.delete(`api/book-copy/${copyBook.book_id}`);
+      await api.delete(`api/book-copy/${copyBook.bookId}`);
 
       toast({
         title: 'Cópia removida com sucesso',
@@ -141,7 +141,7 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
     const dtNow = new Date();
     const data = {
       bookId: copyBook.book_id,
-      copyId: copyBook.id,
+      copy_id: copyBook.id,
       userId: user?.userId,
     };
 
@@ -189,7 +189,7 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
   const backCopy = async () => {
     // const data = {
     //   bookId: copyBook.bookId,
-    //   copyId: copyBook.copyId,
+    //   copy_id: copyBook.copy_id,
     //   userId: user?.userId,
     // };
     // console.log('Data:', data);
@@ -201,7 +201,7 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
 
     try {
       await api.post('api/book-copy/give-back', {
-        copyId: copyBook.id,
+        copy_id: copyBook.id,
       });
       toast({
         title: 'Devolução feita com sucesso',
@@ -231,14 +231,14 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
 
   return (
     <>
-      <Tr key={copyBook.copyId}>
+      <Tr key={copyBook.id}>
         <Td>
-          <Link display="block" href={`books/show/${copyBook.copyId}`}>
-            {copyBook.title}
+          <Link display="block" href={`books/show/${copyBook.id}`}>
+            {copyBook.code}
           </Link>
         </Td>
         <Td>
-          <Link display="block" href={`books/show/${copyBook.copyId}`}>
+          <Link display="block" href={`books/show/${copyBook.id}`}>
             {copyBook.status}
           </Link>
         </Td>
@@ -286,7 +286,7 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
             </AlertDialogHeader>
 
             <AlertDialogBody>
-              Tem certeza que deseja remover a cópia <strong>&quot;{copyBook.copyCode}&quot;</strong>?
+              Tem certeza que deseja remover a cópia <strong>&quot;{copyBook.code}&quot;</strong>?
             </AlertDialogBody>
 
             <AlertDialogFooter>
@@ -309,7 +309,7 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
             </AlertDialogHeader>
 
             <AlertDialogBody>
-              Tem certeza que deseja devolver a cópia <strong>&quot;{copyBook.copyCode}&quot;</strong>?
+              Tem certeza que deseja devolver a cópia <strong>&quot;{copyBook.code}&quot;</strong>?
             </AlertDialogBody>
 
             <AlertDialogFooter>
@@ -327,10 +327,10 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
       <Modal isOpen={isOpenToViewInfo} onClose={onCloseToViewInfo}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Informações da cópia {copyBook.copyCode}</ModalHeader>
+          <ModalHeader>Informações da cópia {copyBook.code}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <CopyBookDetails copyBook={copyBook} />
+            <CopyBookDetails copyBook={copyBook} userId={copyBook.located_by}/>
           </ModalBody>
 
           <ModalFooter>
@@ -342,7 +342,7 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
       <Modal isOpen={isOpenToRentCopy} onClose={onCloseToRentCopy}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Emprestar cópia {copyBook.copyCode}</ModalHeader>
+          <ModalHeader>Emprestar cópia {copyBook.code}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <Box h={540} maxH="90%" background="">
@@ -360,7 +360,7 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
                     </AlertDialogHeader>
 
                     <AlertDialogBody>
-                      Confirmar empréstimo de cópia <strong>&quot;{copyBook.copyCode}&quot;</strong> ao aluno{' '}
+                      Confirmar empréstimo de cópia <strong>&quot;{copyBook.code}&quot;</strong> ao aluno{' '}
                       <strong>&quot;{user?.name}&quot;</strong>?
                     </AlertDialogBody>
 

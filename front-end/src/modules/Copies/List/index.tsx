@@ -75,10 +75,10 @@ const CopiesList = ({ book }: { book: BookType }) => {
       if (value) {
         const newCopie = copies.filter(copyFilter => {
           return (
-            copyFilter?.id?.toLowerCase().includes(value.toLowerCase()) ||
-            copyFilter?.book_id?.toLowerCase().includes(value.toLocaleLowerCase()) ||
+            copyFilter?.copyId?.toLowerCase().includes(value.toLowerCase()) ||
+            copyFilter?.bookId?.toLowerCase().includes(value.toLocaleLowerCase()) ||
             copyFilter?.statusToString?.toLowerCase().includes(value.toLowerCase()) ||
-            copyFilter?.code?.toLowerCase().includes(value.toLowerCase())
+            copyFilter?.copyCode?.toLowerCase().includes(value.toLowerCase())
           );
         });
         setCopiesSearch(newCopie);
@@ -154,7 +154,7 @@ const CopiesList = ({ book }: { book: BookType }) => {
             <Tbody>
               {copiesSearch.map((copyFilter: CopyBookType) => {
                 // console.log('Cópias:', copiesSearch);
-                return <CopiesBookItem key={copyFilter.id} copyBook={copyFilter} />;
+                return <CopiesBookItem key={copyFilter.copyCode} copyBook={copyFilter} />;
               })}
             </Tbody>
           </Table>
