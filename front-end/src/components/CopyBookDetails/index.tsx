@@ -1,16 +1,35 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { Box, Heading, Text } from '@chakra-ui/react';
 import { CopyBookType } from '../../types/Book';
 import { formatCpf } from '../../helpers/formatCpf';
 import { COPY_BOOK } from '../../constants';
 import { UserType } from '../../types/User';
+import { api } from '../../services/api';
 
-export const CopyBookDetails = ({ copyBook, user }: { copyBook: CopyBookType; user: UserType | undefined }) => (
+interface UserResponseType {
+  name: string;
+  email: string;
+  cpf: string;
+  admin: boolean;
+  registrationNumber: string;
+}
+
+export const CopyBookDetails = ({ copyBook, userId }: { copyBook: CopyBookType; userId: string | undefined }) => {
+  const [user, setUser] = useState<UserResponseType>();
+
+  useEffect(() => {
+    api.get(`api/users/${userId}`).then((response) => {
+      setUser(response.data.body);
+    });
+  }, []);
+
+
+  return ( 
   <>
     <Box mt={2} textAlign="left">
       <Text fontSize="18px">
         <b>Identificador: </b>
-        {copyBook.copyCode}
+        {copyBook.code}
       </Text>
     </Box>
 
@@ -23,12 +42,6 @@ export const CopyBookDetails = ({ copyBook, user }: { copyBook: CopyBookType; us
           <Text fontSize="18px">
             <b>Nome de quem alugou: </b>
             {user?.name}
-          </Text>
-        </Box>
-        <Box mt={2} textAlign="left">
-          <Text fontSize="18px">
-            <b>Matrícula de quem alugou: </b>
-            {user?.registrationNumber}
           </Text>
         </Box>
 
@@ -61,4 +74,5 @@ export const CopyBookDetails = ({ copyBook, user }: { copyBook: CopyBookType; us
       </>
     )}
   </>
-);
+  )
+};
