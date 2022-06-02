@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { UserType } from './User';
 
 export interface BookType {
@@ -29,3 +30,4 @@ export interface CopyBookType {
   located_by?: string;
   rentedAt?: string;
 }
+

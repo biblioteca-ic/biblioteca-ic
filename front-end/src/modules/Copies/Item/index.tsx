@@ -93,12 +93,11 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
 
   useEffect(() => {
     console.log('o nome do livro recebido foi', copyBook);
-
   }, []);
 
   const removeCopy = async () => {
     try {
-      await api.delete(`api/book-copy/${copyBook.book_id}`);
+      await api.delete(`api/book-copy/${copyBook.bookId}`);
 
       toast({
         title: 'Cópia removida com sucesso',
