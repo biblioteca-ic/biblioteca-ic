@@ -17,12 +17,13 @@ interface UserResponseType {
 export const CopyBookDetails = ({ copyBook, userId }: { copyBook: CopyBookType; userId: string | undefined }) => {
   const [user, setUser] = useState<UserResponseType>();
 
-  useEffect(() => {
+  const fetchRenter = () => {
     api.get(`api/users/${userId}`).then((response) => {
       setUser(response.data.body);
     });
-  }, []);
+  };
 
+  if (copyBook.status === 'RENTED'){ fetchRenter(); }
 
   return ( 
   <>

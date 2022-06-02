@@ -141,7 +141,7 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
     const dtNow = new Date();
     const data = {
       bookId: copyBook.book_id,
-      copy_id: copyBook.id,
+      copyId: copyBook.id,
       userId: user?.userId,
     };
 
@@ -201,7 +201,7 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
 
     try {
       await api.post('api/book-copy/give-back', {
-        copy_id: copyBook.id,
+        copyId: copyBook.id,
       });
       toast({
         title: 'Devolução feita com sucesso',
