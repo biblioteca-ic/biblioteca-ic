@@ -144,8 +144,8 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
     console.log("on rent copy")
     const dtNow = new Date();
     const data = {
-      bookId: copyBook.bookId,
-      copyId: copyBook.copyId,
+      bookId: copyBook.book_id,
+      copyId: copyBook.id,
       userId: user?.userId,
     };
 
