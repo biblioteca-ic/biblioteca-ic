@@ -142,8 +142,8 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
     console.log("on rent copy")
     const dtNow = new Date();
     const data = {
-      bookId: copyBook.book_id,
-      copyId: copyBook.id,
+      bookId: copyBook.bookId,
+      copyId: copyBook.copyId,
       userId: user?.userId,
     };
 
@@ -196,8 +196,8 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
 
   const backCopy = async () => {
     const data = {
-      bookId: copyBook.book_id,
-      copyId: copyBook.id,
+      bookId: copyBook.bookId,
+      copyId: copyBook.copyId,
       userId: user?.userId,
     };
     // console.log('Data:', data);
@@ -214,14 +214,14 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
 
   return (
     <>
-      <Tr key={copyBook.id}>
+      <Tr key={copyBook.copyId}>
         <Td>
-          <Link display="block" href={`books/show/${copyBook.id}`}>
-            {copyBook.code}
+          <Link display="block" href={`books/show/${copyBook.copyId}`}>
+            {copyBook.title}
           </Link>
         </Td>
         <Td>
-          <Link display="block" href={`books/show/${copyBook.id}`}>
+          <Link display="block" href={`books/show/${copyBook.copyId}`}>
             {copyBook.status}
           </Link>
         </Td>
@@ -269,7 +269,7 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
             </AlertDialogHeader>
 
             <AlertDialogBody>
-              Tem certeza que deseja remover a cópia <strong>&quot;{copyBook.code}&quot;</strong>?
+              Tem certeza que deseja remover a cópia <strong>&quot;{copyBook.copyCode}&quot;</strong>?
             </AlertDialogBody>
 
             <AlertDialogFooter>
@@ -292,7 +292,7 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
             </AlertDialogHeader>
 
             <AlertDialogBody>
-              Tem certeza que deseja devolver a cópia <strong>&quot;{copyBook.code}&quot;</strong>?
+              Tem certeza que deseja devolver a cópia <strong>&quot;{copyBook.copyCode}&quot;</strong>?
             </AlertDialogBody>
 
             <AlertDialogFooter>
@@ -310,7 +310,7 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
       <Modal isOpen={isOpenToViewInfo} onClose={onCloseToViewInfo}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Informações da cópia {copyBook.code}</ModalHeader>
+          <ModalHeader>Informações da cópia {copyBook.copyCode}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <CopyBookDetails copyBook={copyBook} />
@@ -325,7 +325,7 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
       <Modal isOpen={isOpenToRentCopy} onClose={onCloseToRentCopy}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Emprestar cópia {copyBook.code}</ModalHeader>
+          <ModalHeader>Emprestar cópia {copyBook.copyCode}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <Box h={540} maxH="90%" background="">
@@ -343,7 +343,7 @@ export const CopyBookItem = ({ copyBook }: { copyBook: CopyBookType }) => {
                     </AlertDialogHeader>
 
                     <AlertDialogBody>
-                      Confirmar empréstimo de cópia <strong>&quot;{copyBook.code}&quot;</strong> ao aluno{' '}
+                      Confirmar empréstimo de cópia <strong>&quot;{copyBook.copyCode}&quot;</strong> ao aluno{' '}
                       <strong>&quot;{user?.name}&quot;</strong>?
                     </AlertDialogBody>
 

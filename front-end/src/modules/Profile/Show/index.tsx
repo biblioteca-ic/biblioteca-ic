@@ -103,7 +103,7 @@ export const UserItem = ({ userData }: { userData: UserType | undefined }) => {
             </AlertDialogHeader>
 
             <AlertDialogBody>
-              Tem certeza que deseja remover o usuáro <strong>&quot;{userData?.name}&quot;</strong>?
+              Tem certeza que deseja remover o usuário <strong>&quot;{userData?.name}&quot;</strong>?
             </AlertDialogBody>
 
             <AlertDialogFooter>
@@ -173,7 +173,7 @@ const Profile = () => {
               )}
             </Box>
           </Box>
-          {true && <ListCopies book={booksMock} />}
+          <ListCopies user={user} />
         </Box>
       </Container>
     </Page>

@@ -11,7 +11,7 @@ CREATE OR REPLACE VIEW view_books AS SELECT
     b.created_at,
     count(c.id) as copies,
     count(case when c.status='RENTED' then 1 else null end) as borrowed_copies,
-    count(case when c.status='LOST' then 1 else null end) as lost_copies,
+    count(case when c.status='MISPLACED' then 1 else null end) as lost_copies,
     count(case when c.status='AVAILABLE' then 1 else null end) as available_copies
 FROM books b LEFT JOIN book_copies c ON b.id=c.book_id
 GROUP BY b.id;
