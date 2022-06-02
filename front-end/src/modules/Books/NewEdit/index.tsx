@@ -192,7 +192,8 @@ const Register = () => {
       };
       // console.log(formattedData)
       if (id) {
-        const { data: responseSuccess } = await api.patch(`api/books/${id}`, { id, ...formattedData });
+        delete formattedData.createdBy;
+        const { data: responseSuccess } = await api.patch(`api/books/${id}`, { ...formattedData });
         toast({
           title: 'Livro editado com sucesso',
           // description: 'Agora é possível criar cópias desse livro',
