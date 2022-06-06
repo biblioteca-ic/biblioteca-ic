@@ -55,12 +55,6 @@ export const routes = [
     private: false,
     onlyAdmin: false,
   },
-  // {
-  //   path: '/books/new',
-  //   component: NewBook,
-  //   private: false,
-  //   onlyAdmin: false,
-  // },
   {
     path: '/books/new',
     component: NewEditBook,
@@ -78,11 +72,5 @@ export const routes = [
     component: BooksItemPage,
     private: false,
     onlyAdmin: false,
-  },
-  // {
-  //   path: '/books/edit/:id',
-  //   component: EditBook,
-  //   private: false,
-  //   onlyAdmin: false,
-  // },
+  }
 ];

@@ -31,29 +31,23 @@ type ItemParams = {
 
 export const UserItem = ({ userData }: { userData: UserType }) => {
   const history = useHistory();
-  // const { id } = useParams<ItemParams>();
   const toast = useToast();
+
   const { user } = useAuth();
 
   const [isOpenToRemove, setIsOpenToRemove] = useState(false);
-  const onCloseToRemove = () => setIsOpenToRemove(false);
-  const cancelRefToRemove = useRef<HTMLButtonElement>(null);
-
   const [isOpenToTurnAdmin, setIsOpenToTurnAdmin] = useState(false);
-  const onCloseToTurnAdmin = () => setIsOpenToTurnAdmin(false);
-  const cancelRefToTurnAdmin = useRef<HTMLButtonElement>(null);
-  const clickToRemove = () => {
-    setIsOpenToRemove(true);
-  };
 
-  const clickToTurnAdmin = () => {
-    setIsOpenToTurnAdmin(true);
-  };
+  const cancelRefToRemove = useRef<HTMLButtonElement>(null);
+  const cancelRefToTurnAdmin = useRef<HTMLButtonElement>(null);
+
+  const onCloseToTurnAdmin = () => setIsOpenToTurnAdmin(false);
+  const onCloseToRemove = () => setIsOpenToRemove(false);
+
+  const clickToRemove = () => { setIsOpenToRemove(true) };
+  const clickToTurnAdmin = () => { setIsOpenToTurnAdmin(true)  };
 
   const checkIfCanTurnAdmin = () => user.admin && !userData.admin;
-
-    // 3.1 Caso o usuário ainda tenha livros emprestados, não permitir a ação.
-    // 3.2 Caso o usuário seja o único ADM, não permitir a ação.
   const checkIfCanRemoveUser = () => !(userData.isOnlyAdmin && userData.admin);
 
   const removeUser = async () => {
@@ -68,10 +62,10 @@ export const UserItem = ({ userData }: { userData: UserType }) => {
       });
 
       history.push('/users');
-
       onCloseToRemove();
     } catch (error) {
       const err = error as AxiosError;
+
       toast({
         title: 'Ocorreu um erro ao remover o usuário',
         description: err?.message ? err?.message : 'Tente novamente mais tarde',
@@ -94,12 +88,12 @@ export const UserItem = ({ userData }: { userData: UserType }) => {
       });
 
       onCloseToTurnAdmin();
-
       setTimeout(() => {
         window.location.reload();
       }, 1400);
     } catch (error) {
       const err = error as AxiosError;
+      
       toast({
         title: 'Ocorreu um erro ao tentar colocar o usuário como admin',
         description: err?.message ? err?.message : 'Tente novamente mais tarde',
@@ -116,12 +110,12 @@ export const UserItem = ({ userData }: { userData: UserType }) => {
         <Box mb={3} display="flex" alignItems="center" justifyContent="space-between">
           <Heading>{userData.name}</Heading>
           <Box>
-            {checkIfCanTurnAdmin() ? (
+            { checkIfCanTurnAdmin() ? (
               <Button variant="outline" colorScheme="blue" mr={2} onClick={clickToTurnAdmin}>
                 Tornar admin
               </Button>
             ) : null}
-            {checkIfCanRemoveUser() ? (
+            { checkIfCanRemoveUser() ? (
               <IconButton
                 variant="outline"
                 colorScheme="red"
@@ -194,7 +188,6 @@ const UserItemPage = () => {
     setIsLoading(true);
     try {
       const { data: response } = await api.get('api/users');
-
       const userResponse: UserType = response.body?.find((currentUser: UserType) => currentUser.id === id);
 
       if (userResponse) {
@@ -223,7 +216,7 @@ const UserItemPage = () => {
             <Heading color="teal" textAlign="center" mb={6}>
               Dados do usuário
             </Heading>
-            {isLoading ? <Spinner color="teal" size="xl" /> : <Text>Não há usuário com esse id.</Text>}
+            {isLoading ? <Spinner color="teal" size="xl" /> : <Text>Não há usuário com esse ID.</Text>}
           </Center>
         ) : (
           <>

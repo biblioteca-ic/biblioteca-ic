@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import {
   Box,
   Container,
@@ -12,29 +12,19 @@ import {
   AlertDialogHeader,
   AlertDialogBody,
   AlertDialogFooter,
-  useToast,
-  useMediaQuery,
-  Table,
-  Thead,
-  Tr,
-  Th,
-  Tbody,
+  useToast
 } from '@chakra-ui/react';
 import { BsTrashFill } from 'react-icons/bs';
 import { api } from '../../../services/api';
 import { AxiosError } from 'axios';
 import { FaUserEdit, FaUserPlus, FaLock, FaUserFriends } from 'react-icons/fa';
-import { useHistory, useParams } from 'react-router-dom';
 import { Page } from '../../../components/Page';
 import { useAuth } from '../../../providers/AuthProvider';
-import { getUser } from '../../../services/auth';
 import { UserDetails } from '../../../components/UserDetails';
 import { UserType } from '../../../types/User';
 import ListCopies from './ListCopies';
-import { booksMock } from '../../../services/mocks';
 
 export const UserItem = ({ userData }: { userData: UserType | undefined }) => {
-  const history = useHistory();
   const toast = useToast();
   const { signOut } = useAuth();
 
@@ -46,8 +36,6 @@ export const UserItem = ({ userData }: { userData: UserType | undefined }) => {
     setIsOpenToRemove(true);
   };
 
-  // 3.1 Caso o usuário ainda tenha livros emprestados, não permitir a ação.
-  // 3.2 Caso o usuário seja o único ADM, não permitir a ação.
   const checkIfCanRemoveUser = () => !(userData?.isOnlyAdmin && userData.admin);
 
   const removeUser = async () => {
@@ -62,10 +50,10 @@ export const UserItem = ({ userData }: { userData: UserType | undefined }) => {
       });
 
       signOut();
-
       onCloseToRemove();
     } catch (error) {
       const err = error as AxiosError;
+
       toast({
         title: 'Ocorreu um erro ao remover o usuário',
         description: err?.message ? err?.message : 'Tente novamente mais tarde',

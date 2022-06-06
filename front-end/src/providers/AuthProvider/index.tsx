@@ -3,7 +3,6 @@ import { useHistory } from 'react-router-dom';
 import { api } from '../../services/api';
 import { getUser, login, logout, USER_KEY } from '../../services/auth';
 import { UserType } from '../../types/User';
-// import { usersMock } from '../../services/mocks';
 
 interface AuthState {
   user: UserType;
@@ -28,7 +27,6 @@ const AuthProvider: React.FC = ({ children }) => {
 
   const [data, setData] = useState<AuthState>(() => {
     const user = getUser();
-    // const user = JSON.stringify(usersMock[0]); //remove after
 
     if (user) {
       return { user: JSON.parse(user) };
