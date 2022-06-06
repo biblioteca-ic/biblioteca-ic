@@ -1,12 +1,11 @@
+import { RenewBookCopy } from "../../../../src/domain/usecases/book_copies/renew-book-copy";
+import {
+    RenewBorrowedBookCopyController
+} from "../../../../src/presentation/controller/book_copies/renew-borrowed-book-copy.controller";
+import { badRequest, ok, serverError } from "../../../../src/presentation/helpers/http-helper";
 import { Controller } from "../../../../src/presentation/protocols/controller";
 import { Validation } from "../../../../src/presentation/validation/protocols/validation";
-import { RenewBookCopy } from "../../../../src/domain/usecases/book_copies/renew-book-copy";
 import { bookCopyModelMock } from "../../../domain/mocks/bookCopy.mock";
-import { BookCopyModel } from "../../../../src/domain/models/book_copy";
-import {
-    RenewBorrowedBookCopyController, RenewBorrowedBookCopyRequest
-} from "../../../../src/presentation/controller/book_copies/renew-borrowed-book-copy.controller";
-import { badRequest, serverError, ok } from "../../../../src/presentation/helpers/http-helper";
 
 type SutType = {
     sut: Controller,
@@ -19,7 +18,7 @@ class ValidationStub implements Validation {
 }
 
 class RenewCopyStub implements RenewBookCopy {
-    execute = (book_copy_id: string): Promise<BookCopyModel | Error> => Promise.resolve(bookCopyModelMock);
+    execute = (book_copy_id: string): Promise<void | Error> => Promise.resolve();
 }
 
 const makeSut = (): SutType => {
@@ -29,7 +28,7 @@ const makeSut = (): SutType => {
     return { sut, validationStub, renewCopyStub }
 }
 
-const mockRequest: RenewBorrowedBookCopyRequest = {
+const mockRequest = {
     book_copy_id: 'any_uuid'
 }
 

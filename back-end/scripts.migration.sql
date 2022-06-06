@@ -38,6 +38,6 @@ SELECT
     bc.book_id
 FROM book_copies bc 
 INNER JOIN users u ON bc.located_by=u.id 
-LEFT JOIN books b ON bc.book_id=b.id WHERE bc.status='RENTED';
+LEFT JOIN books b ON bc.book_id=b.id WHERE (bc.status='RENTED') OR (bc.status='LATE');
 
 SELECT * FROM view_rented_copies;

@@ -1,5 +1,6 @@
 import { deleteBookCopyPath, registerBookCopyPath, listBookCopiesPath, listBookCopyDetailsPath, borrowBookCopyPath, giveBackBookCopyPath, listRentedCopiesByUserIdPath } from './paths/book-copy-path'
 import { deleteBookPath, listBooksPath, registerBookPath, updateBookPath } from './paths/book-path'
+import { renewBookCopyPath } from './paths/renew-book-copy-path'
 import { changeAdminPath, changePasswordPath, createUserPath, deleteUserPath, editUserPath, listUserByIdPath, listUsersPath, loginPath } from './paths/user-paths'
 import { registerBookCopyRequestSchema, registerBookCopyResponseSchema, listBookCopyDetailsResponseSchema, listBookCopiesResponseSchema, borrowBookCopyRequestSchema, borrowBookCopyResponseSchema, giveBackBookCopyRequestSchema, giveBackBookCopyResponseSchema, listRentedCopiesByUserIdResponseSchema } from './schemas/book-copy-schemas'
 import { listBooksResponseSchema, registerBookRequestSchema, registerBookResponseSchema, updateBookRequestSchema, updateBookResponseSchema } from './schemas/book-schemas'
@@ -49,6 +50,7 @@ export default {
     '/book-copy/details/{book_copy_id}': listBookCopyDetailsPath,
     '/book-copy/borrow': borrowBookCopyPath,
     '/book-copy/give-back': giveBackBookCopyPath,
+    '/book-copy/renew/{copyId}': renewBookCopyPath,
     '/rented-copies/{userId}': listRentedCopiesByUserIdPath
   },
   schemas: {
