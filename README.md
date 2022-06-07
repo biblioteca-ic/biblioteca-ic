@@ -11,6 +11,7 @@ Bash Eco makes building and running Docker easy, passing the commands to docker-
 ./eco backend test              # run npm run test into docker container
 ./eco backend shell             # acesss container via shell
 ./eco postgres                  # access postgres database via terminal client
+./eco flush-database            # flush database
 ```
 
 To use Eco, create a `.env` file with `.env.example` file and, if you want, configure it. Then, configure each project (back-end and front-end) separately and install dependencies:
@@ -45,5 +46,5 @@ cd ../
 ./eco up
 
 # With containers running, execute:
-./eco backend npx prisma migrate reset --force
+./eco flush-database
 ```
