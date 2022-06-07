@@ -26,7 +26,9 @@ if [ -f ./.env ]; then
 fi
 
 # Define environment variables...
-export REPOSITORY=${REPOSITORY:-"biblioteca-ic"}
+REPOSITORY=${REPOSITORY:-"biblioteca-ic"}
+POSTGRES_DB=${POSTGRES_DB:-"biblioteca-ic"}
+POSTGRES_USER=${POSTGRES_USER:-"eco"}
 
 # Function that outputs Eco is not running...
 function eco_is_not_running {
@@ -71,7 +73,16 @@ else
 fi
 
 if [ $# -gt 0 ]; then
-    if [ "$1" == 'backend' ] || [ "$1" == 'frontend' ]; then
+    if [ "$1" == "flush-database" ]; then
+        if [ "$EXEC" == "yes" ]; then
+            ./eco backend npx prisma migrate reset --force
+            docker-compose exec postgres bash -c " \
+                psql -U ${POSTGRES_USER} -d ${POSTGRES_DB} -f /migrations/scripts.migration.sql && \
+                psql -U ${POSTGRES_USER} -d ${POSTGRES_DB} -f /migrations/populate_tables.sql"
+        else
+            eco_is_not_running
+        fi
+    elif [ "$1" == 'backend' ] || [ "$1" == 'frontend' ]; then
         INSTANCE=$1
 
         # Proxy vendor binary commands on the application container...
@@ -133,7 +144,7 @@ if [ $# -gt 0 ]; then
         shift 1
 
         if [ "$EXEC" == "yes" ]; then
-            docker-compose exec postgres bash -c 'psql -U postgres'
+            docker-compose exec postgres bash -c "psql -U ${POSTGRES_USER} -d ${POSTGRES_DB}"
         else
             eco_is_not_running
         fi
