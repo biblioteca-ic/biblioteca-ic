@@ -1,10 +1,12 @@
 import { CronJob } from "cron"
 import { makeLateCopiesJob } from "./factories/make-late-copies-job"
+import { makeRememberToReturnJob } from "./factories/make-remember-to-return-job"
 import { JobContract } from "./protocols/job-contract"
 
 export class JobsKernel {
   public async setUp (): Promise<void> {
     this.run('0 3 * * *', makeLateCopiesJob())
+    this.run('30 4 * * *', makeRememberToReturnJob())
   }
 
   private async run (cronTime: string, job: JobContract): Promise<void> {
