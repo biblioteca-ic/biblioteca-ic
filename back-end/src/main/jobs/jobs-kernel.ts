@@ -5,10 +5,13 @@ import { makeRememberToReturnJob } from "./factories/make-remember-to-return-job
 import { JobContract } from "./protocols/job-contract"
 
 export class JobsKernel {
-  public async setUp (): Promise<void> {
+  public async setUp (callback?: () => void): Promise<void> {
     this.run('0 3 * * *', makeLateCopiesJob())
     this.run('30 4 * * *', makeRememberToReturnJob())
     this.run('45 4 * * *', makeRememberTheDelayedBooksJob())
+    this.run('36 3 * * *', makeRememberToReturnJob())
+    this.run('36 3 * * *', makeRememberTheDelayedBooksJob())
+    callback?.()
   }
 
   private async run (cronTime: string, job: JobContract): Promise<void> {

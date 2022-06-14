@@ -9,6 +9,7 @@ export class LateCopiesJob implements JobContract {
     private readonly _updateBookCopyStatusRepository: UpdateBookCopyStatusRepository,
   ) { }
   public async runJob (): Promise<void> {
+    console.log('Late copies job is running')
     const copies = await this._loadRentedCopiesRepository.loadAll()
     const now = new Date()
     const millisecondsInADay = 86400000
@@ -26,5 +27,6 @@ export class LateCopiesJob implements JobContract {
         }
       })
     }
+    console.log('Late copies job is finished')
   }
 }

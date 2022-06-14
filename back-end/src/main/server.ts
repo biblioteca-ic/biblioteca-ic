@@ -57,4 +57,6 @@ app.listen(3333, () => {
 })
 
 const jobsKernel = new JobsKernel()
-jobsKernel.setUp()
+jobsKernel.setUp(() => {
+  console.log('Jobs are running')
+})

@@ -1,0 +1,1 @@
+export const diacom_email = process.env.MAIL_DIACOM
