@@ -15,8 +15,9 @@ import { UpdateBookCopyStatusRepository } from '../../data/protocols/book_copies
 import { BookCopyModel, BookCopyStatus } from '../../domain/models/book_copy'
 import { RentedCopy } from '../../domain/models/rented-copy'
 import { PrismaHelper } from './prisma-helper'
+import { LoadDelayedAndMisplacedCopiesRepository } from '../../data/protocols/book_copies/load-delayed-and-misplaced-copies.repository'
 
-export class BookCopyPrismaRepository implements CreateBookCopyRepository, FindLastBookCopyCodeInsertedRepository, LoadBookCopyByIdRepository, DeleteBookCopyRepository, LoadRentedCopiesByUserIdRepository, LoadRentedCopiesByBookIdRepository, ListBookCopiesRepository, LoadCopiesByUserIdRepository, BorrowCopyRepository, GiveBackCopyRepository, LoadRentedCopiesRepository, UpdateBookCopyStatusRepository, RenewCopyRepository {
+export class BookCopyPrismaRepository implements CreateBookCopyRepository, FindLastBookCopyCodeInsertedRepository, LoadBookCopyByIdRepository, DeleteBookCopyRepository, LoadRentedCopiesByUserIdRepository, LoadRentedCopiesByBookIdRepository, ListBookCopiesRepository, LoadCopiesByUserIdRepository, BorrowCopyRepository, GiveBackCopyRepository, LoadRentedCopiesRepository, UpdateBookCopyStatusRepository, RenewCopyRepository, LoadDelayedAndMisplacedCopiesRepository {
   async load (id: string): Promise<BookCopyModel[]> {
     const copies = await PrismaHelper.client.book_Copy.findMany({
       where: {
@@ -163,4 +164,15 @@ export class BookCopyPrismaRepository implements CreateBookCopyRepository, FindL
     })
   }
 
+  async loadDelayedAndMisplaced (): Promise<BookCopyModel[]> {
+    const copies = await PrismaHelper.client.book_Copy.findMany({
+      where: {
+        OR: [
+          { status: CopyStatus.LATE },
+          { status: CopyStatus.MISPLACED }
+        ]
+      }
+    })
+    return copies && PrismaHelper.bookCopiesMapper(copies)
+  }
 }
