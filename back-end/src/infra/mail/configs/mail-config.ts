@@ -1,0 +1,5 @@
+export const mail_name: string = String(process.env.MAIL_NAME)
+export const mail_host: string = String(process.env.MAIL_HOST)
+export const mail_port: number = Number(process.env.MAIL_PORT)
+export const mail_from: string = String(process.env.MAIL_FROM)
+export const mail_debug: boolean = Boolean(process.env.MAIL_DEBUG)
